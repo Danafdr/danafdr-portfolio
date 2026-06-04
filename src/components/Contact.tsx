@@ -1,0 +1,45 @@
+export default function Contact() {
+  return (
+    <section id="contact" className="pt-16 px-10 pb-[72px] reveal">
+      <div className="grid grid-cols-2 gap-[60px] items-start">
+        <div>
+          <h2 className="font-playfair text-[clamp(48px,7.5vw,76px)] font-black leading-[0.87] tracking-[-0.03em]">
+            Let&apos;s make<br />
+            something<br />
+            <em className="italic font-normal text-ink2">real.</em>
+          </h2>
+          <p className="font-playfair italic text-[14px] text-ink2 mt-[22px] leading-[1.65] max-w-[400px]">
+            Open to web dev freelance, video editing work, internships, and anything genuinely interesting. I bring both the code and the visual eye — full creative partner, not just a dev.
+          </p>
+        </div>
+        <div>
+          <div className="flex flex-col gap-0">
+            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+              <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">GitHub</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">github.com/danafdr</span>
+              <span className="ml-auto text-[12px] text-ink3">↗</span>
+            </div>
+            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+              <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Location</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">West Jakarta, Indonesia</span>
+              <span className="ml-auto text-[12px] text-ink3">·</span>
+            </div>
+            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+              <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Status</span>
+              <span className="text-[13px] text-accent transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">Available for work</span>
+              <div className="w-[5px] h-[5px] rounded-full bg-accent shrink-0 animate-pd ml-auto"></div>
+            </div>
+            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+              <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Open to</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">Freelance · Collabs · Internships</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-[52px] pt-[18px] border-t border-border-rgba flex justify-between text-[9px] text-ink3 tracking-[0.14em] uppercase">
+        <span>danafdr · West Jakarta · 2025</span>
+        <span>Boys Don&apos;t Cry energy · web-first · no templates ever</span>
+      </div>
+    </section>
+  );
+}
