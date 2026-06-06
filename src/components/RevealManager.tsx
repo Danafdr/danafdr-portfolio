@@ -1,52 +1,65 @@
 "use client";
 
 import { useEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function RevealManager() {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let ScrollTriggerInstance: any = null;
 
-    const revealElements = document.querySelectorAll(".reveal");
-
-    revealElements.forEach((el) => {
-      // Find potential staggers within the section
-      const children = el.querySelectorAll(".reveal-child");
+    const initGsap = async () => {
+      const gsapModule = await import("gsap");
+      const ScrollTriggerModule = await import("gsap/ScrollTrigger");
       
-      if (children.length > 0) {
-        // Prepare children for animation
-        gsap.set(children, { y: 18, opacity: 0 });
+      const gsap = gsapModule.default || gsapModule.gsap;
+      const ScrollTrigger = ScrollTriggerModule.default || ScrollTriggerModule.ScrollTrigger;
+      
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTriggerInstance = ScrollTrigger;
+
+      const revealElements = document.querySelectorAll(".reveal");
+
+      revealElements.forEach((el) => {
+        // Find potential staggers within the section
+        const children = el.querySelectorAll(".reveal-child");
         
-        ScrollTrigger.create({
-          trigger: el,
-          start: "top 90%",
-          onEnter: () => {
-            gsap.to(children, {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.08, // 80ms stagger as per spec
-              ease: "power3.out", // Smooth, breath-like ease
-            });
-            // Also reveal the parent container if it has styles
-            el.classList.add("in");
-          },
-          once: true
-        });
-      } else {
-        // Standard single element reveal
-        ScrollTrigger.create({
-          trigger: el,
-          start: "top 90%",
-          onEnter: () => el.classList.add("in"),
-          once: true
-        });
-      }
-    });
+        if (children.length > 0) {
+          // Prepare children for animation
+          gsap.set(children, { y: 18, opacity: 0 });
+          
+          ScrollTrigger.create({
+            trigger: el,
+            start: "top 90%",
+            onEnter: () => {
+              gsap.to(children, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.08, // 80ms stagger as per spec
+                ease: "power3.out", // Smooth, breath-like ease
+              });
+              // Also reveal the parent container if it has styles
+              el.classList.add("in");
+            },
+            once: true
+          });
+        } else {
+          // Standard single element reveal
+          ScrollTrigger.create({
+            trigger: el,
+            start: "top 90%",
+            onEnter: () => el.classList.add("in"),
+            once: true
+          });
+        }
+      });
+    };
+
+    initGsap();
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      if (ScrollTriggerInstance) {
+        ScrollTriggerInstance.getAll().forEach((t: any) => t.kill());
+      }
     };
   }, []);
 

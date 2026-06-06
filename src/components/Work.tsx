@@ -38,7 +38,7 @@ export default function Work() {
           key={cat.id} 
           href={`/work?cat=${cat.slug}`}
           scroll={false}
-          className="grid grid-cols-[52px_1fr_auto_32px] gap-5 items-center py-5 px-10 border-b border-border-rgba cursor-pointer transition-colors duration-150 group hover:bg-[rgba(15,14,11,0.025)] no-underline"
+          className="work-item grid grid-cols-[52px_1fr_auto_32px] gap-5 items-center py-5 px-10 border-b border-border-rgba cursor-pointer group no-underline"
         >
           <div className="font-playfair text-[26px] font-black text-ink3">{cat.id}</div>
           <div>
@@ -47,10 +47,10 @@ export default function Work() {
           </div>
           <div className="flex gap-[5px] flex-wrap justify-end">
             {cat.tags.map((tag, i) => (
-              <span key={i} className="text-[9px] text-ink2 border border-border-rgba py-[3px] px-2 tracking-[0.05em]">{tag}</span>
+              <span key={i} className="work-tag text-[9px] text-ink2 border border-border-rgba py-[3px] px-2 tracking-[0.05em]">{tag}</span>
             ))}
           </div>
-          <div className="text-[15px] text-ink3 transition-all duration-200 group-hover:translate-x-[5px] group-hover:text-accent">→</div>
+          <div className="w-arr text-[15px] text-ink3 transition-all duration-200 group-hover:translate-x-[5px]">→</div>
         </Link>
       ))}
     </section>

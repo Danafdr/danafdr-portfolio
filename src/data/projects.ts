@@ -11,6 +11,7 @@ export interface Project {
   visualSubtitle?: string;
   gradientStart?: string;
   gradientEnd?: string;
+  media?: string[];
 }
 
 export const projects: Project[] = [

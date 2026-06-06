@@ -14,30 +14,33 @@ export default function Contact() {
         </div>
         <div>
           <div className="flex flex-col gap-0">
-            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+            <div className="c-row flex items-center gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">GitHub</span>
-              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">github.com/danafdr</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">github.com/danafdr</span>
               <span className="ml-auto text-[12px] text-ink3">↗</span>
             </div>
-            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+            <div className="c-row flex items-center gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Location</span>
-              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">West Jakarta, Indonesia</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">West Jakarta, Indonesia</span>
               <span className="ml-auto text-[12px] text-ink3">·</span>
             </div>
-            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+            <div className="c-row flex items-center gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Status</span>
-              <span className="text-[13px] text-accent transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">Available for work</span>
+              <span className="text-[13px] text-accent transition-colors duration-200 tracking-[0.02em]">Available for work</span>
               <div className="w-[5px] h-[5px] rounded-full bg-accent shrink-0 animate-pd ml-auto"></div>
             </div>
-            <div className="flex items-center gap-4 py-[15px] border-b border-border-rgba cursor-pointer group">
+            <div className="c-row flex items-center gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Open to</span>
-              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">Freelance · Collabs · Internships</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">Freelance · Collabs · Internships</span>
             </div>
           </div>
         </div>
       </div>
       <div className="mt-[52px] pt-[18px] border-t border-border-rgba flex justify-between text-[9px] text-ink3 tracking-[0.14em] uppercase">
-        <span>danafdr · West Jakarta · 2025</span>
+        <div className="flex gap-6">
+          <span>danafdr · West Jakarta · 2025</span>
+          <a href="/photography" className="hover:text-ink transition-colors">Photography ↗</a>
+        </div>
         <span>Boys Don&apos;t Cry energy · web-first · no templates ever</span>
       </div>
     </section>

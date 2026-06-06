@@ -1,8 +1,32 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function Header() {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Hide if scrolling down and past 80px, show if scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <header className="px-10 border-b border-border-rgba grid grid-cols-[1fr_auto_1fr] items-center gap-5 sticky top-0 z-[100] bg-paper/96 backdrop-blur-[10px]">
+    <header className={`px-10 border-b border-border-rgba grid grid-cols-[1fr_auto_1fr] items-center gap-5 sticky top-0 z-[100] bg-paper/96 backdrop-blur-[10px] transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
       <nav className="flex gap-6">
         <Link href="/about" className="text-[9px] text-ink2 tracking-[0.18em] uppercase cursor-pointer no-underline py-5 transition-colors duration-200 block hover:text-ink">About</Link>
         <Link href="/#skills" className="text-[9px] text-ink2 tracking-[0.18em] uppercase cursor-pointer no-underline py-5 transition-colors duration-200 block hover:text-ink">Skills</Link>

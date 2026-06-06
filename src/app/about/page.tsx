@@ -11,9 +11,10 @@ export default function AboutPage() {
     <main className="bg-paper min-h-screen">
       <Header />
       
-      <article className="max-w-4xl mx-auto px-10 py-20 pb-40">
-        <div className="grid grid-cols-[1fr_2fr] gap-20 items-start mb-32">
-          <div className="sticky top-32">
+      <article className="max-w-4xl mx-auto px-10 pt-20">
+        <div className="grid grid-cols-[1fr_2fr] gap-20 relative">
+          <div className="h-full">
+            <div className="sticky top-[20vh]">
             <h1 className="font-playfair text-[clamp(40px,5vw,64px)] font-black leading-[0.9] tracking-[-0.02em] mb-6">
               Who is<br /><em className="italic font-normal text-ink2">danafdr?</em>
             </h1>
@@ -26,10 +27,11 @@ export default function AboutPage() {
                 <span>Candid</span>
                 <span>Photo</span>
               </div>
+              </div>
             </div>
           </div>
           
-          <div className="font-mono text-[13px] leading-[2.1] text-ink2 mt-4">
+          <div className="font-mono text-[13px] leading-[2.1] text-ink2 mt-4 pb-32">
             <p className="mb-8 text-ink text-[15px] leading-[1.9]">
               <span className="float-left text-[64px] font-playfair font-black leading-[0.8] mr-3 mt-1 text-ink">A</span>
               17-year-old from West Jakarta who builds full-stack web apps and studies how things move. Web development is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
@@ -101,7 +103,7 @@ export default function AboutPage() {
                 
                 <div>
                   <div className="text-[9px] text-ink3 tracking-[0.18em] uppercase mb-3">Games</div>
-                  <div className="text-[13px] text-ink mb-2 tracking-[0.02em]">The Finals · Cyberpunk 2077 · FragPunk</div>
+                  <div className="text-[13px] text-ink mb-2 tracking-[0.02em]">The Finals · Geometry Dash · Need For Speed Heat</div>
                   <div className="text-[11px] text-ink2 leading-[1.7]">Absolute aesthetic commitment. No half measures in art direction.</div>
                 </div>
               </div>
