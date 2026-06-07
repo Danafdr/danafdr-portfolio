@@ -61,6 +61,8 @@ export async function POST(request: Request) {
         live_url,
         repo_url,
         tools: toolsStr ? JSON.parse(toolsStr) : [],
+        gradient_start: formData.get('gradient_start') as string || '#1a1816',
+        gradient_end: formData.get('gradient_end') as string || '#2a2420',
         thumbnail: thumbnailPath,
         created_at: new Date(),
         updated_at: new Date(),

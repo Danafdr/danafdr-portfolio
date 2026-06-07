@@ -14,29 +14,40 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
 
   try {
     const formData = await request.formData();
-    const title = formData.get('title') as string;
-    let slug = formData.get('slug') as string;
-    const type = formData.get('type') as string;
-    const description = formData.get('description') as string;
-    const full_description = formData.get('full_description') as string;
-    const yearStr = formData.get('year') as string;
-    const year = yearStr ? parseInt(yearStr) : null;
-    const live_url = formData.get('live_url') as string;
-    const repo_url = formData.get('repo_url') as string;
-    const toolsStr = formData.get('tools') as string;
+    const dataToUpdate: any = { updated_at: new Date() };
 
-    const dataToUpdate: any = {
-      title,
-      slug,
-      type,
-      description,
-      full_description,
-      year,
-      live_url,
-      repo_url,
-      tools: toolsStr ? JSON.parse(toolsStr) : [],
-      updated_at: new Date(),
-    };
+    const title = formData.get('title') as string;
+    if (title !== null) dataToUpdate.title = title;
+    
+    const slug = formData.get('slug') as string;
+    if (slug !== null) dataToUpdate.slug = slug;
+    
+    const type = formData.get('type') as string;
+    if (type !== null) dataToUpdate.type = type;
+    
+    const description = formData.get('description') as string;
+    if (description !== null) dataToUpdate.description = description;
+    
+    const full_description = formData.get('full_description') as string;
+    if (full_description !== null) dataToUpdate.full_description = full_description;
+    
+    const yearStr = formData.get('year') as string;
+    if (yearStr !== null) dataToUpdate.year = yearStr ? parseInt(yearStr) : null;
+    
+    const live_url = formData.get('live_url') as string;
+    if (live_url !== null) dataToUpdate.live_url = live_url;
+    
+    const repo_url = formData.get('repo_url') as string;
+    if (repo_url !== null) dataToUpdate.repo_url = repo_url;
+    
+    const toolsStr = formData.get('tools') as string;
+    if (toolsStr !== null) dataToUpdate.tools = toolsStr ? JSON.parse(toolsStr) : [];
+    
+    const gradientStart = formData.get('gradient_start') as string;
+    if (gradientStart !== null) dataToUpdate.gradient_start = gradientStart;
+    
+    const gradientEnd = formData.get('gradient_end') as string;
+    if (gradientEnd !== null) dataToUpdate.gradient_end = gradientEnd;
 
     const thumbnail = formData.get('thumbnail') as File | null;
     if (thumbnail && thumbnail.size > 0) {
