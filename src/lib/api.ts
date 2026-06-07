@@ -1,4 +1,6 @@
-const API = "";
+const API = process.env.NODE_ENV === 'production' 
+    ? "https://danafdr-portfolio-api.onrender.com" 
+    : (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000");
 
 // Try to get auth token
 const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
