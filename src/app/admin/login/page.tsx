@@ -63,7 +63,7 @@ export default function LoginPage() {
         </label>
 
         <AdminButton type="submit" disabled={loading} className="w-full mt-2">
-          {loading ? 'SIGNING IN...' : 'SIGN IN →'}
+          {loading ? 'SIGNING IN...' : 'LOG IN →'}
         </AdminButton>
       </form>
     </div>
