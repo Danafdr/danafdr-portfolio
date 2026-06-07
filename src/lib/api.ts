@@ -17,8 +17,8 @@ const apiFetch = async (path: string, options: RequestInit = {}) => {
 
     const res = await fetch(`${API}${path}`, {
         cache: 'no-store', // ensures we don't cache admin lists
-        headers,
         ...options,
+        headers,
     });
     
     if (res.status === 401) {
