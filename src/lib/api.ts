@@ -1,13 +1,30 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-// Always include credentials for Sanctum cookie auth
+// Try to get auth token
+const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+
+// Helper to fetch from API
 const apiFetch = async (path: string, options: RequestInit = {}) => {
+    const headers: HeadersInit = {
+        'Accept': 'application/json',
+        ...options.headers,
+    };
+
+    const token = getToken();
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const res = await fetch(`${API}${path}`, {
-        credentials: 'include',
         cache: 'no-store', // ensures we don't cache admin lists
-        headers: { 'Accept': 'application/json', ...options.headers },
+        headers,
         ...options,
     });
+    
+    if (res.status === 401) {
+        if (typeof window !== 'undefined') localStorage.removeItem('auth_token');
+    }
+
     if (!res.ok) {
         const text = await res.text().catch(() => '');
         let err = { message: '' };
@@ -24,17 +41,21 @@ export const getProjects  = () => apiFetch('/api/projects');
 export const getProject   = (slug: string) => apiFetch(`/api/projects/${slug}`);
 
 // ── Auth
-export const getCsrfCookie = () => apiFetch('/sanctum/csrf-cookie');
-export const login  = (email: string, password: string) =>
-    apiFetch('/api/login', {
+export const login  = async (email: string, password: string) => {
+    const res = await apiFetch('/api/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-                   'X-XSRF-TOKEN': getCsrfToken() },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
     });
-export const logout = () =>
-    apiFetch('/api/logout', { method: 'POST',
-        headers: { 'X-XSRF-TOKEN': getCsrfToken() } });
+    if (res && res.token && typeof window !== 'undefined') {
+        localStorage.setItem('auth_token', res.token);
+    }
+    return res;
+};
+export const logout = async () => {
+    await apiFetch('/api/logout', { method: 'POST' });
+    if (typeof window !== 'undefined') localStorage.removeItem('auth_token');
+};
 export const getUser = () => apiFetch('/api/user');
 
 // ── Admin

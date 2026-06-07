@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCsrfCookie, login } from '@/lib/api';
+import { login } from '@/lib/api';
 import { AdminInput } from '@/components/admin/AdminInput';
 import { AdminButton } from '@/components/admin/AdminButton';
 
@@ -19,7 +19,6 @@ export default function LoginPage() {
     setError('');
 
     try {
-      await getCsrfCookie();
       await login(email, password);
       router.push('/admin');
     } catch (err: any) {
