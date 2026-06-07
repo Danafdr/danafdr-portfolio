@@ -11,7 +11,7 @@ import RevealManager from "../components/RevealManager";
 
 async function getHeroSettings() {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/hero-settings', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/hero-settings`, {
       next: { revalidate: 1800 }
     });
     if (res.ok) return await res.json();

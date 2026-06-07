@@ -134,7 +134,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
                   <div 
                     className="absolute inset-0 pointer-events-none mix-blend-overlay"
                     style={{
-                      backgroundImage: `url('http://127.0.0.1:8000/storage/assets/grain.png')`,
+                      backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/storage/assets/grain.png')`,
                       opacity: heroSettings.filter_values.grain / 100,
                     }}
                   />

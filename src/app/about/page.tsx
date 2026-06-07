@@ -6,7 +6,42 @@ export const metadata: Metadata = {
   description: "Web dev, video editing, and what shapes the work.",
 };
 
-export default function AboutPage() {
+async function getHeroSettings() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/hero-settings`, {
+      next: { revalidate: 1800 }
+    });
+    if (res.ok) return await res.json();
+  } catch (e) {
+    console.error('Failed to fetch hero settings', e);
+  }
+  return null;
+}
+
+export default async function AboutPage() {
+  const heroSettings = await getHeroSettings();
+  const hasPhoto = !!heroSettings?.photo_url;
+  const isCssMode = heroSettings?.filter_mode === 'css';
+  const showGrain = isCssMode && heroSettings?.filter_values?.grain > 0;
+
+  const getCssFilter = () => {
+    if (!isCssMode) return 'none';
+    if (!heroSettings?.filter_values && !heroSettings?.filter) return 'none';
+    const PRESETS = [
+      { id: 'original', css: 'none' },
+      { id: 'grainy', css: 'contrast(1.1) brightness(0.95) saturate(0.9)' },
+      { id: 'warm', css: 'sepia(0.15) saturate(1.1) brightness(1.05) contrast(0.95)' },
+      { id: 'desaturated', css: 'saturate(0.3) contrast(1.05) brightness(1.02)' },
+      { id: 'dark', css: 'brightness(0.82) contrast(1.2) saturate(0.85)' },
+      { id: 'fade', css: 'brightness(1.1) contrast(0.82) saturate(0.75)' },
+    ];
+    let presetCss = PRESETS.find(p => p.id === heroSettings.filter)?.css || 'none';
+    let base = presetCss !== 'none' ? presetCss + ' ' : '';
+    if (heroSettings.filter_values?.brightness) base += `brightness(${1 + heroSettings.filter_values.brightness/100}) `;
+    if (heroSettings.filter_values?.contrast) base += `contrast(${1 + heroSettings.filter_values.contrast/100}) `;
+    return base.trim() || 'none';
+  };
+
   return (
     <main className="bg-paper min-h-screen">
       <Header />
@@ -21,13 +56,43 @@ export default function AboutPage() {
             <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">West Jakarta, Indonesia</div>
             <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">Web Dev · Video Editor</div>
             
-            <div className="mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden grayscale contrast-125">
-              {/* TODO: Replace with actual personal photo */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
-                <span>Candid</span>
-                <span>Photo</span>
-              </div>
-              </div>
+            <div className="mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden grayscale contrast-125 flex items-center justify-center">
+              {!hasPhoto ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
+                  <span>Candid</span>
+                  <span>Photo</span>
+                </div>
+              ) : (
+                <div className="w-full h-full relative overflow-hidden bg-ink">
+                  <img 
+                    src={heroSettings.photo_url} 
+                    className="absolute max-w-none"
+                    style={{
+                      filter: getCssFilter(),
+                      transform: `rotate(${heroSettings.rotation || 0}deg)`,
+                      ...(heroSettings.crop && isCssMode ? {
+                        width: `${(heroSettings.width / heroSettings.crop.width) * 100}%`,
+                        height: `${(heroSettings.height / heroSettings.crop.height) * 100}%`,
+                        left: `-${(heroSettings.crop.x / heroSettings.crop.width) * 100}%`,
+                        top: `-${(heroSettings.crop.y / heroSettings.crop.height) * 100}%`
+                      } : {
+                        width: '100%', height: '100%', objectFit: 'cover'
+                      })
+                    }}
+                    alt="Danadirsha"
+                  />
+                  {showGrain && (
+                    <div 
+                      className="absolute inset-0 pointer-events-none mix-blend-overlay"
+                      style={{
+                        backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/storage/assets/grain.png')`,
+                        opacity: heroSettings.filter_values.grain / 100,
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
             </div>
           </div>
           
