@@ -151,8 +151,8 @@ export default function AdminPhotosPage() {
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      const oldIndex = photos.findIndex((p) => p.id === active.id);
-      const newIndex = photos.findIndex((p) => p.id === over.id);
+      const oldIndex = photos.findIndex((p) => String(p.id) === String(active.id));
+      const newIndex = photos.findIndex((p) => String(p.id) === String(over.id));
       
       const newPhotos = arrayMove(photos, oldIndex, newIndex);
       setPhotos(newPhotos);
@@ -182,7 +182,7 @@ export default function AdminPhotosPage() {
   };
 
   const handleToggleFeatured = async (id: number) => {
-    const p = photos.find(x => x.id === id);
+    const p = photos.find(x => String(x.id) === String(id));
     if (!p) return;
     
     // Check if adding 5th
@@ -194,7 +194,7 @@ export default function AdminPhotosPage() {
       }
     }
 
-    setPhotos(photos.map(x => x.id === id ? { ...x, featured: !x.featured } : x));
+    setPhotos(photos.map(x => String(x.id) === String(id) ? { ...x, featured: !x.featured } : x));
     try {
       await toggleGalleryFeatured(id);
       toast('Featured status updated', 'success');
@@ -207,7 +207,7 @@ export default function AdminPhotosPage() {
   const handleSaveTags = async (id: number, tags: string[], source: string) => {
     try {
       await updateGalleryPhoto(id, { tags, source });
-      setPhotos(photos.map(p => p.id === id ? { ...p, tags, source } : p));
+      setPhotos(photos.map(p => String(p.id) === String(id) ? { ...p, tags, source } : p));
       toast('Photo updated', 'success');
       setEditingPhoto(null);
     } catch {

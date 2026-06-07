@@ -14,7 +14,7 @@ export default function EditProjectPage() {
   useEffect(() => {
     getAdminProjects()
       .then((projects: any[]) => {
-        const project = projects.find(p => p.id === id);
+        const project = projects.find(p => String(p.id) === String(id));
         if (project) setInitialData(project);
       })
       .finally(() => setLoading(false));

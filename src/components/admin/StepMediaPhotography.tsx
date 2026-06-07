@@ -40,7 +40,7 @@ export function StepMediaPhotography({ projectId }: { projectId: number }) {
           const aiRes = await analyzePhoto(projectId, photo.id);
           if (aiRes.tags) {
             await updatePhotoData(projectId, photo.id, { ai_tags: aiRes.tags });
-            setPhotos(prev => prev.map(p => p.id === photo.id ? { ...p, ai_tags: aiRes.tags } : p));
+            setPhotos(prev => prev.map(p => String(p.id) === String(photo.id) ? { ...p, ai_tags: aiRes.tags } : p));
           }
         } catch (err) {
           console.error("AI tagging failed", err);
@@ -64,22 +64,22 @@ export function StepMediaPhotography({ projectId }: { projectId: number }) {
   };
 
   const acceptAiTag = async (photoId: number, tag: string) => {
-    const photo = photos.find(p => p.id === photoId);
+    const photo = photos.find(p => String(p.id) === String(photoId));
     if (!photo) return;
     const newTags = [...(photo.tags || []), tag];
     try {
       await updatePhotoData(projectId, photoId, { tags: newTags });
-      setPhotos(photos.map(p => p.id === photoId ? { ...p, tags: newTags } : p));
+      setPhotos(photos.map(p => String(p.id) === String(photoId) ? { ...p, tags: newTags } : p));
     } catch (e) {}
   };
 
   const removeTag = async (photoId: number, tag: string) => {
-    const photo = photos.find(p => p.id === photoId);
+    const photo = photos.find(p => String(p.id) === String(photoId));
     if (!photo) return;
     const newTags = (photo.tags || []).filter((t: string) => t !== tag);
     try {
       await updatePhotoData(projectId, photoId, { tags: newTags });
-      setPhotos(photos.map(p => p.id === photoId ? { ...p, tags: newTags } : p));
+      setPhotos(photos.map(p => String(p.id) === String(photoId) ? { ...p, tags: newTags } : p));
     } catch (e) {}
   };
 

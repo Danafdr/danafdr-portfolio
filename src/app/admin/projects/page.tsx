@@ -162,7 +162,7 @@ export default function ProjectsPage() {
 
   const handleToggle = async (id: number, field: string) => {
     // optimistic
-    setProjects(projects.map(p => p.id === id ? { ...p, [field]: !(p as any)[field] } : p));
+    setProjects(projects.map(p => String(p.id) === String(id) ? { ...p, [field]: !(p as any)[field] } : p));
     try {
       await toggleProject(id, field);
       toast(`${field} updated`, 'success');
@@ -177,7 +177,8 @@ export default function ProjectsPage() {
     try {
       await deleteProject(deleteId);
       toast('Project deleted', 'success');
-      setProjects(projects.filter((p) => p.id !== deleteId));
+      setProjects(projects.filter((p) => String(p.id) !== String(deleteId)));
+      setDeleteId(null);
     } catch {
       toast('Failed to delete', 'error');
     } finally {
