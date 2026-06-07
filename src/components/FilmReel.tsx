@@ -13,21 +13,19 @@ const initialCategories = [
     name: "Web Development",
     slug: "webdev",
     description: "Full-stack applications, Next.js frontends, and Laravel APIs.",
-    projects: projects.filter(p =>
-      p.typeBadge === "Web Application" || p.typeBadge === "Next.js Project" || p.typeBadge === "This Portfolio"
-    ),
+    projects: [] as Project[],
   },
   {
     name: "Video Editing",
     slug: "video",
     description: "Cinematic cuts, narrative pacing, and product reels.",
-    projects: projects.filter(p => p.typeBadge === "Video Editing"),
+    projects: [] as Project[],
   },
   {
     name: "Motion Graphics",
     slug: "mograph",
     description: "Title sequences and 3D-assisted motion using Blender and C4D pipelines fed into After Effects.",
-    projects: projects.filter(p => p.typeBadge === "Motion Graphics"),
+    projects: [] as Project[],
   },
 ];
 
