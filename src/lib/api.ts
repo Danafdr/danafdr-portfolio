@@ -5,9 +5,9 @@ const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('aut
 
 // Helper to fetch from API
 const apiFetch = async (path: string, options: RequestInit = {}) => {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
         'Accept': 'application/json',
-        ...options.headers,
+        ...(options.headers as Record<string, string> || {}),
     };
 
     const token = getToken();
