@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AdminGuard } from './AdminGuard';
 import { ToastProvider } from '@/components/admin/Toast';
+import { logout } from '@/lib/api';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -48,7 +49,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <a href="/" target="_blank" rel="noopener noreferrer" className="nav-link text-[10px] text-admin-ink2">
                 View site ↗
               </a>
-              <button onClick={() => {/* TODO: logout */}} className="btn-ghost px-3 py-1 text-[9px] uppercase tracking-[0.1em] border border-border text-admin-ink3">
+              <button 
+                onClick={async () => {
+                  await logout();
+                  window.location.href = '/login';
+                }} 
+                className="btn-ghost px-3 py-1 text-[9px] uppercase tracking-[0.1em] border border-border text-admin-ink3 hover:text-admin-ink hover:border-admin-ink transition-colors"
+              >
                 Logout
               </button>
             </div>
