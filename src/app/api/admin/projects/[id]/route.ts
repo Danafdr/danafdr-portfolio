@@ -19,7 +19,8 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     const type = formData.get('type') as string;
     const description = formData.get('description') as string;
     const full_description = formData.get('full_description') as string;
-    const year = parseInt(formData.get('year') as string);
+    const yearStr = formData.get('year') as string;
+    const year = yearStr ? parseInt(yearStr) : null;
     const live_url = formData.get('live_url') as string;
     const repo_url = formData.get('repo_url') as string;
     const toolsStr = formData.get('tools') as string;
