@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 };
 
 import dynamic from "next/dynamic";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import TransitionProvider from "../components/TransitionProvider";
 import Intro from "../components/Intro";
 import CursorHider from "../components/CursorHider";
@@ -59,6 +60,7 @@ export default function RootLayout({
         <TransitionProvider>
           {children}
         </TransitionProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
