@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { apiFetch } from '@/lib/api';
-import { useToast } from '@/components/admin/Toast';
+import { toast } from '@/components/admin/Toast';
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const toast = useToast();
 
   useEffect(() => {
     fetchMessages();
@@ -15,9 +14,9 @@ export default function MessagesPage() {
 
   const fetchMessages = async () => {
     try {
-      const res = await apiFetch('/api/admin/messages');
-      if (res.ok) {
-        setMessages(await res.json());
+      const data = await apiFetch('/api/admin/messages');
+      if (data) {
+        setMessages(data);
       }
     } catch (e) {
       toast('Failed to fetch messages', 'error');

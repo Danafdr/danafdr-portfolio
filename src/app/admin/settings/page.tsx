@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { apiFetch } from '@/lib/api';
-import AdminButton from '@/components/admin/AdminButton';
-import AdminInput from '@/components/admin/AdminInput';
-import { useToast } from '@/components/admin/Toast';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { AdminInput } from '@/components/admin/AdminInput';
+import { toast } from '@/components/admin/Toast';
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,6 @@ export default function SettingsPage() {
   const [password, setPassword] = useState('');
   const [githubToken, setGithubToken] = useState('');
   const [aiApiKey, setAiApiKey] = useState('');
-  const toast = useToast();
 
   useEffect(() => {
     fetchSettings();
@@ -21,9 +20,8 @@ export default function SettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const res = await apiFetch('/api/admin/settings');
-      if (res.ok) {
-        const data = await res.json();
+      const data = await apiFetch('/api/admin/settings');
+      if (data) {
         setEmail(data.email || '');
         setGithubToken(data.github_token || '');
         setAiApiKey(data.ai_api_key || '');
@@ -41,19 +39,14 @@ export default function SettingsPage() {
       const payload: any = { email, github_token: githubToken, ai_api_key: aiApiKey };
       if (password) payload.password = password;
 
-      const res = await apiFetch('/api/admin/settings', {
+      await apiFetch('/api/admin/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      if (res.ok) {
-        toast('Settings updated successfully!', 'success');
-        setPassword(''); // clear password field after save
-      } else {
-        const err = await res.json();
-        toast(err.error || 'Failed to update', 'error');
-      }
+      toast('Settings updated successfully!', 'success');
+      setPassword(''); // clear password field after save
     } catch (e) {
       toast('Failed to update', 'error');
     } finally {

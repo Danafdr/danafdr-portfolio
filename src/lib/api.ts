@@ -4,7 +4,7 @@ const API = "";
 const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
 
 // Helper to fetch from API
-const apiFetch = async (path: string, options: RequestInit = {}) => {
+export const apiFetch = async (path: string, options: RequestInit = {}) => {
     const headers: Record<string, string> = {
         'Accept': 'application/json',
         ...(options.headers as Record<string, string> || {}),

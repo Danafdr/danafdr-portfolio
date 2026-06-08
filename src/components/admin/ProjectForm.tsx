@@ -229,7 +229,7 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                       const res = await fetch('/api/admin/ai/generate-description', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ title, type, repo_url: repoUrl, tools: toolsString.split(',').map(s => s.trim()) })
+                        body: JSON.stringify({ title, type, repo_url: repoUrl, tools: toolsString.split(',').map((s: string) => s.trim()) })
                       });
                       const data = await res.json();
                       if (res.ok && data.description) {
