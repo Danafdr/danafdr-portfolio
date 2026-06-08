@@ -183,6 +183,9 @@ export default function FilmReel() {
 
       if (targetIndex >= 0 && targetIndex < totalSlides) {
         isAnimatingWheel.current = true;
+        // Temporarily disable native scroll snapping so it doesn't fight GSAP
+        container.style.scrollSnapType = 'none';
+
         const targetElement = container.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
         if (targetElement) {
           const proxy = { y: container.scrollTop };
@@ -192,11 +195,14 @@ export default function FilmReel() {
             ease: "expo.out",
             onUpdate: () => { container.scrollTop = proxy.y; },
             onComplete: () => {
+              // Restore native snap after animation completes
+              container.style.scrollSnapType = 'y mandatory';
               // Add delay to prevent double-jumps from continuous scrolling
               setTimeout(() => { isAnimatingWheel.current = false; }, 400);
             }
           });
         } else {
+          container.style.scrollSnapType = 'y mandatory';
           isAnimatingWheel.current = false;
         }
       }
