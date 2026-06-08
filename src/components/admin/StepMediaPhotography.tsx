@@ -23,11 +23,14 @@ export function StepMediaPhotography({ projectId }: { projectId: number }) {
     }
   };
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (!files.length) return;
+  const [isDragging, setIsDragging] = useState(false);
 
+  const processFiles = async (files: File[]) => {
     for (const file of files) {
+      if (file.size > 50 * 1024 * 1024) {
+        toast(`File ${file.name} exceeds 50MB limit`, 'error');
+        continue;
+      }
       try {
         const formData = new FormData();
         formData.append('photo', file);
@@ -51,6 +54,32 @@ export function StepMediaPhotography({ projectId }: { projectId: number }) {
     }
     // Refresh to ensure order is correct
     loadPhotos();
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    await processFiles(files);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const files = Array.from(e.dataTransfer.files || []);
+    if (!files.length) return;
+    
+    await processFiles(files);
   };
 
   const handleDelete = async (id: number) => {
@@ -86,8 +115,14 @@ export function StepMediaPhotography({ projectId }: { projectId: number }) {
   return (
     <div className="flex flex-col gap-8">
       {/* Upload Zone */}
-      <label className="cursor-pointer border border-dashed border-border px-4 py-12 text-center hover:border-accent transition-colors block">
-        <span className="font-mono text-[10px] text-admin-ink3 uppercase block mb-2">Upload Photos (Multi-select)</span>
+      <label 
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`cursor-pointer border border-dashed px-4 py-12 text-center transition-colors block ${isDragging ? 'border-accent bg-accent/10' : 'border-border hover:border-accent'}`}
+      >
+        <span className="font-mono text-[10px] text-admin-ink3 uppercase block mb-2">Upload Photos (Multi-select or Drag & Drop)</span>
+        <span className="font-mono text-[8px] text-admin-ink3 uppercase block mb-4">Max file size: 50MB</span>
         <input type="file" className="hidden" accept="image/jpeg,image/png,image/webp" multiple onChange={handleUpload} />
       </label>
 

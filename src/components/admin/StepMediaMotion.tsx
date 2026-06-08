@@ -13,6 +13,7 @@ export function StepMediaMotion({ projectId, initialData, onComplete }: { projec
   const [videoUrl, setVideoUrl] = useState(initialData?.video_url || '');
   const [videoPath, setVideoPath] = useState(initialData?.video_path || '');
   const [loading, setLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleUpload = async () => {
     if (!videoFile) return;
@@ -77,10 +78,36 @@ export function StepMediaMotion({ projectId, initialData, onComplete }: { projec
 
       {mode === 'upload' ? (
         <div className="flex flex-col gap-4">
-          <label className="cursor-pointer border border-dashed border-border px-4 py-12 text-center hover:border-accent transition-colors">
-            <span className="font-mono text-[10px] text-admin-ink3 uppercase block mb-2">Select video file (mp4, mov, webm max 100MB)</span>
+          <label 
+            onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={e => { e.preventDefault(); setIsDragging(false); }}
+            onDrop={e => {
+              e.preventDefault();
+              setIsDragging(false);
+              const file = e.dataTransfer.files?.[0];
+              if (file) {
+                if (file.size > 50 * 1024 * 1024) {
+                  toast(`File ${file.name} exceeds 50MB limit`, 'error');
+                } else {
+                  setVideoFile(file);
+                }
+              }
+            }}
+            className={`cursor-pointer border border-dashed px-4 py-12 text-center transition-colors ${isDragging ? 'border-accent bg-accent/10' : 'border-border hover:border-accent'}`}
+          >
+            <span className="font-mono text-[10px] text-admin-ink3 uppercase block mb-2">Select or Drag & Drop video file</span>
+            <span className="font-mono text-[8px] text-admin-ink3 uppercase block mb-4">Max file size: 50MB</span>
             {videoFile && <span className="font-mono text-[12px] text-admin-ink block">{videoFile.name}</span>}
-            <input type="file" className="hidden" accept="video/mp4,video/quicktime,video/webm" onChange={e => setVideoFile(e.target.files?.[0] || null)} />
+            <input type="file" className="hidden" accept="video/mp4,video/quicktime,video/webm" onChange={e => {
+              const file = e.target.files?.[0];
+              if (file) {
+                if (file.size > 50 * 1024 * 1024) {
+                  toast(`File ${file.name} exceeds 50MB limit`, 'error');
+                } else {
+                  setVideoFile(file);
+                }
+              }
+            }} />
           </label>
           <AdminButton onClick={handleUpload} disabled={!videoFile || loading}>
             {loading ? 'Uploading...' : 'Upload & Finish'}
