@@ -39,6 +39,7 @@ import Intro from "../components/Intro";
 import CursorHider from "../components/CursorHider";
 import Cursor from "../components/Cursor";
 import SmoothScroll from "../components/SmoothScroll";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function RootLayout({
   children,
@@ -59,6 +60,7 @@ export default function RootLayout({
         <TransitionProvider>
           {children}
         </TransitionProvider>
+        <Analytics />
       </body>
     </html>
   );
