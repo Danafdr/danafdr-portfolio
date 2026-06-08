@@ -69,7 +69,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex flex-col gap-8">
-        <section className="flex flex-col gap-4 border border-border p-6 bg-paper">
+        <section className="flex flex-col gap-4 border border-border p-6">
           <h2 className="font-mono text-[11px] uppercase tracking-widest text-admin-ink font-bold mb-2">Account Details</h2>
           <AdminInput 
             label="Email Address" 
@@ -84,7 +84,7 @@ export default function SettingsPage() {
           />
         </section>
 
-        <section className="flex flex-col gap-4 border border-border p-6 bg-paper">
+        <section className="flex flex-col gap-4 border border-border p-6">
           <h2 className="font-mono text-[11px] uppercase tracking-widest text-admin-ink font-bold mb-2">Integrations</h2>
           
           <div className="flex flex-col gap-1">

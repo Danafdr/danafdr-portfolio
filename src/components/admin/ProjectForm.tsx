@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createProject, updateProject, processThumbnail } from '@/lib/api';
+import { createProject, updateProject, processThumbnail, apiFetch } from '@/lib/api';
 import { AdminInput } from './AdminInput';
 import { AdminButton } from './AdminButton';
 import { toast } from './Toast';
@@ -156,10 +156,8 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                 type="button"
                 onClick={async () => {
                   try {
-                    const res = await fetch('/api/admin/github/repos');
-                    if (!res.ok) throw new Error(await res.text());
-                    const repos = await res.json();
-                    if (repos.error) throw new Error(repos.error);
+                    const repos = await apiFetch('/api/admin/github/repos');
+                    if (repos && repos.error) throw new Error(repos.error);
                     
                     const repoName = prompt("Enter exactly the name of the repository to import (e.g., 'my-website')\n\nAvailable:\n" + repos.map((r: any) => r.name).slice(0, 10).join(', ') + '...');
                     if (!repoName) return;
@@ -226,17 +224,16 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                   onClick={async () => {
                     toast('Generating...', 'success');
                     try {
-                      const res = await fetch('/api/admin/ai/generate-description', {
+                      const data = await apiFetch('/api/admin/ai/generate-description', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ title, type, repo_url: repoUrl, tools: toolsString.split(',').map((s: string) => s.trim()) })
                       });
-                      const data = await res.json();
-                      if (res.ok && data.description) {
+                      if (data && data.description) {
                         setDescription(data.description);
                         toast('Description generated!', 'success');
                       } else {
-                        toast(data.error || 'Failed to generate', 'error');
+                        toast(data?.error || 'Failed to generate', 'error');
                       }
                     } catch {
                       toast('Error connecting to AI', 'error');
