@@ -62,7 +62,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     return NextResponse.json(project);
   } catch (error) {
     console.error('Failed to update project:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -79,6 +79,6 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
     return NextResponse.json({ message: 'Deleted' });
   } catch (error) {
     console.error('Failed to delete project:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

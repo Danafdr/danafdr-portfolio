@@ -16,6 +16,6 @@ export async function GET() {
     return NextResponse.json(projects);
   } catch (error) {
     console.error('Failed to fetch projects:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

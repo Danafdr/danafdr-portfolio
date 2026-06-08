@@ -19,6 +19,6 @@ export async function GET(request: Request, props: { params: Promise<{ slug: str
     return NextResponse.json(project);
   } catch (error) {
     console.error('Failed to fetch project:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

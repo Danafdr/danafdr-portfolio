@@ -28,6 +28,6 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     return NextResponse.json({ success: true, field, value: (updated as any)[field] });
   } catch (error) {
     console.error('Failed to toggle project:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

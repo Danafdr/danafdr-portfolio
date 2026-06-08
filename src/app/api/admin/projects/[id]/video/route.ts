@@ -35,7 +35,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     return NextResponse.json(project);
   } catch (error) {
     console.error('Failed to upload video:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -58,6 +58,6 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
     return NextResponse.json(project);
   } catch (error) {
     console.error('Failed to delete video:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

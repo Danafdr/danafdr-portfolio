@@ -20,6 +20,6 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Failed to mark message read:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

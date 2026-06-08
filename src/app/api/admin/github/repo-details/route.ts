@@ -47,6 +47,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ readme, languages });
   } catch (error) {
     console.error('Failed to fetch github repo details:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

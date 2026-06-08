@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error('Failed to fetch settings:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -53,6 +53,6 @@ export async function POST(request: Request) {
     if (error.code === 'P2002') {
       return NextResponse.json({ error: 'Email already exists' }, { status: 400 });
     }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

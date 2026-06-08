@@ -15,6 +15,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ total, published, featured, drafts });
   } catch (error) {
     console.error('Failed to fetch stats:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

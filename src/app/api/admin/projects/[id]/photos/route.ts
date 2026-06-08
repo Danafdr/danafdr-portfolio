@@ -21,7 +21,7 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
     return NextResponse.json(photos);
   } catch (error) {
     console.error('Failed to fetch photos:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -57,6 +57,6 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     return NextResponse.json(photo, { status: 201 });
   } catch (error) {
     console.error('Failed to upload photo:', error);
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

@@ -34,7 +34,7 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     return NextResponse.json(photo);
   } catch (error) {
     console.error('Failed to update photo file:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -59,7 +59,7 @@ export async function PUT(request: Request, props: { params: Promise<{ id: strin
     return NextResponse.json(photo);
   } catch (error) {
     console.error('Failed to update photo data:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -76,6 +76,6 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
     return NextResponse.json({ message: 'Deleted' });
   } catch (error) {
     console.error('Failed to delete photo:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

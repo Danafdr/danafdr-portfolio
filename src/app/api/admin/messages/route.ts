@@ -18,6 +18,6 @@ export async function GET(request: Request) {
     return NextResponse.json(messages);
   } catch (error) {
     console.error('Failed to fetch messages:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
