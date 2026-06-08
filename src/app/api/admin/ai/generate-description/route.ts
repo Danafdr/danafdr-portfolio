@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
     const prompt = `Write a short, engaging description (1-2 sentences) for a portfolio project.
 Project Title: ${title || 'Unknown'}
