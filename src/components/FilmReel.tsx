@@ -64,9 +64,10 @@ export default function FilmReel() {
         videoUrl: p.video_url || undefined,
         hasCaseStudy: false,
         visualTitle: p.title,
-        visualSubtitle: p.type,
+        visualSubtitle: p.typeBadge,
         gradientStart: p.gradient_start || '#0f0f0f',
-        gradientEnd: p.gradient_end || '#1a1a1a'
+        gradientEnd: p.gradient_end || '#1a1a1a',
+        media: p.thumbnail_url ? [p.thumbnail_url] : (Array.isArray(p.media) ? p.media : (typeof p.media === 'string' ? JSON.parse(p.media) : []))
       }));
 
       setCategories([
@@ -547,10 +548,10 @@ export default function FilmReel() {
           onClick={() => setPreview(null)}
         >
           <div className="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
-
           <div
-            className="relative z-10 w-[90vw] max-w-[900px] max-h-[85vh] bg-paper border border-[rgba(15,14,11,0.15)] overflow-hidden"
+            className="relative z-10 w-[90vw] max-w-[900px] max-h-[85vh] bg-paper border border-[rgba(15,14,11,0.15)] overflow-y-auto no-scrollbar flex flex-col"
             onClick={(e) => e.stopPropagation()}
+            style={{ scrollbarWidth: "none" }}
           >
             <button
               onClick={() => setPreview(null)}

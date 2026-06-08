@@ -53,11 +53,25 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
   // We will save first, and if it's a new project, we get the ID so Step 2 can upload files directly (for Photos and Videos).
   const [projectId, setProjectId] = useState<number | null>(initialData?.id || null);
 
-  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThumbnailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setThumbnailFile(file);
+    if (!file || !projectId) return;
+    
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('_method', 'PUT');
+    formData.append('thumbnail', file);
+    
+    try {
+      await updateProject(projectId, formData);
+      toast('Thumbnail uploaded', 'success');
       setThumbnailPreview(URL.createObjectURL(file));
+      setThumbnailFile(null); // Clear file since it's uploaded
+      setEditorOpen(true); // Automatically open editor
+    } catch (err: any) {
+      toast(err.message || 'Failed to upload thumbnail', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -277,27 +291,57 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
             ) : (type === 'motion' || type === 'video') ? (
               <StepMediaMotion projectId={projectId} initialData={initialData} onComplete={() => { router.push('/admin/projects'); router.refresh(); }} />
             ) : (
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <label className="font-mono text-[9px] uppercase tracking-[0.18em] text-admin-ink2">Thumbnail</label>
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="font-mono text-[9px] uppercase tracking-[0.18em] text-admin-ink2">Thumbnail</label>
+                    <div className="flex items-center gap-4 mb-6">
+                      {thumbnailPreview && (
+                        <div className="flex flex-col gap-2">
+                          <button 
+                            onClick={() => setEditorOpen(true)}
+                            className="font-mono text-[9px] bg-accent text-paper px-3 py-1.5 uppercase tracking-[0.1em] hover:bg-opacity-90 transition-colors"
+                          >
+                            Open Image Editor →
+                          </button>
+                        </div>
+                      )}
+                      <label className="cursor-pointer border border-dashed border-border px-4 py-3 text-center flex-1 hover:border-accent transition-colors flex items-center justify-center">
+                        <span className="font-mono text-[10px] text-admin-ink3 uppercase">{thumbnailPreview ? 'Replace Image' : 'Click to upload thumbnail'}</span>
+                        <input type="file" className="hidden" accept="image/*" onChange={handleThumbnailChange} />
+                      </label>
+                    </div>
+
                     {thumbnailPreview && (
-                      <div className="flex flex-col gap-2">
-                        <img src={thumbnailPreview} alt="Preview" className="w-24 h-24 object-cover border border-border" />
-                        <button 
-                          onClick={() => setEditorOpen(true)}
-                          className="font-mono text-[9px] text-accent hover:underline uppercase text-left"
-                        >
-                          Edit image →
-                        </button>
+                      <div className="mb-4">
+                        <div className="font-mono text-[9px] text-admin-ink3 uppercase mb-3 tracking-[0.1em]">Live Preview (How it looks on the site)</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {/* Modal Visual (16:9) */}
+                          <div className="flex flex-col gap-2">
+                            <div className="text-[8px] font-mono text-admin-ink2 uppercase">Modal Visual (16:9)</div>
+                            <div className="w-full aspect-[16/9] border border-border bg-bg overflow-hidden relative">
+                              <img src={thumbnailPreview} className="w-full h-full object-cover" alt="16:9 preview" />
+                            </div>
+                          </div>
+                          
+                          {/* Project Row List (4:3) */}
+                          <div className="flex flex-col gap-2">
+                            <div className="text-[8px] font-mono text-admin-ink2 uppercase">List Thumbnail (4:3)</div>
+                            <div className="w-full aspect-[4/3] border border-border bg-bg overflow-hidden relative">
+                              <img src={thumbnailPreview} className="w-full h-full object-cover" alt="4:3 preview" />
+                            </div>
+                          </div>
+
+                          {/* Category Mosaic (1:1) */}
+                          <div className="flex flex-col gap-2">
+                            <div className="text-[8px] font-mono text-admin-ink2 uppercase">Mosaic Tile (1:1)</div>
+                            <div className="w-full aspect-square border border-border bg-bg overflow-hidden relative">
+                              <img src={thumbnailPreview} className="w-full h-full object-cover" alt="1:1 preview" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
-                    <label className="cursor-pointer border border-dashed border-border px-4 py-8 text-center flex-1 hover:border-accent transition-colors h-24 flex items-center justify-center">
-                      <span className="font-mono text-[10px] text-admin-ink3 uppercase">Click to upload thumbnail</span>
-                      <input type="file" className="hidden" accept="image/*" onChange={handleThumbnailChange} />
-                    </label>
                   </div>
-                </div>
 
                 <div className="grid grid-cols-2 gap-6 mt-4">
                   <AdminInput label="Gradient Start (Hex)" value={gradientStart} onChange={e => setGradientStart(e.target.value)} />
