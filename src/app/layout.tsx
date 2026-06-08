@@ -6,7 +6,7 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "700", "900"],
   style: ["normal", "italic"],
-  display: "swap",
+  display: "block",
   variable: "--font-playfair",
   adjustFontFallback: true,
 });
@@ -15,7 +15,7 @@ const dmMono = DM_Mono({
   subsets: ["latin"],
   weight: ["300", "400"],
   style: ["normal", "italic"],
-  display: "swap",
+  display: "block",
   variable: "--font-mono",
   adjustFontFallback: true,
 });
@@ -23,7 +23,7 @@ const dmMono = DM_Mono({
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
   weight: ["400"],
-  display: "swap",
+  display: "block",
   variable: "--font-bebas",
   adjustFontFallback: true,
 });

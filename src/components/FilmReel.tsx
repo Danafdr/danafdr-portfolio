@@ -61,6 +61,7 @@ export default function FilmReel() {
         tags: Array.isArray(p.tools) ? p.tools : (typeof p.tools === 'string' ? (function() { try { return JSON.parse(p.tools); } catch { return p.tools.split(',').map((s: string) => s.trim()); } })() : []),
         year: p.year || "2024",
         link: p.live_url || undefined,
+        videoUrl: p.video_url || undefined,
         hasCaseStudy: false,
         visualTitle: p.title,
         visualSubtitle: p.type,
@@ -477,7 +478,7 @@ export default function FilmReel() {
                       <button
                         key={project.id}
                         onClick={() => setPreview(project)}
-                        className="project-row proj-row w-full grid grid-cols-1 md:grid-cols-[60px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hoverable"
+                        className="project-row proj-row w-full grid grid-cols-1 md:grid-cols-[60px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hoverable active:scale-[0.98] transition-all duration-200"
                         role="button"
                       >
                         <div
@@ -601,33 +602,46 @@ export default function FilmReel() {
                 {preview.description}
               </p>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 border-t border-[rgba(15,14,11,0.1)] pt-6">
-                <div className="flex gap-2 flex-wrap">
-                  {preview.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="text-[9px] font-mono text-ink2 border border-[rgba(15,14,11,0.15)] py-1 px-3 uppercase tracking-[0.05em]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {preview.link ? (
-                  <a
-                    href={preview.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="sm:ml-auto text-[11px] font-mono tracking-[0.1em] uppercase text-accent flex items-center gap-2 hover:gap-3 transition-all no-underline"
-                  >
-                    Visit live ↗
-                  </a>
-                ) : (
-                  <div className="sm:ml-auto text-[11px] font-mono tracking-[0.1em] uppercase text-ink3 flex items-center gap-2">
-                    {preview.hasCaseStudy ? "Case study coming" : "Coming soon"}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 border-t border-[rgba(15,14,11,0.1)] pt-6">
+                  <div className="flex gap-2 flex-wrap">
+                    {preview.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="text-[9px] font-mono text-ink2 border border-[rgba(15,14,11,0.15)] py-1 px-3 uppercase tracking-[0.05em]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
-                )}
-              </div>
+
+                  <div className="sm:ml-auto flex flex-wrap gap-4 items-center">
+                    {preview.videoUrl && (
+                      <a
+                        href={preview.videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-mono tracking-[0.1em] uppercase text-accent flex items-center gap-2 hover:gap-3 transition-all no-underline"
+                      >
+                        Watch Video ↗
+                      </a>
+                    )}
+                    {preview.link && (
+                      <a
+                        href={preview.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-mono tracking-[0.1em] uppercase text-accent flex items-center gap-2 hover:gap-3 transition-all no-underline"
+                      >
+                        Visit live ↗
+                      </a>
+                    )}
+                    {!preview.link && !preview.videoUrl && (
+                      <div className="text-[11px] font-mono tracking-[0.1em] uppercase text-ink3 flex items-center gap-2">
+                        {preview.hasCaseStudy ? "Case study coming" : "Coming soon"}
+                      </div>
+                    )}
+                  </div>
+                </div>
             </div>
           </div>
         </div>

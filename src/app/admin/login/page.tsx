@@ -31,8 +31,8 @@ export default function LoginPage() {
   return (
     <div className="w-full max-w-[360px] animate-fi">
       <div className="text-center mb-10">
-        <h1 className="font-playfair text-[13px] font-black tracking-wide text-ink-public">
-          Danadirsha <span className="font-normal italic text-ink2-public">· Admin</span>
+        <h1 className="font-playfair text-[13px] font-black tracking-wide text-ink">
+          Danadirsha <span className="font-normal italic text-ink2">· Admin</span>
         </h1>
       </div>
 
@@ -59,7 +59,7 @@ export default function LoginPage() {
 
         <label className="flex items-center gap-2 cursor-pointer mt-[-8px]">
           <input type="checkbox" className="accent-accent" />
-          <span className="font-mono text-[10px] text-ink2-public">Remember me</span>
+          <span className="font-mono text-[10px] text-ink2">Remember me</span>
         </label>
 
         <AdminButton type="submit" disabled={loading} className="w-full mt-2">

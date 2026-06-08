@@ -51,6 +51,15 @@
   }
 }
 
+:root {
+  --paper: var(--color-paper);
+  --ink: var(--color-ink);
+  --ink2: var(--color-ink2);
+  --ink3: var(--color-ink3);
+  --accent: var(--color-accent);
+  --border: var(--color-border-rgba);
+}
+
 html,
 body {
   margin: 0;

@@ -42,6 +42,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link href="/admin/photos" className={pathname.startsWith('/admin/photos') ? 'text-admin-ink' : 'text-admin-ink3'}>
                 Photos
               </Link>
+              <Link href="/admin/messages" className={pathname.startsWith('/admin/messages') ? 'text-admin-ink' : 'text-admin-ink3'}>
+                Messages
+              </Link>
+              <Link href="/admin/settings" className={pathname.startsWith('/admin/settings') ? 'text-admin-ink' : 'text-admin-ink3'}>
+                Settings
+              </Link>
             </nav>
 
             {/* Right */}

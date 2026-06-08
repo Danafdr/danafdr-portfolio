@@ -10,6 +10,11 @@ export default function Cursor() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Reset hover on route change
+    setIsHovering(false);
+  }, [pathname]);
+
+  useEffect(() => {
     // Only show on devices with fine pointer (mouse/trackpad)
     if (typeof window === "undefined" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       return;
@@ -22,6 +27,7 @@ export default function Cursor() {
     let cursorX = mouseX;
     let cursorY = mouseY;
     let isMoving = false;
+    let isHoveringRef = false;
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
@@ -29,6 +35,16 @@ export default function Cursor() {
       if (!isMoving) {
         isMoving = true;
         requestAnimationFrame(updateCursor);
+      }
+      
+      // Check target on mouse move for more reliability than mouseover
+      const target = document.elementFromPoint(mouseX, mouseY) as HTMLElement;
+      if (target) {
+        const isInteractive = !!target.closest('a, button, input, textarea, select, [role="button"], .hoverable, [data-hoverable], .c-row, .work-item, .contact-link');
+        if (isHoveringRef !== isInteractive) {
+          isHoveringRef = isInteractive;
+          setIsHovering(isInteractive);
+        }
       }
     };
 
@@ -48,26 +64,24 @@ export default function Cursor() {
       }
     };
 
-    const isHoveringRef = { current: false };
+    const onMouseLeave = () => {
+      setIsVisible(false);
+    };
 
-    const onMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target) return;
-      const isInteractive = !!target.closest('a, button, input, textarea, select, [role="button"], .hoverable, [data-hoverable]');
-      if (isHoveringRef.current !== isInteractive) {
-        isHoveringRef.current = isInteractive;
-        setIsHovering(isInteractive);
-      }
+    const onMouseEnter = () => {
+      setIsVisible(true);
     };
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
-    window.addEventListener("mouseover", onMouseOver, { passive: true });
+    document.addEventListener("mouseleave", onMouseLeave);
+    document.addEventListener("mouseenter", onMouseEnter);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseover", onMouseOver);
+      document.removeEventListener("mouseleave", onMouseLeave);
+      document.removeEventListener("mouseenter", onMouseEnter);
     };
-  }, [pathname]);
+  }, []);
 
   if (!isVisible) return null;
 
