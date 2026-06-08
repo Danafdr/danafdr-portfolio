@@ -44,6 +44,15 @@ export async function POST(request: Request) {
       slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     }
 
+    let finalSlug = slug;
+    let count = 1;
+    while (await prisma.projects.findUnique({ where: { slug: finalSlug } })) {
+      finalSlug = `${slug}-${count}`;
+      count++;
+    }
+    slug = finalSlug;
+
+
     let thumbnailPath = null;
     const thumbnail = formData.get('thumbnail') as File | null;
     if (thumbnail && thumbnail.size > 0) {
