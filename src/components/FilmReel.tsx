@@ -7,6 +7,42 @@ import { projects, type Project } from "../data/projects";
 import { getProjects } from "../lib/api";
 import gsap from "gsap";
 
+function CroppedThumbnail({ project, sizeKey, className }: { project: Project, sizeKey: '16:9' | '4:3' | '1:1', className?: string }) {
+  if (!project.thumbnail) return null;
+  const crop = project.thumbnailMultiCrops?.[sizeKey] || project.thumbnailCrop;
+  
+  const cssFilter = project.thumbnailFilter && project.thumbnailFilterValues && Object.keys(project.thumbnailFilterValues).length > 0
+    ? Object.entries(project.thumbnailFilterValues).map(([k, v]: [string, any]) => {
+        if (k === 'blur') return `${k}(${v}px)`;
+        if (k === 'hue-rotate') return `${k}(${v}deg)`;
+        return `${k}(${v})`;
+      }).join(' ')
+    : 'none';
+
+  return (
+    <div className={`overflow-hidden relative bg-bg ${className}`}>
+      {crop && crop.width > 0 && crop.height > 0 ? (
+        <img
+          src={project.thumbnail}
+          alt={project.title}
+          style={{
+            position: 'absolute',
+            width: `${(100 / crop.width) * 100}%`,
+            height: `${(100 / crop.height) * 100}%`,
+            left: `-${(crop.x / crop.width) * 100}%`,
+            top: `-${(crop.y / crop.height) * 100}%`,
+            filter: cssFilter,
+            objectFit: 'cover',
+            maxWidth: 'none'
+          }}
+        />
+      ) : (
+        <img src={project.thumbnail} className="w-full h-full object-cover" style={{ filter: cssFilter }} alt={project.title} />
+      )}
+    </div>
+  );
+}
+
 // Group projects by category
 const initialCategories = [
   {
@@ -67,7 +103,12 @@ export default function FilmReel() {
         visualSubtitle: p.typeBadge,
         gradientStart: p.gradient_start || '#0f0f0f',
         gradientEnd: p.gradient_end || '#1a1a1a',
-        media: p.thumbnail_url ? [p.thumbnail_url] : (Array.isArray(p.media) ? p.media : (typeof p.media === 'string' ? JSON.parse(p.media) : []))
+        media: p.thumbnail ? [p.thumbnail] : (Array.isArray(p.media) ? p.media : (typeof p.media === 'string' ? JSON.parse(p.media) : [])),
+        thumbnail: p.thumbnail || undefined,
+        thumbnailFilter: p.thumbnail_filter || undefined,
+        thumbnailFilterValues: p.thumbnail_filter_values ? (typeof p.thumbnail_filter_values === 'string' ? JSON.parse(p.thumbnail_filter_values) : p.thumbnail_filter_values) : undefined,
+        thumbnailCrop: p.thumbnail_crop ? (typeof p.thumbnail_crop === 'string' ? JSON.parse(p.thumbnail_crop) : p.thumbnail_crop) : undefined,
+        thumbnailMultiCrops: p.thumbnail_multi_crops ? (typeof p.thumbnail_multi_crops === 'string' ? JSON.parse(p.thumbnail_multi_crops) : p.thumbnail_multi_crops) : undefined,
       }));
 
       setCategories([
@@ -534,15 +575,24 @@ export default function FilmReel() {
                       <button
                         key={project.id}
                         onClick={() => setPreview(project)}
-                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left active:scale-[0.98] transition-all duration-200"
+                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left active:scale-[0.98] transition-all duration-200"
                         role="button"
                       >
                         <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60">
                           {String(category.projects.indexOf(project) + 1).padStart(2, '0')}
                         </div>
 
+                        {/* Thumbnail */}
+                        <div className="hidden md:block w-full">
+                          {project.thumbnail ? (
+                            <CroppedThumbnail project={project} sizeKey="4:3" className="w-full aspect-[4/3] rounded-[2px]" />
+                          ) : (
+                            <div className="w-full aspect-[4/3] bg-ink3/10 rounded-[2px]" />
+                          )}
+                        </div>
+
                         {/* Info */}
-                        <div className="flex flex-col gap-1 w-full">
+                        <div className="flex flex-col gap-1 w-full pl-0 md:pl-4">
                           <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
                             <span className="font-playfair font-black text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
                               {project.title}
@@ -607,20 +657,27 @@ export default function FilmReel() {
 
             {/* Large Gradient Visual */}
             <div
-              className="w-full aspect-[16/9] flex items-center justify-center relative"
+              className="w-full aspect-[16/9] flex items-center justify-center relative overflow-hidden"
               style={{
                 background: `linear-gradient(135deg, ${preview.gradientStart}, ${preview.gradientEnd})`,
               }}
             >
-              <div className="font-playfair font-black text-[clamp(36px,6vw,72px)] text-[#f0ebe2]/30 tracking-[-0.02em] leading-[0.9] text-center px-10">
-                {preview.title}
-              </div>
+              {preview.thumbnail ? (
+                <CroppedThumbnail project={preview} sizeKey="16:9" className="absolute inset-0 w-full h-full" />
+              ) : (
+                <div className="font-playfair font-black text-[clamp(36px,6vw,72px)] text-[#f0ebe2]/30 tracking-[-0.02em] leading-[0.9] text-center px-10 relative z-10">
+                  {preview.title}
+                </div>
+              )}
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-bg/90 via-transparent to-transparent pointer-events-none" />
+
               {preview.visualTitle && (
-                <div className="absolute bottom-6 left-8 flex flex-col gap-1">
-                  <div className="font-playfair font-black text-[16px] text-[#f0ebe2]/80">
+                <div className="absolute bottom-6 left-8 flex flex-col gap-1 z-10">
+                  <div className="font-playfair font-black text-[16px] text-[#f0ebe2]/80 drop-shadow-md">
                     {preview.visualTitle}
                   </div>
-                  <div className="font-mono text-[9px] uppercase tracking-widest text-[#f0ebe2]/50">
+                  <div className="font-mono text-[9px] uppercase tracking-widest text-[#f0ebe2]/50 drop-shadow-md">
                     {preview.visualSubtitle}
                   </div>
                 </div>

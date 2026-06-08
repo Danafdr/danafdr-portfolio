@@ -13,6 +13,11 @@ export interface Project {
   gradientStart?: string;
   gradientEnd?: string;
   media?: string[];
+  thumbnail?: string;
+  thumbnailFilter?: string;
+  thumbnailFilterValues?: any;
+  thumbnailCrop?: any;
+  thumbnailMultiCrops?: any;
 }
 
 export const projects: Project[] = [
