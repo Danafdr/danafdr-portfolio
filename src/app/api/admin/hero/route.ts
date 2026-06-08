@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth';
 
@@ -45,9 +46,42 @@ export async function PUT(request: Request) {
       },
     });
 
+    revalidatePath('/');
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Failed to update hero settings:', error);
-    return NextResponse.json({ error: error instanceof Error ? error.message : error instanceof Error ? error.message : String(error) }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const auth = await authenticateRequest(request);
+  if (auth.error) return NextResponse.json({ message: auth.error }, { status: auth.status });
+
+  try {
+    const hero = await prisma.hero_settings.findFirst();
+    if (!hero) return NextResponse.json({ message: 'No hero settings found' }, { status: 404 });
+
+    const updated = await prisma.hero_settings.update({
+      where: { id: hero.id },
+      data: {
+        photo_url: null,
+        photo_path: null,
+        original_path: null,
+        width: null,
+        height: null,
+        filter: null,
+        filter_values: null,
+        crop: null,
+        rotation: null,
+        updated_at: new Date()
+      }
+    });
+
+    revalidatePath('/');
+    return NextResponse.json(updated);
+  } catch (error) {
+    console.error('Failed to delete hero photo:', error);
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }

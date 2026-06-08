@@ -114,7 +114,7 @@ export const updateHeroPhoto = (data: any) =>
         body: JSON.stringify(data),
     });
 export const deleteHeroPhoto = () => 
-    apiFetch('/api/admin/hero/photo', { method: 'DELETE', headers: { 'X-XSRF-TOKEN': getCsrfToken() } });
+    apiFetch('/api/admin/hero', { method: 'DELETE', headers: { 'X-XSRF-TOKEN': getCsrfToken() } });
 
 // ── Standalone Photography (Public) ──
 export const getPhotos = (params: any = {}) => {

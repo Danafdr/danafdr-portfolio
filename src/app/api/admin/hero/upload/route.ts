@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth';
 import { uploadFileLocally } from '@/lib/upload';
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
       },
     });
 
+    revalidatePath('/');
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Failed to upload hero photo:', error);
