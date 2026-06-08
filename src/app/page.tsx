@@ -8,19 +8,18 @@ import Work from "../components/Work";
 import Now from "../components/Now";
 import Contact from "../components/Contact";
 import RevealManager from "../components/RevealManager";
+import { prisma } from "../lib/prisma";
+
+export const revalidate = 0;
 
 async function getHeroSettings() {
   try {
-    // In server components, fetch needs absolute URLs.
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-    const res = await fetch(`${baseUrl}/api/hero`, {
-      next: { revalidate: 1800 }
-    });
-    if (res.ok) return await res.json();
+    const hero = await prisma.hero_settings.findFirst();
+    return hero || null;
   } catch (e) {
     console.error('Failed to fetch hero settings', e);
+    return null;
   }
-  return null;
 }
 
 export default async function Home() {

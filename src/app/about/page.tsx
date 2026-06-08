@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Header from "../../components/Header";
+import { prisma } from "../../lib/prisma";
+
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "About — danafdr",
@@ -8,26 +11,24 @@ export const metadata: Metadata = {
 
 async function getHeroSettings() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-    const res = await fetch(`${baseUrl}/api/hero`, {
-      next: { revalidate: 1800 }
-    });
-    if (res.ok) return await res.json();
+    const hero = await prisma.hero_settings.findFirst();
+    return hero || null;
   } catch (e) {
     console.error('Failed to fetch hero settings', e);
+    return null;
   }
-  return null;
 }
 
 export default async function AboutPage() {
   const heroSettings = await getHeroSettings();
   const hasPhoto = !!heroSettings?.photo_url;
   const isCssMode = heroSettings?.filter_mode === 'css';
-  const showGrain = isCssMode && heroSettings?.filter_values?.grain > 0;
+  const showGrain = isCssMode && (heroSettings?.filter_values as any)?.grain > 0;
 
   const getCssFilter = () => {
     if (!isCssMode) return 'none';
     if (!heroSettings?.filter_values && !heroSettings?.filter) return 'none';
+    const fv = heroSettings.filter_values as any;
     const PRESETS = [
       { id: 'original', css: 'none' },
       { id: 'grainy', css: 'contrast(1.1) brightness(0.95) saturate(0.9)' },
@@ -38,8 +39,8 @@ export default async function AboutPage() {
     ];
     let presetCss = PRESETS.find(p => p.id === heroSettings.filter)?.css || 'none';
     let base = presetCss !== 'none' ? presetCss + ' ' : '';
-    if (heroSettings.filter_values?.brightness) base += `brightness(${1 + heroSettings.filter_values.brightness/100}) `;
-    if (heroSettings.filter_values?.contrast) base += `contrast(${1 + heroSettings.filter_values.contrast/100}) `;
+    if (fv?.brightness) base += `brightness(${1 + fv.brightness/100}) `;
+    if (fv?.contrast) base += `contrast(${1 + fv.contrast/100}) `;
     return base.trim() || 'none';
   };
 
@@ -66,16 +67,16 @@ export default async function AboutPage() {
               ) : (
                 <div className="w-full h-full relative overflow-hidden bg-ink">
                   <img 
-                    src={heroSettings.photo_url} 
+                    src={heroSettings.photo_url!} 
                     className="absolute max-w-none"
                     style={{
                       filter: getCssFilter(),
                       transform: `rotate(${heroSettings.rotation || 0}deg)`,
-                      ...(heroSettings.crop && isCssMode ? {
-                        width: `${(heroSettings.width / heroSettings.crop.width) * 100}%`,
-                        height: `${(heroSettings.height / heroSettings.crop.height) * 100}%`,
-                        left: `-${(heroSettings.crop.x / heroSettings.crop.width) * 100}%`,
-                        top: `-${(heroSettings.crop.y / heroSettings.crop.height) * 100}%`
+                      ...((heroSettings.crop as any) && isCssMode ? {
+                        width: `${(heroSettings.width! / (heroSettings.crop as any).width) * 100}%`,
+                        height: `${(heroSettings.height! / (heroSettings.crop as any).height) * 100}%`,
+                        left: `-${((heroSettings.crop as any).x / (heroSettings.crop as any).width) * 100}%`,
+                        top: `-${((heroSettings.crop as any).y / (heroSettings.crop as any).height) * 100}%`
                       } : {
                         width: '100%', height: '100%', objectFit: 'cover'
                       })
@@ -87,7 +88,7 @@ export default async function AboutPage() {
                       className="absolute inset-0 pointer-events-none mix-blend-overlay"
                       style={{
                         backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/storage/assets/grain.png')`,
-                        opacity: heroSettings.filter_values.grain / 100,
+                        opacity: (heroSettings.filter_values as any).grain / 100,
                       }}
                     />
                   )}
