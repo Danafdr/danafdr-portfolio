@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import ReactCrop, { type Crop } from 'react-image-crop';
+import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 interface ImageEditorProps {
@@ -51,6 +51,27 @@ export default function ImageEditor({
   const [isSaving, setIsSaving] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
+
+  const handleAspectClick = (newAspect: number | undefined) => {
+    setAspect(newAspect);
+    if (newAspect && imgRef.current) {
+      const { width, height } = imgRef.current;
+      const newCrop = centerCrop(
+        makeAspectCrop(
+          {
+            unit: '%',
+            width: 90,
+          },
+          newAspect,
+          width,
+          height
+        ),
+        width,
+        height
+      );
+      setCrop(newCrop);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -178,7 +199,7 @@ export default function ImageEditor({
                 return (
                   <button
                     key={r.id}
-                    onClick={() => setAspect(r.value)}
+                    onClick={() => handleAspectClick(r.value)}
                     className={`text-[10px] px-3 py-2 border transition-all ${
                       aspect === r.value 
                         ? 'border-accent text-ink bg-[rgba(200,68,26,0.1)]' 
