@@ -6,6 +6,16 @@ import { authenticateRequest } from '@/lib/auth';
   return this.toString();
 };
 
+export async function GET() {
+  try {
+    const hero = await prisma.hero_settings.findFirst();
+    return NextResponse.json(hero || {});
+  } catch (error) {
+    console.error('Failed to fetch hero settings:', error);
+    return NextResponse.json({ error: 'Failed to fetch hero settings' }, { status: 500 });
+  }
+}
+
 export async function PUT(request: Request) {
   const auth = await authenticateRequest(request);
   if (auth.error) return NextResponse.json({ message: auth.error }, { status: auth.status });
@@ -30,7 +40,7 @@ export async function PUT(request: Request) {
         filter_values: data.filter_values,
         crop: data.crop,
         rotation: data.rotation,
-        filter_mode: data.filter_mode,
+        filter_mode: data.filter_mode ?? data.mode,
         updated_at: new Date(),
       },
     });
