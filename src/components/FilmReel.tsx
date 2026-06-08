@@ -531,7 +531,7 @@ export default function FilmReel() {
                       <button
                         key={project.id}
                         onClick={() => setPreview(project)}
-                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hoverable active:scale-[0.98] transition-all duration-200"
+                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left active:scale-[0.98] transition-all duration-200"
                         role="button"
                       >
                         <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60">
