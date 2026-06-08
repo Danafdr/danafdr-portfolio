@@ -7,6 +7,7 @@ import { toast } from '@/components/admin/Toast';
 export default function MessagesPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchMessages();
@@ -36,7 +37,7 @@ export default function MessagesPage() {
   };
 
   const deleteMessage = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this message?')) return;
+    setConfirmDeleteId(null);
     setMessages(msgs => msgs.filter(m => String(m.id) !== String(id)));
     try {
       await apiFetch(`/api/admin/messages/${id}`, { method: 'DELETE' });
@@ -76,9 +77,21 @@ export default function MessagesPage() {
                       Mark Read
                     </button>
                   )}
-                  <button onClick={() => deleteMessage(msg.id)} className="text-[9px] uppercase tracking-wider text-red-500 hover:underline">
-                    Delete
-                  </button>
+                  {confirmDeleteId === msg.id ? (
+                    <div className="flex gap-2 items-center">
+                      <span className="text-[9px] text-admin-ink3 uppercase">Sure?</span>
+                      <button onClick={() => deleteMessage(msg.id)} className="text-[9px] uppercase tracking-wider text-red-500 font-bold hover:underline">
+                        Yes
+                      </button>
+                      <button onClick={() => setConfirmDeleteId(null)} className="text-[9px] uppercase tracking-wider text-admin-ink hover:underline">
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setConfirmDeleteId(msg.id)} className="text-[9px] uppercase tracking-wider text-red-500 hover:underline">
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="bg-bg p-4 border border-border text-sm whitespace-pre-wrap font-sans text-admin-ink">

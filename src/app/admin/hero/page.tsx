@@ -10,7 +10,7 @@ export default function HeroAdminPage() {
   const [setting, setSetting] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [editorOpen, setEditorOpen] = useState(false);
-
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const loadData = async () => {
     setLoading(true);
     try {
@@ -236,14 +236,25 @@ export default function HeroAdminPage() {
           
           {hasPhoto && (
             <div className="mt-8">
-              <button onClick={async () => {
-                if (confirm('Are you sure you want to remove the hero photo?')) {
-                  await deleteHeroPhoto();
-                  loadData();
-                }
-              }} className="text-red-500 hover:text-red-400 uppercase tracking-[0.1em] text-[9px] underline underline-offset-2">
-                Remove photo entirely
-              </button>
+              {!confirmDelete ? (
+                <button onClick={() => setConfirmDelete(true)} className="text-red-500 hover:text-red-400 uppercase tracking-[0.1em] text-[9px] underline underline-offset-2">
+                  Remove photo entirely
+                </button>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <span className="text-admin-ink2 uppercase tracking-[0.1em] text-[9px]">Are you sure?</span>
+                  <button onClick={async () => {
+                    await deleteHeroPhoto();
+                    loadData();
+                    setConfirmDelete(false);
+                  }} className="text-red-500 hover:text-red-400 uppercase tracking-[0.1em] text-[9px] underline underline-offset-2 font-bold">
+                    Yes, remove
+                  </button>
+                  <button onClick={() => setConfirmDelete(false)} className="text-admin-ink3 hover:text-admin-ink uppercase tracking-[0.1em] text-[9px] underline underline-offset-2">
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
