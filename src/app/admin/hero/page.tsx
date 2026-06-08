@@ -73,8 +73,9 @@ export default function HeroAdminPage() {
   const showGrain = isCssMode && setting?.filter_values?.grain > 0;
 
   return (
-    <div className="max-w-4xl animate-fi pb-24">
-      <div className="mb-8 border-b border-border pb-4">
+    <>
+      <div className="max-w-4xl animate-fi pb-24">
+        <div className="mb-8 border-b border-border pb-4">
         <h1 className="font-playfair text-[28px] italic text-admin-ink">Hero Photo</h1>
         <p className="font-mono text-[10px] text-admin-ink3 mt-1">Manages the photo placeholder on the home page hero section.</p>
       </div>
@@ -259,6 +260,7 @@ export default function HeroAdminPage() {
           )}
         </div>
       </div>
+      </div>
 
       <ImageEditor 
         isOpen={editorOpen} 
@@ -276,6 +278,6 @@ export default function HeroAdminPage() {
           loadData();
         }}
       />
-    </div>
+    </>
   );
 }

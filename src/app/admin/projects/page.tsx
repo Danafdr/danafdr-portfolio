@@ -107,7 +107,7 @@ function SortableItem({
 
       {/* Actions */}
       <div className="flex items-center gap-3">
-        <Link href={`/admin/projects/${project.id}/edit`} className="edit-btn hoverable px-3 py-1 border border-border text-[10px] uppercase font-mono text-admin-ink2">
+        <Link href={`/admin/projects/${project.id}/edit`} className="px-3 py-1 border border-border text-[10px] uppercase font-mono text-admin-ink2 hover:bg-admin-ink hover:text-bg hover:border-admin-ink transition-colors">
           Edit
         </Link>
         <button onClick={() => onDelete(project.id)} className="text-[10px] uppercase font-mono text-accent hover:opacity-80">

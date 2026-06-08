@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AdminGuard } from './AdminGuard';
 import { ToastProvider } from '@/components/admin/Toast';
+import { LoadingBar } from '@/components/admin/LoadingBar';
 import { logout } from '@/lib/api';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <ToastProvider />
         {/* Sticky top nav */}
         <header className="sticky top-0 z-50 border-b border-border bg-[rgba(15,14,11,0.97)] backdrop-blur-md">
+          <LoadingBar />
           <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
             
             {/* Left */}
