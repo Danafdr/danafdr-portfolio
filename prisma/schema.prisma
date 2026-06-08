@@ -161,6 +161,7 @@ model projects {
   thumbnail_filter        String?   @db.VarChar(255)
   thumbnail_filter_values Json?     @db.Json
   thumbnail_crop          Json?     @db.Json
+  thumbnail_multi_crops   Json?     @db.Json
   thumbnail_rotation      Int       @default(0)
   photos                  photos[]
 }

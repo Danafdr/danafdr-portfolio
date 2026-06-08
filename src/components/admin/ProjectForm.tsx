@@ -310,40 +310,9 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                         <input type="file" className="hidden" accept="image/*" onChange={handleThumbnailChange} />
                       </label>
                     </div>
-
-                    {thumbnailPreview && (
-                      <div className="mb-4">
-                        <div className="font-mono text-[9px] text-admin-ink3 uppercase mb-3 tracking-[0.1em]">Live Preview (How it looks on the site)</div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          {/* Modal Visual (16:9) */}
-                          <div className="flex flex-col gap-2">
-                            <div className="text-[8px] font-mono text-admin-ink2 uppercase">Modal Visual (16:9)</div>
-                            <div className="w-full aspect-[16/9] border border-border bg-bg overflow-hidden relative">
-                              <img src={thumbnailPreview} className="w-full h-full object-cover" alt="16:9 preview" />
-                            </div>
-                          </div>
-                          
-                          {/* Project Row List (4:3) */}
-                          <div className="flex flex-col gap-2">
-                            <div className="text-[8px] font-mono text-admin-ink2 uppercase">List Thumbnail (4:3)</div>
-                            <div className="w-full aspect-[4/3] border border-border bg-bg overflow-hidden relative">
-                              <img src={thumbnailPreview} className="w-full h-full object-cover" alt="4:3 preview" />
-                            </div>
-                          </div>
-
-                          {/* Category Mosaic (1:1) */}
-                          <div className="flex flex-col gap-2">
-                            <div className="text-[8px] font-mono text-admin-ink2 uppercase">Mosaic Tile (1:1)</div>
-                            <div className="w-full aspect-square border border-border bg-bg overflow-hidden relative">
-                              <img src={thumbnailPreview} className="w-full h-full object-cover" alt="1:1 preview" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
-                <div className="grid grid-cols-2 gap-6 mt-4">
+                  <div className="grid grid-cols-2 gap-6 mt-4">
                   <AdminInput label="Gradient Start (Hex)" value={gradientStart} onChange={e => setGradientStart(e.target.value)} />
                   <AdminInput label="Gradient End (Hex)" value={gradientEnd} onChange={e => setGradientEnd(e.target.value)} />
                 </div>
@@ -364,6 +333,8 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
           initialFilterValues={initialData?.thumbnail_filter_values}
           initialCrop={initialData?.thumbnail_crop}
           initialRotation={initialData?.thumbnail_rotation}
+          multiCropMode={true}
+          initialMultiCrops={initialData?.thumbnail_multi_crops || {}}
           onSave={async (payload) => {
             // First ensure we have the project id
             if (!projectId) return;

@@ -15,6 +15,8 @@ interface ImageEditorProps {
   initialFilterValues?: any | null;
   initialRotation?: number;
   recommendedRatio?: string;
+  multiCropMode?: boolean;
+  initialMultiCrops?: Record<string, Crop | undefined>;
 }
 
 const PRESETS = [
@@ -36,9 +38,16 @@ const RATIOS = [
   { id: '9:13', label: '9:13', value: 9/13 },
 ];
 
+const MULTI_CROP_RATIOS = [
+  { id: '16:9', label: '16:9 (Modal)', value: 16/9 },
+  { id: '4:3', label: '4:3 (List)', value: 4/3 },
+  { id: '1:1', label: '1:1 (Mosaic)', value: 1 },
+];
+
 export default function ImageEditor({
   isOpen, onClose, onSave, imageUrl, title,
-  initialCrop, initialFilter, initialFilterValues, initialRotation, recommendedRatio
+  initialCrop, initialFilter, initialFilterValues, initialRotation, recommendedRatio,
+  multiCropMode = false, initialMultiCrops = {}
 }: ImageEditorProps) {
   const [crop, setCrop] = useState<Crop | undefined>(initialCrop || undefined);
   const [aspect, setAspect] = useState<number | undefined>(undefined);
@@ -50,26 +59,45 @@ export default function ImageEditor({
   const [saveMode, setSaveMode] = useState<'css' | 'bake'>('css');
   const [isSaving, setIsSaving] = useState(false);
 
+  // Multi-crop states
+  const [editMode, setEditMode] = useState<'master' | 'manual'>('master');
+  const [activeTab, setActiveTab] = useState<string>('16:9');
+  const [multiCrops, setMultiCrops] = useState<Record<string, Crop | undefined>>(initialMultiCrops);
+
   const imgRef = useRef<HTMLImageElement>(null);
+
+  const handleCropChange = (c: Crop) => {
+    setCrop(c);
+    if (multiCropMode && editMode === 'manual') {
+      setMultiCrops(prev => ({ ...prev, [activeTab]: c }));
+    }
+  };
 
   const handleAspectClick = (newAspect: number | undefined) => {
     setAspect(newAspect);
     if (newAspect && imgRef.current) {
       const { width, height } = imgRef.current;
       const newCrop = centerCrop(
-        makeAspectCrop(
-          {
-            unit: '%',
-            width: 90,
-          },
-          newAspect,
-          width,
-          height
-        ),
+        makeAspectCrop({ unit: '%', width: 90 }, newAspect, width, height),
         width,
         height
       );
       setCrop(newCrop);
+      if (multiCropMode && editMode === 'manual') {
+        setMultiCrops(prev => ({ ...prev, [activeTab]: newCrop }));
+      }
+    }
+  };
+
+  const handleTabChange = (ratioId: string) => {
+    setActiveTab(ratioId);
+    const r = MULTI_CROP_RATIOS.find(r => r.id === ratioId);
+    setAspect(r?.value);
+    
+    if (multiCrops[ratioId]) {
+      setCrop(multiCrops[ratioId]);
+    } else {
+      handleAspectClick(r?.value);
     }
   };
 
@@ -83,10 +111,28 @@ export default function ImageEditor({
       setGrain(initialFilterValues?.grain || 0);
       setSaveMode('css');
       setAspect(undefined);
+      setEditMode(Object.keys(initialMultiCrops).length > 0 ? 'manual' : 'master');
+      setMultiCrops(initialMultiCrops);
+      if (multiCropMode && Object.keys(initialMultiCrops).length > 0) {
+        setActiveTab('16:9');
+        setAspect(16/9);
+        setCrop(initialMultiCrops['16:9'] || undefined);
+      }
     }
-  }, [isOpen, initialCrop, initialFilter, initialFilterValues, initialRotation]);
+  }, [isOpen, initialCrop, initialFilter, initialFilterValues, initialRotation, initialMultiCrops, multiCropMode]);
 
   if (!isOpen) return null;
+
+  const scaleCrop = (c: Crop | undefined, scaleX: number, scaleY: number) => {
+    if (!c) return null;
+    return {
+      x: c.x * scaleX,
+      y: c.y * scaleY,
+      width: c.width * scaleX,
+      height: c.height * scaleY,
+      unit: 'px'
+    };
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -97,19 +143,23 @@ export default function ImageEditor({
       scaleY = imgRef.current.naturalHeight / imgRef.current.height;
     }
 
-    const payload = {
+    const payload: any = {
       mode: saveMode,
       filter,
       filter_values: { brightness, contrast, grain },
-      crop: crop ? {
-        x: crop.x * scaleX,
-        y: crop.y * scaleY,
-        width: crop.width * scaleX,
-        height: crop.height * scaleY,
-        unit: 'px'
-      } : null,
       rotation
     };
+
+    if (multiCropMode && editMode === 'manual') {
+      payload.multi_crops = {
+        '16:9': scaleCrop(multiCrops['16:9'], scaleX, scaleY),
+        '4:3': scaleCrop(multiCrops['4:3'], scaleX, scaleY),
+        '1:1': scaleCrop(multiCrops['1:1'], scaleX, scaleY),
+      };
+      payload.crop = scaleCrop(crop, scaleX, scaleY); // fallback
+    } else {
+      payload.crop = scaleCrop(crop, scaleX, scaleY);
+    }
 
     try {
       await onSave(payload);
@@ -187,16 +237,60 @@ export default function ImageEditor({
         {/* Right Controls */}
         <div className="w-[40%] bg-[#0f0e0b] border-l border-[rgba(240,235,226,0.07)] p-[32px_28px] overflow-y-auto custom-scrollbar">
           
-          {/* Aspect Ratio */}
+          {/* Aspect Ratio / Multi Crop Mode */}
           <div className="mb-10">
-            <div className="text-[9px] text-ink3 uppercase tracking-[0.1em] mb-4 flex justify-between">
-              <span>Aspect ratio</span>
+            <div className="text-[9px] text-ink3 uppercase tracking-[0.1em] mb-4 flex justify-between items-center">
+              <span>{multiCropMode ? 'Crop Mode' : 'Aspect ratio'}</span>
               {recommendedRatio && <span className="text-accent italic text-[8px] lowercase">Recommended: {recommendedRatio}</span>}
             </div>
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {RATIOS.map(r => {
-                // If there's a recommendedRatio like "9:13", we can dynamically inject it if not present
-                return (
+            
+            {multiCropMode && (
+              <div className="flex gap-2 mb-6">
+                <button
+                  onClick={() => setEditMode('master')}
+                  className={`flex-1 text-[10px] px-3 py-2 border transition-all ${
+                    editMode === 'master' 
+                      ? 'border-accent text-ink bg-[rgba(200,68,26,0.1)]' 
+                      : 'border-[rgba(240,235,226,0.08)] text-ink3 hover:bg-ink hover:text-[#0f0e0b]'
+                  }`}
+                >
+                  Master Crop (Applies to all)
+                </button>
+                <button
+                  onClick={() => setEditMode('manual')}
+                  className={`flex-1 text-[10px] px-3 py-2 border transition-all ${
+                    editMode === 'manual' 
+                      ? 'border-accent text-ink bg-[rgba(200,68,26,0.1)]' 
+                      : 'border-[rgba(240,235,226,0.08)] text-ink3 hover:bg-ink hover:text-[#0f0e0b]'
+                  }`}
+                >
+                  Manual Crop (Per size)
+                </button>
+              </div>
+            )}
+
+            {multiCropMode && editMode === 'manual' ? (
+              <div>
+                <div className="text-[8px] text-ink3 uppercase mb-2">Select size to edit:</div>
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {MULTI_CROP_RATIOS.map(r => (
+                    <button
+                      key={r.id}
+                      onClick={() => handleTabChange(r.id)}
+                      className={`text-[10px] px-3 py-2 border transition-all flex flex-col items-center gap-1 ${
+                        activeTab === r.id 
+                          ? 'border-accent text-ink bg-[rgba(200,68,26,0.1)]' 
+                          : 'border-[rgba(240,235,226,0.08)] text-ink3 hover:bg-ink hover:text-[#0f0e0b]'
+                      }`}
+                    >
+                      <span>{r.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                {RATIOS.map(r => (
                   <button
                     key={r.id}
                     onClick={() => handleAspectClick(r.value)}
@@ -208,9 +302,10 @@ export default function ImageEditor({
                   >
                     {r.label}
                   </button>
-                )
-              })}
-            </div>
+                ))}
+              </div>
+            )}
+            
             {recommendedRatio === '9:13' && (
               <div className="text-[9px] text-ink3 mb-4 leading-relaxed">
                 The crop preview on the canvas shows a faint outline of the safe zone so you know what the box will show.
@@ -231,6 +326,39 @@ export default function ImageEditor({
               </button>
             </div>
           </div>
+
+          {/* Live Previews */}
+          {multiCropMode && (
+            <div className="mb-10 p-4 border border-[rgba(240,235,226,0.1)] bg-[rgba(0,0,0,0.2)]">
+              <div className="text-[9px] text-accent uppercase tracking-[0.1em] mb-4">Live Previews</div>
+              <div className="flex flex-col gap-4">
+                <LivePreviewCrop 
+                  crop={editMode === 'manual' ? multiCrops['16:9'] : crop} 
+                  imageRef={imgRef} 
+                  imageUrl={imageUrl} 
+                  aspectValue={16/9} 
+                  title="Modal Visual (16:9)" 
+                  cssFilter={getCssFilter()} 
+                />
+                <LivePreviewCrop 
+                  crop={editMode === 'manual' ? multiCrops['4:3'] : crop} 
+                  imageRef={imgRef} 
+                  imageUrl={imageUrl} 
+                  aspectValue={4/3} 
+                  title="List Thumbnail (4:3)" 
+                  cssFilter={getCssFilter()} 
+                />
+                <LivePreviewCrop 
+                  crop={editMode === 'manual' ? multiCrops['1:1'] : crop} 
+                  imageRef={imgRef} 
+                  imageUrl={imageUrl} 
+                  aspectValue={1} 
+                  title="Mosaic Tile (1:1)" 
+                  cssFilter={getCssFilter()} 
+                />
+              </div>
+            </div>
+          )}
 
           {/* Filter Presets */}
           <div className="mb-10">
@@ -347,6 +475,39 @@ function Slider({ label, value, min, max, onChange }: { label: string, value: nu
           cursor: pointer;
         }
       `}} />
+    </div>
+  );
+}
+
+function LivePreviewCrop({ crop, imageRef, imageUrl, aspectValue, title, cssFilter }: { crop?: Crop, imageRef: React.RefObject<HTMLImageElement>, imageUrl: string, aspectValue: number, title: string, cssFilter: string }) {
+  if (!crop || !imageRef.current || !crop.width || !crop.height) {
+    return (
+      <div className="flex flex-col gap-2 w-full">
+        <div className="text-[8px] font-mono text-ink2 uppercase">{title}</div>
+        <div className="w-full bg-[#1a1816] border border-[rgba(240,235,226,0.1)] overflow-hidden relative flex items-center justify-center" style={{ aspectRatio: aspectValue }}>
+          <img src={imageUrl} className="w-full h-full object-cover opacity-50" style={{ filter: cssFilter }} alt="Preview" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <div className="text-[8px] font-mono text-accent uppercase">{title}</div>
+      <div className="w-full bg-[#1a1816] border border-accent overflow-hidden relative" style={{ aspectRatio: aspectValue }}>
+        <img 
+          src={imageUrl} 
+          style={{
+            position: 'absolute',
+            width: `${(imageRef.current.width / crop.width) * 100}%`,
+            height: `${(imageRef.current.height / crop.height) * 100}%`,
+            left: `${-(crop.x / crop.width) * 100}%`,
+            top: `${-(crop.y / crop.height) * 100}%`,
+            filter: cssFilter
+          }}
+          alt="Preview"
+        />
+      </div>
     </div>
   );
 }
