@@ -8,7 +8,9 @@ import { AdminButton } from './AdminButton';
 import { toast } from './Toast';
 import { StepMediaMotion } from './StepMediaMotion';
 import { StepMediaPhotography } from './StepMediaPhotography';
+import { GithubRepoSelector } from './GithubRepoSelector';
 import ImageEditor from '../ImageEditor';
+import { Wand2 } from 'lucide-react';
 
 interface ProjectFormProps {
   initialData?: any;
@@ -150,39 +152,17 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
       <div className="bg-bg2 border border-border p-8 mb-8">
         {step === 1 && (
           <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between mb-4 pb-4 border-b border-border">
-              <div className="text-[10px] uppercase tracking-[0.15em] text-admin-ink2">Quick Import</div>
-              <button 
-                type="button"
-                onClick={async () => {
-                  try {
-                    const repos = await apiFetch('/api/admin/github/repos');
-                    if (repos && repos.error) throw new Error(repos.error);
-                    
-                    const repoName = prompt("Enter exactly the name of the repository to import (e.g., 'my-website')\n\nAvailable:\n" + repos.map((r: any) => r.name).slice(0, 10).join(', ') + '...');
-                    if (!repoName) return;
-
-                    const repo = repos.find((r: any) => r.name === repoName);
-                    if (repo) {
-                      setTitle(repo.name);
-                      if (repo.description) setDescription(repo.description);
-                      if (repo.html_url) setRepoUrl(repo.html_url);
-                      if (repo.homepage) setLiveUrl(repo.homepage);
-                      if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
-                      else if (repo.language) setToolsString(repo.language);
-                      toast('Imported repo details!', 'success');
-                    } else {
-                      toast('Repo not found', 'error');
-                    }
-                  } catch (e: any) {
-                    toast(e.message || 'Failed to fetch repos', 'error');
-                  }
-                }}
-                className="font-mono text-[9px] uppercase tracking-[0.1em] border border-border px-3 py-1 hover:text-accent hover:border-accent transition-colors"
-              >
-                Fetch from GitHub
-              </button>
-            </div>
+            <GithubRepoSelector 
+              onSelect={(repo) => {
+                setTitle(repo.name);
+                if (repo.description) setDescription(repo.description);
+                if (repo.html_url) setRepoUrl(repo.html_url);
+                if (repo.homepage) setLiveUrl(repo.homepage);
+                if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
+                else if (repo.language) setToolsString(repo.language);
+                toast('Imported repo details!', 'success');
+              }}
+            />
 
             <AdminInput label="Title" value={title} onChange={e => setTitle(e.target.value)} required />
             <AdminInput label="Slug (optional)" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated if empty" />
@@ -239,9 +219,9 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                       toast('Error connecting to AI', 'error');
                     }
                   }}
-                  className="text-[9px] text-accent uppercase tracking-wider hover:underline"
+                  className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
                 >
-                  Magic Auto-fill ✨
+                  Magic Auto-fill <Wand2 size={10} />
                 </button>
               </div>
               <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} maxLength={200} className="w-full bg-bg text-admin-ink border border-border px-[14px] py-[10px] font-mono text-[12px] focus:border-accent focus:outline-none resize-none" />
