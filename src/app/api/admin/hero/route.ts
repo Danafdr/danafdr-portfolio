@@ -47,6 +47,7 @@ export async function PUT(request: Request) {
     });
 
     revalidatePath('/');
+    revalidatePath('/about');
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Failed to update hero settings:', error);
@@ -79,6 +80,7 @@ export async function DELETE(request: Request) {
     });
 
     revalidatePath('/');
+    revalidatePath('/about');
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Failed to delete hero photo:', error);

@@ -38,6 +38,7 @@ export async function POST(request: Request) {
     });
 
     revalidatePath('/');
+    revalidatePath('/about');
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Failed to upload hero photo:', error);

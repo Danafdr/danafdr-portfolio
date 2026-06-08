@@ -8,7 +8,8 @@ export const metadata: Metadata = {
 
 async function getHeroSettings() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/hero-settings`, {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+    const res = await fetch(`${baseUrl}/api/hero`, {
       next: { revalidate: 1800 }
     });
     if (res.ok) return await res.json();
