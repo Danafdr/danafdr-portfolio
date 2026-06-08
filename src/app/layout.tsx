@@ -40,6 +40,8 @@ import CursorHider from "../components/CursorHider";
 import Cursor from "../components/Cursor";
 import SmoothScroll from "../components/SmoothScroll";
 
+import { Analytics } from "@vercel/analytics/react";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,6 +61,7 @@ export default function RootLayout({
         <TransitionProvider>
           {children}
         </TransitionProvider>
+        <Analytics />
       </body>
     </html>
   );

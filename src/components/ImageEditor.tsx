@@ -436,6 +436,16 @@ export default function ImageEditor({
             </div>
           </div>
 
+          <div className="mt-12 pt-6 border-t border-[rgba(240,235,226,0.1)]">
+            <button 
+              onClick={handleSave} 
+              disabled={isSaving}
+              className="w-full bg-accent text-paper py-3 uppercase tracking-[0.1em] text-[11px] font-bold hover:bg-opacity-90 transition-colors disabled:opacity-50"
+            >
+              {isSaving ? 'Saving...' : 'Save Picture Changes'}
+            </button>
+          </div>
+
         </div>
       </div>
 
@@ -445,6 +455,14 @@ export default function ImageEditor({
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(240,235,226,0.1); border-radius: 4px; }
         .ReactCrop__crop-selection { border: none !important; box-shadow: 0 0 0 9999em rgba(0,0,0,0.5); }
         .ReactCrop__drag-handle { width: 10px !important; height: 10px !important; background-color: #f0ebe2 !important; border: none !important; opacity: 1 !important; }
+        input[type=range]::-webkit-slider-thumb {
+          appearance: none;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #f0ebe2;
+          cursor: pointer;
+        }
       `}} />
     </div>
   );
@@ -479,7 +497,7 @@ function Slider({ label, value, min, max, onChange }: { label: string, value: nu
   );
 }
 
-function LivePreviewCrop({ crop, imageRef, imageUrl, aspectValue, title, cssFilter }: { crop?: Crop, imageRef: React.RefObject<HTMLImageElement>, imageUrl: string, aspectValue: number, title: string, cssFilter: string }) {
+function LivePreviewCrop({ crop, imageRef, imageUrl, aspectValue, title, cssFilter }: { crop?: Crop, imageRef: React.RefObject<HTMLImageElement | null>, imageUrl: string, aspectValue: number, title: string, cssFilter: string }) {
   if (!crop || !imageRef.current || !crop.width || !crop.height) {
     return (
       <div className="flex flex-col gap-2 w-full">
