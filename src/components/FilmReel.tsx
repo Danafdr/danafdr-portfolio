@@ -522,17 +522,27 @@ export default function FilmReel() {
                     {category.projects.slice(0, 3).map((project) => (
                       <div
                         key={project.id}
-                        className="border border-[rgba(15,14,11,0.1)] overflow-hidden flex items-center justify-center relative cursor-pointer group"
+                        className="border border-[rgba(15,14,11,0.1)] overflow-hidden flex items-center justify-center relative cursor-pointer group bg-bg"
                         role="button"
                         style={{
                           background: `linear-gradient(135deg, ${project.gradientStart}, ${project.gradientEnd})`,
                         }}
                         onClick={() => setPreview(project)}
                       >
-                        <div className="font-playfair font-black text-[18px] text-[#f0ebe2]/50 tracking-[-0.02em] transition-transform duration-500 group-hover:scale-110">
-                          {project.title}
-                        </div>
-                        <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/10 transition-colors duration-300"></div>
+                        {project.thumbnail ? (
+                          <>
+                            <CroppedThumbnail project={project} sizeKey="1:1" className="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-105" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
+                            <div className="absolute bottom-4 left-5 font-playfair font-black text-[16px] text-paper opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-20">
+                              {project.title}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="font-playfair font-black text-[18px] text-[#f0ebe2]/50 tracking-[-0.02em] transition-transform duration-500 group-hover:scale-110 relative z-10">
+                            {project.title}
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/10 transition-colors duration-300 z-20 pointer-events-none"></div>
                       </div>
                     ))}
                   </div>
