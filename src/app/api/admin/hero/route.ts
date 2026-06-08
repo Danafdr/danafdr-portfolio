@@ -65,15 +65,15 @@ export async function DELETE(request: Request) {
     const updated = await prisma.hero_settings.update({
       where: { id: hero.id },
       data: {
-        photo_url: null,
-        photo_path: null,
-        original_path: null,
-        width: null,
-        height: null,
-        filter: null,
-        filter_values: null,
-        crop: null,
-        rotation: null,
+        photo_url: null as any,
+        photo_path: null as any,
+        original_path: null as any,
+        width: null as any,
+        height: null as any,
+        filter: null as any,
+        filter_values: null as any,
+        crop: null as any,
+        rotation: null as any,
         updated_at: new Date()
       }
     });
