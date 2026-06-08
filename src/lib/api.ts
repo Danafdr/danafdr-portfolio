@@ -29,7 +29,7 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
         const text = await res.text().catch(() => '');
         let err = { message: '' };
         try { err = JSON.parse(text); } catch(e) {}
-        throw new Error(err.message || 'API error');
+        throw new Error(err.error || err.message || 'API error');
     }
     if (res.status === 204) return null;
     const text = await res.text().catch(() => '');
