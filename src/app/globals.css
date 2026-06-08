@@ -221,20 +221,20 @@ header nav a:hover {
 .work-item,
 .proj-row {
   background: transparent;
-  transition: background 220ms ease;
+  transition: all 220ms ease;
 }
 .work-item:hover,
 .proj-row:hover {
-  background: var(--ink);
+  /* Removed dark background */
 }
-.work-item:hover *,
-.proj-row:hover * {
-  color: var(--paper) !important;
-  border-color: rgba(240,235,226,0.2) !important;
+.work-item:hover .title-text,
+.proj-row:hover .title-text {
+  color: var(--accent);
 }
 .work-item:hover .w-arr,
 .proj-row:hover .work-arr {
-  color: var(--paper);
+  color: var(--accent);
+  transform: translateX(4px);
 }
 
 /* 7. Reel arrows */
