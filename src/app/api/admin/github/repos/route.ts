@@ -30,6 +30,7 @@ export async function GET(request: Request) {
     // Process repos to extract what we need
     const formattedRepos = repos.map((repo: any) => ({
       name: repo.name,
+      full_name: repo.full_name,
       description: repo.description,
       html_url: repo.html_url,
       homepage: repo.homepage,

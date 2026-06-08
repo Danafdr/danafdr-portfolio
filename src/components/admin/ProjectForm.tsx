@@ -153,14 +153,37 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
         {step === 1 && (
           <div className="flex flex-col gap-6">
             <GithubRepoSelector 
-              onSelect={(repo) => {
+              onSelect={async (repo) => {
                 setTitle(repo.name);
                 if (repo.description) setDescription(repo.description);
                 if (repo.html_url) setRepoUrl(repo.html_url);
                 if (repo.homepage) setLiveUrl(repo.homepage);
-                if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
-                else if (repo.language) setToolsString(repo.language);
-                toast('Imported repo details!', 'success');
+                
+                toast('Fetching repo details...', 'success');
+                try {
+                  const details = await apiFetch(`/api/admin/github/repo-details?repo=${encodeURIComponent(repo.full_name)}`);
+                  if (details && !details.error) {
+                    if (details.readme) {
+                      setFullDescription(details.readme);
+                    }
+                    if (details.languages && details.languages.length > 0) {
+                      setToolsString(details.languages.join(', '));
+                    } else if (repo.topics && repo.topics.length > 0) {
+                      setToolsString(repo.topics.join(', '));
+                    } else if (repo.language) {
+                      setToolsString(repo.language);
+                    }
+                    toast('Imported repo completely!', 'success');
+                  } else {
+                    if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
+                    else if (repo.language) setToolsString(repo.language);
+                    toast('Imported basic details', 'success');
+                  }
+                } catch (e) {
+                  if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
+                  else if (repo.language) setToolsString(repo.language);
+                  toast('Imported basic details', 'success');
+                }
               }}
             />
 
