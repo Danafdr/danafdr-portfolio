@@ -160,6 +160,52 @@ export default function FilmReel() {
     };
   }, []);
 
+  const isAnimatingWheel = useRef(false);
+
+  // GSAP Smooth Wheel Hijacking for Vertical Snap
+  useEffect(() => {
+    const container = vContainerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Allow horizontal scroll (e.g. trackpad side swipe) to pass natively
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      // Allow native scroll inside the preview modal
+      if (document.querySelector('.lightbox-close')) return;
+
+      e.preventDefault();
+
+      if (isAnimatingWheel.current) return;
+      if (Math.abs(e.deltaY) < 5) return; // Ignore tiny movements
+
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const targetIndex = currentVIndex + direction;
+
+      if (targetIndex >= 0 && targetIndex < totalSlides) {
+        isAnimatingWheel.current = true;
+        const targetElement = container.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
+        if (targetElement) {
+          const proxy = { y: container.scrollTop };
+          gsap.to(proxy, {
+            y: targetElement.offsetTop,
+            duration: 1.2,
+            ease: "expo.out",
+            onUpdate: () => { container.scrollTop = proxy.y; },
+            onComplete: () => {
+              // Add delay to prevent double-jumps from continuous scrolling
+              setTimeout(() => { isAnimatingWheel.current = false; }, 400);
+            }
+          });
+        } else {
+          isAnimatingWheel.current = false;
+        }
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
+  }, [currentVIndex, totalSlides]);
+
   // Vertical Observer (between categories)
   useEffect(() => {
     if (!vContainerRef.current) return;
@@ -479,22 +525,11 @@ export default function FilmReel() {
                       <button
                         key={project.id}
                         onClick={() => setPreview(project)}
-                        className="project-row proj-row w-full grid grid-cols-1 md:grid-cols-[60px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hoverable active:scale-[0.98] transition-all duration-200"
+                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hoverable active:scale-[0.98] transition-all duration-200"
                         role="button"
                       >
-                        <div
-                          className="w-full md:w-[60px] h-[80px] md:h-[40px] border border-[rgba(15,14,11,0.1)] overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
-                          style={{
-                            background: `linear-gradient(135deg, ${project.gradientStart || '#0f0f0f'}, ${project.gradientEnd || '#1a1a1a'})`,
-                          }}
-                        >
-                          {project.media && project.media.length > 0 ? (
-                            <img src={project.media[0]} loading="lazy" alt={project.title} className="w-full h-full object-cover grayscale opacity-80" />
-                          ) : (
-                            <div className="font-playfair font-black text-[12px] md:text-[7px] text-[#f0ebe2]/50 tracking-[-0.02em]">
-                              {project.title}
-                            </div>
-                          )}
+                        <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60">
+                          {String(category.projects.indexOf(project) + 1).padStart(2, '0')}
                         </div>
 
                         {/* Info */}
