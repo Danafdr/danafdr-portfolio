@@ -15,7 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <AdminGuard>
-      <div className="admin-page min-h-screen bg-bg text-admin-ink font-mono">
+      <div className="admin-page min-h-screen bg-bg text-admin-ink font-mono select-none">
         <ToastProvider />
         {/* Sticky top nav */}
         <header className="sticky top-0 z-50 border-b border-border bg-[rgba(15,14,11,0.97)] backdrop-blur-md">

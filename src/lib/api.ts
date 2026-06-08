@@ -27,7 +27,7 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
 
     if (!res.ok) {
         const text = await res.text().catch(() => '');
-        let err = { message: '' };
+        let err: any = { message: '' };
         try { err = JSON.parse(text); } catch(e) {}
         throw new Error(err.error || err.message || 'API error');
     }

@@ -57,8 +57,8 @@ export default function SettingsPage() {
   if (loading) return <div className="p-12 text-[11px] uppercase tracking-widest text-admin-ink3 animate-pulse">Loading settings...</div>;
 
   return (
-    <div className="flex flex-col gap-12 max-w-2xl">
-      <div className="flex justify-between items-end">
+    <div className="max-w-2xl mx-auto select-text">
+      <div className="flex justify-between items-center mb-12">
         <div>
           <h1 className="font-playfair text-3xl mb-2 text-admin-ink">Settings</h1>
           <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-admin-ink2">Manage your account and integrations</p>
