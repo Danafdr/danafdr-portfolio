@@ -189,8 +189,11 @@ export default function FilmReel() {
         const targetElement = container.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
         if (targetElement) {
           const proxy = { y: container.scrollTop };
+          // Account for the 80px scroll-padding-top so it perfectly matches native snap points
+          const targetY = Math.max(0, targetElement.offsetTop - 80);
+
           gsap.to(proxy, {
-            y: targetElement.offsetTop,
+            y: targetY,
             duration: 1.2,
             ease: "expo.out",
             onUpdate: () => { container.scrollTop = proxy.y; },
