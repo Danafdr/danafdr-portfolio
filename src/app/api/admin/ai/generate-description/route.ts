@@ -32,8 +32,8 @@ Tone: Confident, professional but cool, "Boys Don't Cry" energy. Make it sound l
     const text = response.text();
 
     return NextResponse.json({ description: text.trim() });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to generate description:', error);
-    return NextResponse.json({ error: 'Failed to generate description with AI' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to generate description with AI' }, { status: 500 });
   }
 }

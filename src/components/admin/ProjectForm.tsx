@@ -238,8 +238,8 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                       } else {
                         toast(data?.error || 'Failed to generate', 'error');
                       }
-                    } catch {
-                      toast('Error connecting to AI', 'error');
+                    } catch (e: any) {
+                      toast(e.message || 'Error connecting to AI', 'error');
                     }
                   }}
                   className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
