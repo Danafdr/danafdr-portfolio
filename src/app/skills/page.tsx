@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "../../components/Header";
 import Skills from "../../components/Skills";
+import RevealManager from "../../components/RevealManager";
 
 export const metadata: Metadata = {
   title: "Skills — danafdr",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 export default function SkillsPage() {
   return (
     <main className="bg-paper min-h-screen flex flex-col">
+      <RevealManager />
       <Header />
       
       <div className="pt-16 max-w-7xl mx-auto w-full px-5 md:px-10">
