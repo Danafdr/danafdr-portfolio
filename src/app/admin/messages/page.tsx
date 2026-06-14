@@ -8,6 +8,9 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState('');
+  const [sendingReply, setSendingReply] = useState(false);
 
   useEffect(() => {
     fetchMessages();
@@ -48,6 +51,27 @@ export default function MessagesPage() {
     }
   };
 
+  const handleReply = async (id: number) => {
+    if (!replyText.trim()) return;
+    setSendingReply(true);
+    try {
+      await apiFetch(`/api/admin/messages/${id}/reply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reply: replyText }),
+      });
+      toast('Reply sent successfully', 'success');
+      setReplyingTo(null);
+      setReplyText('');
+      // Mark as read after replying
+      setMessages(msgs => msgs.map(m => String(m.id) === String(id) ? { ...m, is_read: true } : m));
+    } catch (e: any) {
+      toast(e.message || 'Failed to send reply', 'error');
+    } finally {
+      setSendingReply(false);
+    }
+  };
+
   if (loading) return <div className="p-12 text-[11px] uppercase tracking-widest text-admin-ink3 animate-pulse">Loading messages...</div>;
 
   return (
@@ -72,6 +96,12 @@ export default function MessagesPage() {
                   <span className="text-[9px] text-admin-ink3 mt-1">{new Date(msg.created_at).toLocaleString()}</span>
                 </div>
                 <div className="flex gap-4">
+                  <button 
+                    onClick={() => { setReplyingTo(replyingTo === msg.id ? null : msg.id); setReplyText(''); }} 
+                    className="text-[9px] uppercase tracking-wider text-accent hover:underline"
+                  >
+                    {replyingTo === msg.id ? 'Cancel' : 'Reply'}
+                  </button>
                   {!msg.is_read && (
                     <button onClick={() => markAsRead(msg.id)} className="text-[9px] uppercase tracking-wider text-admin-ink hover:text-accent">
                       Mark Read
@@ -97,6 +127,32 @@ export default function MessagesPage() {
               <div className="bg-bg p-4 border border-border text-sm whitespace-pre-wrap font-sans text-admin-ink">
                 {msg.message}
               </div>
+              
+              {/* Reply Section */}
+              {replyingTo === msg.id && (
+                <div className="flex flex-col gap-3 border-t border-border pt-4">
+                  <div className="text-[9px] uppercase tracking-[0.15em] text-admin-ink2 font-mono">
+                    Reply to {msg.name} ({msg.email})
+                  </div>
+                  <textarea
+                    value={replyText}
+                    onChange={e => setReplyText(e.target.value)}
+                    placeholder="Type your reply..."
+                    rows={4}
+                    className="w-full bg-bg text-admin-ink border border-border px-4 py-3 font-mono text-[12px] focus:border-accent focus:outline-none resize-none"
+                  />
+                  <div className="flex gap-3 items-center">
+                    <button
+                      onClick={() => handleReply(msg.id)}
+                      disabled={sendingReply || !replyText.trim()}
+                      className="bg-accent text-paper px-5 py-2 font-mono text-[10px] uppercase tracking-[0.1em] hover:opacity-85 transition-opacity disabled:opacity-50"
+                    >
+                      {sendingReply ? 'Sending...' : 'Send Reply →'}
+                    </button>
+                    <span className="text-[9px] text-admin-ink3 font-mono">Email will be sent via SMTP</span>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

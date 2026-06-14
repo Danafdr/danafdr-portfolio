@@ -29,7 +29,7 @@ const categories = [
 export default function Work() {
   return (
     <section id="work" className="border-b border-border-rgba reveal">
-      <div className="py-7 px-10 border-b border-border-rgba flex justify-between items-baseline">
+      <div className="py-7 px-5 md:px-10 border-b border-border-rgba flex justify-between items-baseline">
         <div className="font-playfair text-[clamp(22px,3vw,32px)] font-black tracking-[-0.02em]">Selected <em className="italic font-normal">work</em></div>
         <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">2024 — present</div>
       </div>
@@ -38,19 +38,19 @@ export default function Work() {
           key={cat.id} 
           href={`/work?cat=${cat.slug}`}
           scroll={false}
-          className="work-item grid grid-cols-[52px_1fr_auto_32px] gap-5 items-center py-5 px-10 border-b border-border-rgba cursor-pointer group no-underline"
+          className="work-item grid grid-cols-[40px_1fr_24px] md:grid-cols-[52px_1fr_auto_32px] gap-x-3 gap-y-1 md:gap-5 items-center py-5 px-5 md:px-10 border-b border-border-rgba cursor-pointer group no-underline"
         >
-          <div className="font-playfair text-[26px] font-black text-ink3">{cat.id}</div>
-          <div>
+          <div className="font-playfair text-[26px] font-black text-ink3 row-span-2 md:row-span-1">{cat.id}</div>
+          <div className="col-start-2">
             <div className="text-[13px] text-ink tracking-[0.03em] mb-[3px]">{cat.name}</div>
             <div className="text-[10px] text-ink2 leading-[1.55]">{cat.description}</div>
           </div>
-          <div className="flex gap-[5px] flex-wrap justify-end">
+          <div className="flex gap-[5px] flex-wrap justify-start md:justify-end col-start-2 md:col-start-auto">
             {cat.tags.map((tag, i) => (
               <span key={i} className="work-tag text-[9px] text-ink2 border border-border-rgba py-[3px] px-2 tracking-[0.05em]">{tag}</span>
             ))}
           </div>
-          <div className="w-arr text-[15px] text-ink3 transition-all duration-200 group-hover:translate-x-[5px]">→</div>
+          <div className="w-arr text-[15px] text-ink3 transition-all duration-200 group-hover:translate-x-[5px] row-start-1 col-start-3 md:col-start-auto text-right md:text-left">→</div>
         </Link>
       ))}
     </section>

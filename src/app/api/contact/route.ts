@@ -28,11 +28,21 @@ export async function POST(request: Request) {
         },
       });
 
+      // Notify admin
       await transporter.sendMail({
         from: process.env.SMTP_USER,
         to: user.email,
         subject: `New Portfolio Message from ${name}`,
         text: `You have received a new message on your portfolio:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      });
+
+      // Auto-reply to sender
+      await transporter.sendMail({
+        from: process.env.SMTP_USER,
+        replyTo: user.email,
+        to: email,
+        subject: `Thanks for reaching out — danafdr`,
+        text: `Hi ${name},\n\nThank you for your message. I've received it and will get back to you as soon as possible.\n\nFor reference, here's what you sent:\n"${message}"\n\nBest regards,\nDanadirsha\nhttps://danafdr.com`,
       });
     }
 

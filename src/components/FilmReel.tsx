@@ -497,14 +497,14 @@ export default function FilmReel() {
                       </span>
                     </div>
                     <div className="anim-el">
-                      <button
+                      <div
                         onClick={() => browseProjects(catIdx)}
                         className="reel-arrow font-mono tracking-[0.1em] uppercase text-[9px] px-[14px] py-[6px] flex items-center gap-3 cursor-pointer group w-fit"
                         role="button"
                       >
                         <span>Browse projects</span>
                         <span className="transition-transform group-hover:translate-x-1">→</span>
-                      </button>
+                      </div>
                     </div>
                   </div>
 
@@ -552,18 +552,18 @@ export default function FilmReel() {
               {/* ── Panel 2: Project Listing ── */}
               <div
                 data-hindex="1"
-                className="slide-panel w-screen h-full shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)]"
+                className="slide-panel w-screen h-[calc(100dvh-80px)] shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)]"
               >
                 {/* Panel Header */}
-                <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4">
+                <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10">
                   <div className="flex flex-col items-start">
-                    <button
+                    <div
                       onClick={() => goBackToIntro(catIdx)}
-                      className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group"
+                      className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
                       role="button"
                     >
                       <span className="transition-transform group-hover:-translate-x-1">←</span> Back to {category.name}
-                    </button>
+                    </div>
                     <div className="font-playfair font-black text-[24px] leading-[1] tracking-[-0.02em]">
                       Projects
                     </div>
@@ -579,10 +579,10 @@ export default function FilmReel() {
                 </div>
 
                 {/* Project List */}
-                <div className="flex-1 overflow-y-auto no-scrollbar px-6 md:px-10 py-6" style={{ scrollbarWidth: "none" }}>
-                  <div className="max-w-[1200px] mx-auto flex flex-col gap-0">
+                <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 md:px-10 py-6" style={{ scrollbarWidth: "none" }}>
+                  <div className="max-w-[1200px] mx-auto flex flex-col gap-0 pb-10">
                     {category.projects.map((project) => (
-                      <button
+                      <div
                         key={project.id}
                         onClick={() => setPreview(project)}
                         className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left active:scale-[0.98] transition-all duration-200"
@@ -635,7 +635,7 @@ export default function FilmReel() {
                             </span>
                           </div>
                         </div>
-                      </button>
+                      </div>
                     ))}
                   </div>
                 </div>

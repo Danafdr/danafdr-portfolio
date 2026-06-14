@@ -3,7 +3,6 @@ import Hero from "../components/Hero";
 import Tape from "../components/Tape";
 import PullQuote from "../components/PullQuote";
 import About from "../components/About";
-import Skills from "../components/Skills";
 import Work from "../components/Work";
 import Now from "../components/Now";
 import Contact from "../components/Contact";
@@ -32,7 +31,6 @@ export default async function Home() {
       <Tape />
       <PullQuote />
       <About />
-      <Skills />
       <Work />
       <Now />
       <Contact />

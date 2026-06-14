@@ -1,12 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Contact() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [availableForWork, setAvailableForWork] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/hero')
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.available_for_work !== undefined) {
+          setAvailableForWork(data.available_for_work);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,11 +120,13 @@ export default function Contact() {
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">West Jakarta, Indonesia</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">·</span>
             </div>
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba">
-              <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Status</span>
-              <span className="text-[13px] text-accent transition-colors duration-200 tracking-[0.02em]">Available for work</span>
-              <div className="w-[5px] h-[5px] rounded-full bg-accent shrink-0 animate-pd hidden md:block md:ml-auto"></div>
-            </div>
+            {availableForWork && (
+              <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba">
+                <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Status</span>
+                <span className="text-[13px] text-accent transition-colors duration-200 tracking-[0.02em]">Available for work</span>
+                <div className="w-[5px] h-[5px] rounded-full bg-accent shrink-0 animate-pd hidden md:block md:ml-auto"></div>
+              </div>
+            )}
             <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Open to</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">Freelance · Collabs · Internships</span>

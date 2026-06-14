@@ -13,6 +13,8 @@ export default function SettingsPage() {
   const [password, setPassword] = useState('');
   const [githubToken, setGithubToken] = useState('');
   const [aiApiKey, setAiApiKey] = useState('');
+  const [availableForWork, setAvailableForWork] = useState(true);
+  const [togglingAvailability, setTogglingAvailability] = useState(false);
 
   useEffect(() => {
     fetchSettings();
@@ -20,11 +22,17 @@ export default function SettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const data = await apiFetch('/api/admin/settings');
-      if (data) {
-        setEmail(data.email || '');
-        setGithubToken(data.github_token || '');
-        setAiApiKey(data.ai_api_key || '');
+      const [userData, heroData] = await Promise.all([
+        apiFetch('/api/admin/settings'),
+        apiFetch('/api/hero'),
+      ]);
+      if (userData) {
+        setEmail(userData.email || '');
+        setGithubToken(userData.github_token || '');
+        setAiApiKey(userData.ai_api_key || '');
+      }
+      if (heroData) {
+        setAvailableForWork(heroData.available_for_work !== false);
       }
     } catch (e) {
       toast('Failed to fetch settings', 'error');
@@ -54,6 +62,25 @@ export default function SettingsPage() {
     }
   };
 
+  const handleToggleAvailability = async () => {
+    const newValue = !availableForWork;
+    setAvailableForWork(newValue);
+    setTogglingAvailability(true);
+    try {
+      await apiFetch('/api/admin/hero/settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ available_for_work: newValue }),
+      });
+      toast(newValue ? 'Status: Available for work' : 'Status: Not available', 'success');
+    } catch (e) {
+      setAvailableForWork(!newValue); // revert
+      toast('Failed to update availability', 'error');
+    } finally {
+      setTogglingAvailability(false);
+    }
+  };
+
   if (loading) return <div className="p-12 text-[11px] uppercase tracking-widest text-admin-ink3 animate-pulse">Loading settings...</div>;
 
   return (
@@ -69,6 +96,34 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex flex-col gap-8">
+        {/* Availability Toggle */}
+        <section className="flex flex-col gap-4 border border-border p-6">
+          <h2 className="font-mono text-[11px] uppercase tracking-widest text-admin-ink font-bold mb-2">Availability Status</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <span className="font-mono text-[12px] text-admin-ink">Available for Work</span>
+              <span className="font-mono text-[9px] text-admin-ink3">
+                {availableForWork 
+                  ? 'Your portfolio shows "Available for work" to visitors.' 
+                  : 'The availability badge is hidden from visitors.'}
+              </span>
+            </div>
+            <button
+              onClick={handleToggleAvailability}
+              disabled={togglingAvailability}
+              className={`w-12 h-6 rounded-full p-[3px] transition-colors duration-200 ${availableForWork ? 'bg-accent' : 'bg-admin-ink3'} ${togglingAvailability ? 'opacity-50' : ''}`}
+            >
+              <div className={`w-[18px] h-[18px] rounded-full bg-bg transition-transform duration-200 ${availableForWork ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+          <div className="flex items-center gap-3 mt-2">
+            <div className={`w-2 h-2 rounded-full ${availableForWork ? 'bg-accent animate-pulse' : 'bg-admin-ink3'}`} />
+            <span className={`font-mono text-[10px] uppercase tracking-widest ${availableForWork ? 'text-accent' : 'text-admin-ink3'}`}>
+              {availableForWork ? 'Currently Available' : 'Not Available'}
+            </span>
+          </div>
+        </section>
+
         <section className="flex flex-col gap-4 border border-border p-6">
           <h2 className="font-mono text-[11px] uppercase tracking-widest text-admin-ink font-bold mb-2">Account Details</h2>
           <AdminInput 

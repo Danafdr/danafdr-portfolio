@@ -43,6 +43,7 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
   // URLs (Step 1 or 2 depending on type)
   const [liveUrl, setLiveUrl] = useState(initialData?.live_url || '');
   const [repoUrl, setRepoUrl] = useState(initialData?.repo_url || '');
+  const [videoUrl, setVideoUrl] = useState(initialData?.video_url || '');
   
   // Design (Step 2)
   const [gradientStart, setGradientStart] = useState(initialData?.gradient_start || '#1a1816');
@@ -91,6 +92,15 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
     if (type === 'web' || type === 'other') {
         formData.append('live_url', liveUrl);
         if (type === 'web') formData.append('repo_url', repoUrl);
+    }
+    if (type === 'video' || type === 'motion') {
+        formData.append('video_url', videoUrl);
+        // Determine platform
+        let platform = 'other';
+        if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) platform = 'youtube';
+        else if (videoUrl.includes('drive.google.com')) platform = 'drive';
+        else if (videoUrl.includes('vimeo.com')) platform = 'vimeo';
+        formData.append('video_platform', platform);
     }
     
     // Also append gradients if they exist to avoid validation errors if they are required
@@ -166,40 +176,42 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
       <div className="bg-bg2 border border-border p-8 mb-8">
         {step === 1 && (
           <div className="flex flex-col gap-6">
-            <GithubRepoSelector 
-              onSelect={async (repo) => {
-                setTitle(repo.name);
-                if (repo.description) setDescription(repo.description);
-                if (repo.html_url) setRepoUrl(repo.html_url);
-                if (repo.homepage) setLiveUrl(repo.homepage);
-                
-                toast('Fetching repo details...', 'success');
-                try {
-                  const details = await apiFetch(`/api/admin/github/repo-details?repo=${encodeURIComponent(repo.full_name)}`);
-                  if (details && !details.error) {
-                    if (details.readme) {
-                      setFullDescription(details.readme);
+            {type === 'web' && (
+              <GithubRepoSelector 
+                onSelect={async (repo) => {
+                  setTitle(repo.name);
+                  if (repo.description) setDescription(repo.description);
+                  if (repo.html_url) setRepoUrl(repo.html_url);
+                  if (repo.homepage) setLiveUrl(repo.homepage);
+                  
+                  toast('Fetching repo details...', 'success');
+                  try {
+                    const details = await apiFetch(`/api/admin/github/repo-details?repo=${encodeURIComponent(repo.full_name)}`);
+                    if (details && !details.error) {
+                      if (details.readme) {
+                        setFullDescription(details.readme);
+                      }
+                      if (details.languages && details.languages.length > 0) {
+                        setToolsString(details.languages.join(', '));
+                      } else if (repo.topics && repo.topics.length > 0) {
+                        setToolsString(repo.topics.join(', '));
+                      } else if (repo.language) {
+                        setToolsString(repo.language);
+                      }
+                      toast('Imported repo completely!', 'success');
+                    } else {
+                      if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
+                      else if (repo.language) setToolsString(repo.language);
+                      toast('Imported basic details', 'success');
                     }
-                    if (details.languages && details.languages.length > 0) {
-                      setToolsString(details.languages.join(', '));
-                    } else if (repo.topics && repo.topics.length > 0) {
-                      setToolsString(repo.topics.join(', '));
-                    } else if (repo.language) {
-                      setToolsString(repo.language);
-                    }
-                    toast('Imported repo completely!', 'success');
-                  } else {
+                  } catch (e) {
                     if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
                     else if (repo.language) setToolsString(repo.language);
                     toast('Imported basic details', 'success');
                   }
-                } catch (e) {
-                  if (repo.topics && repo.topics.length > 0) setToolsString(repo.topics.join(', '));
-                  else if (repo.language) setToolsString(repo.language);
-                  toast('Imported basic details', 'success');
-                }
-              }}
-            />
+                }}
+              />
+            )}
 
             <AdminInput label="Title" value={title} onChange={e => setTitle(e.target.value)} required />
             <AdminInput label="Slug (optional)" value={slug} onChange={e => setSlug(e.target.value)} placeholder="auto-generated if empty" />
@@ -279,6 +291,18 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                 {type === 'web' && (
                   <AdminInput label="Repository" value={repoUrl} onChange={e => setRepoUrl(e.target.value)} placeholder="https://github.com/..." />
                 )}
+              </div>
+            )}
+
+            {(type === 'video' || type === 'motion') && (
+              <div className="flex flex-col gap-2">
+                <AdminInput 
+                  label="Video URL (YouTube, Google Drive, Vimeo, etc.)" 
+                  value={videoUrl} 
+                  onChange={e => setVideoUrl(e.target.value)} 
+                  placeholder="https://youtube.com/watch?v=... or https://drive.google.com/..." 
+                />
+                <p className="text-[9px] text-admin-ink3 font-mono">Paste a link to your video from YouTube, Google Drive, Vimeo, or any online video player.</p>
               </div>
             )}
           </div>

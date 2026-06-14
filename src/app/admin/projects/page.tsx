@@ -161,6 +161,18 @@ export default function ProjectsPage() {
   };
 
   const handleToggle = async (id: number, field: string) => {
+    // Guard: max 3 featured projects
+    if (field === 'featured') {
+      const project = projects.find(p => String(p.id) === String(id));
+      if (project && !project.featured) {
+        const featuredCount = projects.filter(p => p.featured).length;
+        if (featuredCount >= 3) {
+          toast('Featured limit reached — a maximum of 3 projects may be featured at any time. Please unfeature an existing project before featuring a new one.', 'error');
+          return;
+        }
+      }
+    }
+
     // optimistic
     setProjects(projects.map(p => String(p.id) === String(id) ? { ...p, [field]: !(p as any)[field] } : p));
     try {

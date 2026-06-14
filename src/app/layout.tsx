@@ -52,16 +52,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${playfair.variable} ${dmMono.variable} ${bebasNeue.variable}`}>
       <head>
         <style dangerouslySetInnerHTML={{ __html: '@media(hover:hover) and (pointer:fine){*{cursor:none!important}}' }} />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
       </head>
       <body suppressHydrationWarning>
         <SmoothScroll />
         <CursorHider />
         <Cursor />
         <Intro />
-        <TransitionProvider>
-          {children}
-        </TransitionProvider>
+        <div className="max-w-[1920px] mx-auto relative bg-paper shadow-2xl min-h-screen">
+          <TransitionProvider>
+            {children}
+          </TransitionProvider>
+        </div>
         <Analytics />
         <SpeedInsights />
       </body>

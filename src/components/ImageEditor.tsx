@@ -65,6 +65,7 @@ export default function ImageEditor({
   const [multiCrops, setMultiCrops] = useState<Record<string, Crop | undefined>>(initialMultiCrops);
 
   const imgRef = useRef<HTMLImageElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleCropChange = (c: Crop) => {
     setCrop(c);
@@ -92,12 +93,40 @@ export default function ImageEditor({
   const handleTabChange = (ratioId: string) => {
     setActiveTab(ratioId);
     const r = MULTI_CROP_RATIOS.find(r => r.id === ratioId);
-    setAspect(r?.value);
+    const newAspect = r?.value;
+    setAspect(newAspect);
     
-    if (multiCrops[ratioId]) {
+    if (multiCrops[ratioId] && multiCrops[ratioId]!.width && multiCrops[ratioId]!.height) {
       setCrop(multiCrops[ratioId]);
+    } else if (newAspect && imgRef.current) {
+      const { width, height } = imgRef.current;
+      const newCrop = centerCrop(
+        makeAspectCrop({ unit: '%', width: 90 }, newAspect, width, height),
+        width,
+        height
+      );
+      setCrop(newCrop);
+      setMultiCrops(prev => ({ ...prev, [ratioId]: newCrop }));
     } else {
-      handleAspectClick(r?.value);
+      setCrop(undefined);
+    }
+  };
+
+  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    setImageLoaded(true);
+    // If in multi-crop manual mode with no existing crops, init the active tab
+    if (multiCropMode && editMode === 'manual') {
+      const { width, height } = e.currentTarget;
+      const r = MULTI_CROP_RATIOS.find(r => r.id === activeTab);
+      if (r && (!multiCrops[activeTab] || !multiCrops[activeTab]!.width)) {
+        const newCrop = centerCrop(
+          makeAspectCrop({ unit: '%', width: 90 }, r.value, width, height),
+          width,
+          height
+        );
+        setCrop(newCrop);
+        setMultiCrops(prev => ({ ...prev, [activeTab]: newCrop }));
+      }
     }
   };
 
@@ -202,7 +231,7 @@ export default function ImageEditor({
         <div className="w-[60%] bg-[#1a1816] relative flex items-center justify-center p-8 overflow-hidden">
           <ReactCrop
             crop={crop}
-            onChange={c => setCrop(c)}
+            onChange={handleCropChange}
             aspect={aspect}
             className="max-h-full max-w-full"
           >
@@ -211,6 +240,7 @@ export default function ImageEditor({
                 ref={imgRef}
                 src={imageUrl}
                 alt="Edit"
+                onLoad={onImageLoad}
                 style={{
                   transform: `rotate(${rotation}deg)`,
                   filter: getCssFilter(),

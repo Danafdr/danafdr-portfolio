@@ -58,7 +58,7 @@ export default async function AboutPage() {
             <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">West Jakarta, Indonesia</div>
             <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">Web Dev · Video Editor</div>
             
-            <div className="mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden grayscale contrast-125 flex items-center justify-center">
+            <div className="mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden flex items-center justify-center">
               {!hasPhoto ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
                   <span>Candid</span>

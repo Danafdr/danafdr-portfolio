@@ -1,7 +1,7 @@
 export default function About() {
   return (
-    <section id="about-s" className="grid grid-cols-2 border-b border-border-rgba reveal">
-      <div className="py-[52px] px-10 border-r border-border-rgba">
+    <section id="about-s" className="grid grid-cols-1 lg:grid-cols-2 border-b border-border-rgba reveal">
+      <div className="py-[52px] px-5 md:px-10 border-b lg:border-b-0 lg:border-r border-border-rgba">
         <h2 className="font-playfair text-[clamp(24px,3.5vw,36px)] font-black leading-[0.95] tracking-[-0.02em] mb-7">Who is<br /><em className="italic font-normal text-ink2">danafdr?</em></h2>
         <p className="text-[11px] text-ink2 leading-[1.95] mb-[14px]">
           A 17-year-old from West Jakarta who builds full-stack web apps and studies how things move. <strong className="text-ink font-normal">Web development</strong> is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
@@ -13,7 +13,7 @@ export default function About() {
           Obsessed with <strong className="text-ink font-normal">The Finals</strong> for the same reason Whiplash hits so hard — when every detail is deliberate, when nothing is accidental, it stops being a game or a film and becomes something else entirely. That&apos;s the standard.
         </p>
       </div>
-      <div className="py-[52px] px-10">
+      <div className="py-[52px] px-5 md:px-10">
         <h2 className="font-playfair text-[clamp(24px,3.5vw,36px)] font-black leading-[0.95] tracking-[-0.02em] mb-7">What<br /><em className="italic font-normal text-ink2">shapes him</em></h2>
         <div className="flex flex-col">
           <div className="py-4 border-b border-border-rgba grid grid-cols-[22px_1fr] gap-[14px] last:border-b-0">
