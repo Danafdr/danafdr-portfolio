@@ -393,7 +393,7 @@ export default function FilmReel() {
       >
         {(() => {
           const currentCat = currentVIndex > 0 ? categories[currentVIndex - 1] : null;
-          const numPanels = currentCat ? 1 + Math.ceil(currentCat.projects.length / 4) : 0;
+          const numPanels = currentCat ? 1 + Math.ceil(currentCat.projects.length / 3) : 0;
           const totalDots = Math.max(2, numPanels);
           return Array.from({ length: totalDots }).map((_, idx) => (
             <div
@@ -557,8 +557,8 @@ export default function FilmReel() {
               {/* ── Panel 2+: Project Listing Pages ── */}
               {(() => {
                 const chunks = [];
-                for (let i = 0; i < category.projects.length; i += 4) {
-                  chunks.push(category.projects.slice(i, i + 4));
+                for (let i = 0; i < category.projects.length; i += 3) {
+                  chunks.push(category.projects.slice(i, i + 3));
                 }
                 if (chunks.length === 0) chunks.push([]); // At least one page
 
