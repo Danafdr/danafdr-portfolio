@@ -80,7 +80,7 @@ export default function FilmReel() {
 
   // Track which slides have already been animated
   const animatedSlidesRef = useRef<Set<number>>(new Set());
-  const animatedHSlidesRef = useRef<Set<number>>(new Set());
+  const animatedHSlidesRef = useRef<Set<string>>(new Set());
 
   const [categories, setCategories] = useState(initialCategories);
   const totalSlides = categories.length + 1;
@@ -341,18 +341,21 @@ export default function FilmReel() {
             const hIndex = Number((entry.target as HTMLElement).dataset.hindex);
             setCurrentHIndex(hIndex);
 
-            if (hIndex === 1) {
+            if (hIndex >= 1) {
               const panel = entry.target;
-              if (!animatedHSlidesRef.current.has(currentVIndex)) {
-                animatedHSlidesRef.current.add(currentVIndex);
+              const panelKey = `${currentVIndex}-${hIndex}`;
+              if (!animatedHSlidesRef.current.has(panelKey)) {
+                animatedHSlidesRef.current.add(panelKey);
                 const items = panel.querySelectorAll(".project-row");
-                ctx.add(() => {
-                  gsap.fromTo(
-                    items,
-                    { opacity: 0, x: 20 },
-                    { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }
-                  );
-                });
+                if (items.length > 0) {
+                  ctx.add(() => {
+                    gsap.fromTo(
+                      items,
+                      { opacity: 0, x: 20 },
+                      { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }
+                    );
+                  });
+                }
               }
             }
           }
