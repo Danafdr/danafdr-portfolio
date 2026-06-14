@@ -39,6 +39,7 @@ import Intro from "../components/Intro";
 import CursorHider from "../components/CursorHider";
 import Cursor from "../components/Cursor";
 import SmoothScroll from "../components/SmoothScroll";
+import ZoomPreventer from "../components/ZoomPreventer";
 
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -58,6 +59,7 @@ export default function RootLayout({
         <SmoothScroll />
         <CursorHider />
         <Cursor />
+        <ZoomPreventer />
         <Intro />
         <div className="max-w-[1920px] mx-auto relative bg-paper shadow-2xl min-h-screen">
           <TransitionProvider>
