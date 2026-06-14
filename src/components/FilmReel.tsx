@@ -85,6 +85,33 @@ export default function FilmReel() {
   const [categories, setCategories] = useState(initialCategories);
   const totalSlides = categories.length + 1;
 
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+
+  useEffect(() => {
+    const calculateItemsPerPage = () => {
+      // 100dvh - 80px (Main Header) - 130px (Panel Header/Padding) - 50px (Bottom Padding)
+      const availableHeight = window.innerHeight - 260;
+      // Project rows are roughly 150px tall on desktop, and 200px on mobile
+      const rowHeight = window.innerWidth < 768 ? 200 : 160;
+      const count = Math.max(1, Math.floor(availableHeight / rowHeight));
+      setItemsPerPage(Math.min(count, 10)); // Cap it so it doesn't get infinitely high
+    };
+
+    calculateItemsPerPage();
+    // Add small delay on resize to avoid thrashing
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(calculateItemsPerPage, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   useEffect(() => {
     getProjects().then(data => {
       if (!data || !Array.isArray(data)) return;
@@ -393,7 +420,7 @@ export default function FilmReel() {
       >
         {(() => {
           const currentCat = currentVIndex > 0 ? categories[currentVIndex - 1] : null;
-          const numPanels = currentCat ? 1 + Math.ceil(currentCat.projects.length / 3) : 0;
+          const numPanels = currentCat ? 1 + Math.ceil(currentCat.projects.length / itemsPerPage) : 0;
           const totalDots = Math.max(2, numPanels);
           return Array.from({ length: totalDots }).map((_, idx) => (
             <div
@@ -557,8 +584,8 @@ export default function FilmReel() {
               {/* ── Panel 2+: Project Listing Pages ── */}
               {(() => {
                 const chunks = [];
-                for (let i = 0; i < category.projects.length; i += 3) {
-                  chunks.push(category.projects.slice(i, i + 3));
+                for (let i = 0; i < category.projects.length; i += itemsPerPage) {
+                  chunks.push(category.projects.slice(i, i + itemsPerPage));
                 }
                 if (chunks.length === 0) chunks.push([]); // At least one page
 
