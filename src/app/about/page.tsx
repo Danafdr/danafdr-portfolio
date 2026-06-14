@@ -52,7 +52,7 @@ export default async function AboutPage() {
         <div className="grid grid-cols-[1fr_2fr] gap-20 relative">
           <div className="h-full">
             <div className="sticky top-[20vh]">
-            <h1 className="font-playfair text-[clamp(40px,5vw,64px)] font-black leading-[0.9] tracking-[-0.02em] mb-6">
+            <h1 className="font-playfair text-[40px] md:text-[52px] lg:text-[64px] font-black leading-[0.9] tracking-[-0.02em] mb-6">
               Who is<br /><em className="italic font-normal text-ink2">danafdr?</em>
             </h1>
             <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">West Jakarta, Indonesia</div>

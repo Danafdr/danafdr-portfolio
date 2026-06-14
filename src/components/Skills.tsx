@@ -2,7 +2,7 @@ export default function Skills() {
   return (
     <section id="skills" className="border-b border-border-rgba reveal">
       <div className="py-7 px-5 md:px-10 border-b border-border-rgba flex flex-col sm:flex-row justify-between sm:items-baseline gap-2 sm:gap-0">
-        <div className="font-playfair text-[clamp(22px,3vw,32px)] font-black tracking-[-0.02em]">The <em className="italic font-normal">toolkit</em></div>
+        <div className="font-playfair text-[22px] md:text-[27px] lg:text-[32px] font-black tracking-[-0.02em]">The <em className="italic font-normal">toolkit</em></div>
         <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">Web-first · Video-editing · Motion-graphics</div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">

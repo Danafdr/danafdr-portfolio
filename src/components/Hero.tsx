@@ -95,7 +95,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
         {/* Left Col */}
         <div className="pr-0 lg:pr-10 border-b lg:border-b-0 lg:border-r border-border-rgba relative z-10 flex flex-col justify-center py-[6vh] lg:py-[4vh]">
           <div className="text-[9px] text-accent tracking-[0.3em] uppercase mb-[4vh]">Portfolio — Issue No. 001</div>
-          <h1 ref={headlineRef} className="font-playfair text-[clamp(46px,9.5vw,104px)] font-black leading-[0.86] tracking-[-0.03em] flex flex-col">
+          <h1 ref={headlineRef} className="font-playfair text-[46px] md:text-[75px] lg:text-[104px] font-black leading-[0.86] tracking-[-0.03em] flex flex-col">
             <span className="anim-word block opacity-0 translate-y-10">CODES</span>
             <span className="anim-word block opacity-0 translate-y-10"><em className="italic font-normal text-ink2">&amp; moves</em></span>
             <span className="anim-word block opacity-0 translate-y-10">THINGS</span>
@@ -106,7 +106,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
         <div className="pl-0 lg:pl-10 flex flex-col justify-between relative py-[6vh] lg:py-[4vh] gap-8 lg:gap-0">
           <div 
             ref={photoRef} 
-            className="absolute top-4 lg:top-0 right-0 w-[clamp(110px,25vw,200px)] h-[clamp(140px,32vw,260px)] bg-[rgba(15,14,11,0.05)] border border-border-rgba z-0 -mt-px overflow-hidden flex items-center justify-center opacity-40 lg:opacity-100"
+            className="absolute top-4 lg:top-0 right-0 w-[110px] md:w-[155px] lg:w-[200px] h-[140px] md:h-[200px] lg:h-[260px] bg-[rgba(15,14,11,0.05)] border border-border-rgba z-0 -mt-px overflow-hidden flex items-center justify-center opacity-40 lg:opacity-100"
           >
             {!hasPhoto ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
@@ -145,8 +145,8 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
             )}
           </div>
           
-          <div className="relative z-10 mt-[clamp(20px,5vh,200px)] lg:mt-[clamp(120px,18vh,200px)]">
-            <p className="font-playfair italic text-[clamp(15px,1.6vw,17px)] text-ink2 leading-[1.6] max-w-[380px]">
+          <div className="relative z-10 mt-[20px] md:mt-[110px] lg:mt-[200px] lg:mt-[120px] md:mt-[160px] lg:mt-[200px]">
+            <p className="font-playfair italic text-[15px] md:text-[16px] lg:text-[17px] text-ink2 leading-[1.6] max-w-[380px]">
               A web developer with the eye of a video editor. Full-stack apps that ship, visual cuts that hit with intention. At 17, from West Jakarta — building both before most people choose one.
             </p>
           </div>
@@ -161,15 +161,15 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
       {/* Bottom Bar */}
       <div className="grid grid-cols-1 md:grid-cols-3 border-t border-border-rgba mt-auto shrink-0">
         <div className="py-5 px-5 md:px-7 border-b md:border-b-0 md:border-r border-border-rgba">
-          <div className="font-bebas text-[clamp(24px,3vw,34px)] tracking-[0.08em] text-ink leading-none">WD</div>
+          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">WD</div>
           <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">web dev — strongest</div>
         </div>
         <div className="py-5 px-5 md:px-7 border-b md:border-b-0 md:border-r border-border-rgba">
-          <div className="font-bebas text-[clamp(24px,3vw,34px)] tracking-[0.08em] text-ink leading-none">VE / MG</div>
+          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">VE / MG</div>
           <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">video editing &amp; mograph</div>
         </div>
         <div className="py-5 px-5 md:px-7">
-          <div className="font-bebas text-[clamp(24px,3vw,34px)] tracking-[0.08em] text-ink leading-none">17</div>
+          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">17</div>
           <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">years old — building</div>
         </div>
       </div>

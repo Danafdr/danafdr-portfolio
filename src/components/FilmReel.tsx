@@ -434,7 +434,7 @@ export default function FilmReel() {
             <div className="anim-el text-[9px] text-ink3 tracking-[0.3em] uppercase mb-6">
               Vol. I · 2024 — present
             </div>
-            <h1 className="anim-el font-playfair font-black text-[clamp(48px,10vw,100px)] leading-[0.88] tracking-[-0.02em] mb-8">
+            <h1 className="anim-el font-playfair font-black text-[48px] md:text-[74px] lg:text-[100px] leading-[0.88] tracking-[-0.02em] mb-8">
               Selected <em className="italic font-normal">work</em>
             </h1>
             <div className="anim-el w-[1px] h-12 bg-[rgba(15,14,11,0.18)] mx-auto mb-8"></div>
@@ -480,7 +480,7 @@ export default function FilmReel() {
                     <div className="anim-el text-[9px] text-accent tracking-[0.2em] uppercase mb-5">
                       0{catIdx + 1} — Category
                     </div>
-                    <h2 className="anim-el font-playfair font-black text-[clamp(40px,6vw,72px)] leading-[0.88] tracking-[-0.02em] mb-6 text-ink">
+                    <h2 className="anim-el font-playfair font-black text-[40px] md:text-[56px] lg:text-[72px] leading-[0.88] tracking-[-0.02em] mb-6 text-ink">
                       {category.name}
                     </h2>
                     <p className="anim-el font-mono text-[14px] text-ink2 leading-[1.7] max-w-[400px] mb-8">
@@ -706,7 +706,7 @@ export default function FilmReel() {
               {preview.thumbnail ? (
                 <CroppedThumbnail project={preview} sizeKey="16:9" className="absolute inset-0 w-full h-full" />
               ) : (
-                <div className="font-playfair font-black text-[clamp(36px,6vw,72px)] text-[#f0ebe2]/30 tracking-[-0.02em] leading-[0.9] text-center px-10 relative z-10">
+                <div className="font-playfair font-black text-[36px] md:text-[54px] lg:text-[72px] text-[#f0ebe2]/30 tracking-[-0.02em] leading-[0.9] text-center px-10 relative z-10">
                   {preview.title}
                 </div>
               )}
@@ -732,7 +732,7 @@ export default function FilmReel() {
                   <div className="text-[9px] text-accent tracking-[0.2em] uppercase mb-3">
                     {preview.typeBadge}
                   </div>
-                  <h3 className="font-playfair font-black text-[clamp(28px,4vw,44px)] leading-[0.9] tracking-[-0.02em] mb-2 md:mb-4">
+                  <h3 className="font-playfair font-black text-[28px] md:text-[36px] lg:text-[44px] leading-[0.9] tracking-[-0.02em] mb-2 md:mb-4">
                     {preview.title}
                   </h3>
                 </div>

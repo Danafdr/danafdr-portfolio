@@ -15,7 +15,7 @@ export default function SkillsPage() {
       <Header />
       
       <div className="pt-16 max-w-7xl mx-auto w-full px-5 md:px-10">
-        <h1 className="font-playfair text-[clamp(40px,6vw,80px)] font-black leading-[0.9] tracking-[-0.02em] mb-12">
+        <h1 className="font-playfair text-[40px] md:text-[60px] lg:text-[80px] font-black leading-[0.9] tracking-[-0.02em] mb-12">
           The <em className="italic font-normal text-ink2">toolkit</em>
         </h1>
         <Skills />

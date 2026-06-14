@@ -40,7 +40,7 @@ export default function ContactPage() {
       <Header />
       
       <section className="flex-1 flex flex-col justify-center px-10 py-20 max-w-5xl mx-auto w-full">
-        <h1 className="font-playfair text-[clamp(60px,10vw,120px)] font-black leading-[0.87] tracking-[-0.03em] mb-16">
+        <h1 className="font-playfair text-[60px] md:text-[90px] lg:text-[120px] font-black leading-[0.87] tracking-[-0.03em] mb-16">
           Let&apos;s make<br />
           something<br />
           <em className="italic font-normal text-ink2">real.</em>

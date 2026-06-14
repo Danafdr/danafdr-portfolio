@@ -30,7 +30,7 @@ export default function Work() {
   return (
     <section id="work" className="border-b border-border-rgba reveal">
       <div className="py-7 px-5 md:px-10 border-b border-border-rgba flex justify-between items-baseline">
-        <div className="font-playfair text-[clamp(22px,3vw,32px)] font-black tracking-[-0.02em]">Selected <em className="italic font-normal">work</em></div>
+        <div className="font-playfair text-[22px] md:text-[27px] lg:text-[32px] font-black tracking-[-0.02em]">Selected <em className="italic font-normal">work</em></div>
         <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">2024 — present</div>
       </div>
       {categories.map((cat) => (

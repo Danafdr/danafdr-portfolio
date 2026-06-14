@@ -48,7 +48,7 @@ export default function Contact() {
     <section id="contact" className="pt-16 px-6 md:px-10 pb-[72px] reveal">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[60px] items-start">
         <div>
-          <h2 className="font-playfair text-[clamp(48px,7.5vw,76px)] font-black leading-[0.87] tracking-[-0.03em]">
+          <h2 className="font-playfair text-[48px] md:text-[62px] lg:text-[76px] font-black leading-[0.87] tracking-[-0.03em]">
             Let&apos;s make<br />
             something<br />
             <em className="italic font-normal text-ink2">real.</em>

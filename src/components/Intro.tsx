@@ -83,7 +83,7 @@ export default function Intro() {
       className={`fixed inset-0 bg-ink z-[999] flex items-center justify-center flex-col ${!instantSkip ? "transition-all duration-[1100ms] ease-out delay-300" : ""} ${isOut ? "opacity-0 -translate-y-2.5 pointer-events-none" : ""}`}
     >
       <div ref={topTextRef} className="text-[9px] text-[rgba(240,235,226,0.28)] tracking-[0.4em] uppercase mb-5">Vol. I &nbsp;·&nbsp; No. 001 &nbsp;·&nbsp; West Jakarta</div>
-      <div ref={nameRef} className="font-playfair text-[clamp(52px,11vw,96px)] font-black text-paper tracking-[-0.02em] leading-[0.9] text-center">dana<em className="italic font-normal">fdr</em></div>
+      <div ref={nameRef} className="font-playfair text-[52px] md:text-[74px] lg:text-[96px] font-black text-paper tracking-[-0.02em] leading-[0.9] text-center">dana<em className="italic font-normal">fdr</em></div>
       <div ref={ruleRef} className="w-[1px] bg-[rgba(240,235,226,0.18)] my-7 mx-auto"></div>
       <div ref={subTextRef} className="text-[9px] text-[rgba(240,235,226,0.22)] tracking-[0.35em] uppercase">Web Dev · Video Editor · Mograph</div>
       <div ref={progressRef} className="absolute bottom-0 left-0 h-0.5 bg-paper"></div>
