@@ -33,6 +33,13 @@ export const metadata: Metadata = {
   description: "Web Dev · Video Editing · Motion Graphics",
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 import dynamic from "next/dynamic";
 import TransitionProvider from "../components/TransitionProvider";
 import Intro from "../components/Intro";
@@ -52,7 +59,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${playfair.variable} ${dmMono.variable} ${bebasNeue.variable}`}>
       <head>
         <style dangerouslySetInnerHTML={{ __html: '@media(hover:hover) and (pointer:fine){*{cursor:none!important}}' }} />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
       </head>
       <body suppressHydrationWarning>
         <SmoothScroll />
