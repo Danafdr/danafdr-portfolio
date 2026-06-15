@@ -106,7 +106,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
         <div className="pl-0 lg:pl-10 flex flex-col justify-between relative py-[6vh] lg:py-[4vh] gap-8 lg:gap-0">
           <div 
             ref={photoRef} 
-            className="relative lg:absolute top-0 lg:top-0 right-0 w-[140px] md:w-[155px] lg:w-[200px] h-[180px] md:h-[200px] lg:h-[260px] bg-[rgba(15,14,11,0.05)] border border-border-rgba z-0 -mt-px overflow-hidden flex items-center justify-center opacity-100 mb-6 lg:mb-0"
+            className="relative lg:absolute top-0 lg:top-0 right-0 w-full lg:w-[200px] h-[260px] md:h-[340px] lg:h-[260px] bg-[rgba(15,14,11,0.05)] border border-border-rgba z-0 overflow-hidden flex items-center justify-center opacity-100 mb-6 lg:mb-0 lg:opacity-100"
           >
             {!hasPhoto ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
@@ -145,7 +145,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
             )}
           </div>
           
-          <div className="relative z-10 mt-0 lg:mt-[200px]">
+          <div className="relative z-10 mt-2 lg:mt-[200px]">
             <p className="font-playfair italic text-[15px] md:text-[16px] lg:text-[17px] text-ink2 leading-[1.6] max-w-[380px]">
               A web developer with the eye of a video editor. Full-stack apps that ship, visual cuts that hit with intention. At 17, from West Jakarta — building both before most people choose one.
             </p>

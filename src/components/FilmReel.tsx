@@ -529,7 +529,7 @@ export default function FilmReel() {
                 </div>
 
                 {/* Project List */}
-                <div className={`flex-1 min-h-0 flex flex-col justify-start px-4 sm:px-6 md:px-10 py-6 overflow-y-auto scroll-smooth no-scrollbar ${isGridView ? "" : "snap-y snap-mandatory"}`} style={{ scrollbarWidth: "none" }}>
+                <div className={`flex-1 min-h-0 flex flex-col justify-start px-5 sm:px-6 md:px-10 py-6 overflow-x-hidden overflow-y-auto scroll-smooth no-scrollbar ${isGridView ? "" : "snap-y snap-mandatory"}`} style={{ scrollbarWidth: "none" }}>
                   <div className={`max-w-[1200px] w-full mx-auto pb-24 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
@@ -538,7 +538,7 @@ export default function FilmReel() {
                         className={`project-row proj-row group w-full cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 shrink-0 ${
                           isGridView 
                             ? "flex flex-col justify-between gap-4 p-5 rounded-[4px] border border-[rgba(15,14,11,0.08)] shadow-[0_4px_12px_rgba(0,0,0,0.02)] bg-paper/50" 
-                            : "flex flex-col md:grid md:grid-cols-[40px_110px_1fr_auto] gap-3 md:gap-5 items-start md:items-center py-5 md:py-4 px-4 mx-0 md:-mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] snap-start border border-border-rgba md:border-none rounded-[4px] md:rounded-none bg-paper/50 md:bg-transparent"
+                            : "grid grid-cols-1 md:grid-cols-[40px_110px_1fr_auto] gap-4 md:gap-5 items-start md:items-center py-4 px-4 mx-0 md:-mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] snap-start"
                         }`}
                         role="button"
                         style={isGridView ? {} : { scrollMarginTop: "24px" }}
@@ -554,9 +554,8 @@ export default function FilmReel() {
                             </span>
                           </div>
                         ) : (
-                          <div className="font-playfair text-[16px] md:text-[20px] font-black text-ink3 opacity-80 md:opacity-60 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-between w-full md:w-auto">
-                            <span>{String(idx + 1).padStart(2, '0')}</span>
-                            <span className="md:hidden text-[7px] font-mono text-accent tracking-[0.15em] uppercase px-2 py-1 bg-[rgba(15,14,11,0.03)] border border-[rgba(15,14,11,0.08)] rounded-[2px]">{project.typeBadge}</span>
+                          <div className="font-playfair text-[18px] md:text-[20px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
+                            {String(idx + 1).padStart(2, '0')}
                           </div>
                         )}
 
