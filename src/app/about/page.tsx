@@ -48,118 +48,124 @@ export default async function AboutPage() {
     <main className="bg-paper min-h-screen">
       <Header />
       
-      {/* FIX 1: Adjusted padding for mobile (px-5 pt-10) and desktop (md:px-10 md:pt-20) */}
-      <article className="max-w-4xl mx-auto px-5 pt-10 md:px-10 md:pt-20">
-        <div className="flex flex-col md:grid md:grid-cols-[1fr_2fr] gap-12 md:gap-20 relative">
-          <div className="h-full">
-            {/* FIX 2: Added 'relative md:sticky' to stop mobile overlapping */}
-            <div className="relative md:sticky md:top-[20vh]">
-              {/* FIX 3: Adjusted mobile font sizes so the header doesn't break */}
-              <h1 className="font-playfair text-[36px] md:text-[52px] lg:text-[64px] font-black leading-[0.9] tracking-[-0.02em] mb-6">
-                Who is<br /><em className="italic font-normal text-ink2">danafdr?</em>
-              </h1>
-              <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">West Jakarta, Indonesia</div>
-              <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">Web Dev · Video Editor</div>
-              
-              <div className="mt-8 md:mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden flex items-center justify-center">
-                {!hasPhoto ? (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
-                    <span>Candid</span>
-                    <span>Photo</span>
-                  </div>
-                ) : (
-                  <div className="w-full h-full relative overflow-hidden bg-ink">
-                    <img 
-                      src={heroSettings.photo_url!} 
-                      className="absolute max-w-none"
+      {/* Mobile-first layout: flex column with gap-12, switches to grid on md */}
+      <article className="max-w-4xl mx-auto px-5 md:px-10 pt-10 md:pt-20">
+        <div className="flex flex-col md:grid md:grid-cols-[1fr_2fr] gap-12 md:gap-20">
+          
+          {/* Left Column (Header & Photo) */}
+          <div className="w-full relative md:sticky md:top-[20vh] h-auto md:h-fit">
+            <h1 className="font-playfair text-[36px] md:text-[52px] lg:text-[64px] font-black leading-[0.9] tracking-[-0.02em] mb-6">
+              Who is<br /><em className="italic font-normal text-ink2">danafdr?</em>
+            </h1>
+            <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">West Jakarta, Indonesia</div>
+            <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">Web Dev · Video Editor</div>
+            
+            <div className="mt-8 md:mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden flex items-center justify-center">
+              {!hasPhoto ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
+                  <span>Candid</span>
+                  <span>Photo</span>
+                </div>
+              ) : (
+                <div className="w-full h-full relative overflow-hidden bg-ink">
+                  <img 
+                    src={heroSettings.photo_url!} 
+                    className="absolute max-w-none"
+                    style={{
+                      filter: getCssFilter(),
+                      transform: `rotate(${heroSettings.rotation || 0}deg)`,
+                      ...((heroSettings.crop as any) && isCssMode ? {
+                        width: `${(heroSettings.width! / (heroSettings.crop as any).width) * 100}%`,
+                        height: `${(heroSettings.height! / (heroSettings.crop as any).height) * 100}%`,
+                        left: `-${((heroSettings.crop as any).x / (heroSettings.crop as any).width) * 100}%`,
+                        top: `-${((heroSettings.crop as any).y / (heroSettings.crop as any).height) * 100}%`
+                      } : {
+                        width: '100%', height: '100%', objectFit: 'cover'
+                      })
+                    }}
+                    alt="Danadirsha"
+                  />
+                  {showGrain && (
+                    <div 
+                      className="absolute inset-0 pointer-events-none mix-blend-overlay"
                       style={{
-                        filter: getCssFilter(),
-                        transform: `rotate(${heroSettings.rotation || 0}deg)`,
-                        ...((heroSettings.crop as any) && isCssMode ? {
-                          width: `${(heroSettings.width! / (heroSettings.crop as any).width) * 100}%`,
-                          height: `${(heroSettings.height! / (heroSettings.crop as any).height) * 100}%`,
-                          left: `-${((heroSettings.crop as any).x / (heroSettings.crop as any).width) * 100}%`,
-                          top: `-${((heroSettings.crop as any).y / (heroSettings.crop as any).height) * 100}%`
-                        } : {
-                          width: '100%', height: '100%', objectFit: 'cover'
-                        })
+                        backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/storage/assets/grain.png')`,
+                        opacity: (heroSettings.filter_values as any).grain / 100,
                       }}
-                      alt="Danadirsha"
                     />
-                    {showGrain && (
-                      <div 
-                        className="absolute inset-0 pointer-events-none mix-blend-overlay"
-                        style={{
-                          backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/storage/assets/grain.png')`,
-                          opacity: (heroSettings.filter_values as any).grain / 100,
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           
-          {/* FIX 4: Reduced bottom padding on mobile so it doesn't leave a huge blank space */}
-          <div className="font-mono text-[13px] leading-[2.1] text-ink2 mt-4 pb-16 md:pb-32">
-            <p className="mb-8 text-ink text-[15px] leading-[1.9]">
-              <span className="float-left text-[56px] md:text-[64px] font-playfair font-black leading-[0.8] mr-3 mt-1 text-ink">A</span>
-              17-year-old from West Jakarta who builds full-stack web apps and studies how things move. Web development is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
-            </p>
+          {/* Right Column (Content) */}
+          <div className="w-full flex flex-col gap-12 md:gap-16 font-mono text-[13px] leading-[2.1] text-ink2 pb-16 md:pb-32">
             
-            <p className="mb-8">
-              But I'm also carving out a direction in video editing and motion graphics. Tweaking with After Effects, using Cinema 4D and Blender as pipeline tools, and learning cinematography to see what makes a cut feel alive. I'm studying Apple and SaaS motion aesthetics because I want to learn what makes a product look premium.
-            </p>
-            
-            <p className="mb-8">
-              I'm obsessed with The Finals for the same reason Whiplash hits so hard — when every detail is deliberate, when nothing is accidental, it stops being a game or a film and becomes something else entirely. That's the standard.
-            </p>
+            {/* Intro Text Block */}
+            <div>
+              <p className="mb-8 text-ink text-[15px] leading-[1.9]">
+                <span className="float-left text-[56px] md:text-[64px] font-playfair font-black leading-[0.8] mr-3 mt-1 text-ink">A</span>
+                17-year-old from West Jakarta who builds full-stack web apps and studies how things move. Web development is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
+              </p>
+              
+              <p className="mb-8">
+                But I'm also carving out a direction in video editing and motion graphics. Tweaking with After Effects, using Cinema 4D and Blender as pipeline tools, and learning cinematography to see what makes a cut feel alive. I'm studying Apple and SaaS motion aesthetics because I want to learn what makes a product look premium.
+              </p>
+              
+              <p>
+                I'm obsessed with The Finals for the same reason Whiplash hits so hard — when every detail is deliberate, when nothing is accidental, it stops being a game or a film and becomes something else entirely. That's the standard.
+              </p>
+            </div>
 
-            <div className="border-t border-border-rgba my-12 md:my-16 pt-12 md:pt-16">
+            {/* Timeline Section */}
+            <div className="border-t border-border-rgba pt-12 md:pt-16">
               <h2 className="font-playfair text-[22px] md:text-[24px] font-black text-ink tracking-[-0.01em] mb-8 md:mb-10">
                 Timeline
               </h2>
               
-              <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 mb-8 group">
-                <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2025</div>
-                <div>
-                  <div className="text-[13px] text-ink mb-1">Building</div>
-                  <div className="text-[11px] text-ink2 leading-[1.7]">Shipping real projects, paid work, growing fast. Moving towards combining web dev with high-end motion.</div>
+              <div className="flex flex-col gap-8">
+                <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 group">
+                  <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2025</div>
+                  <div>
+                    <div className="text-[13px] text-ink mb-1">Building</div>
+                    <div className="text-[11px] text-ink2 leading-[1.7]">Shipping real projects, paid work, growing fast. Moving towards combining web dev with high-end motion.</div>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 mb-8 group">
-                <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2024</div>
-                <div>
-                  <div className="text-[13px] text-ink mb-1">Modern Stack</div>
-                  <div className="text-[11px] text-ink2 leading-[1.7]">Diving deep into Next.js, React, and Laravel. Building apps that solve real problems.</div>
+                
+                <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 group">
+                  <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2024</div>
+                  <div>
+                    <div className="text-[13px] text-ink mb-1">Modern Stack</div>
+                    <div className="text-[11px] text-ink2 leading-[1.7]">Diving deep into Next.js, React, and Laravel. Building apps that solve real problems.</div>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 mb-8 group">
-                <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2023</div>
-                <div>
-                  <div className="text-[13px] text-ink mb-1">Web Dev</div>
-                  <div className="text-[11px] text-ink2 leading-[1.7]">Wrote the first lines of code. Discovered how to build the things I was designing.</div>
+                
+                <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 group">
+                  <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2023</div>
+                  <div>
+                    <div className="text-[13px] text-ink mb-1">Web Dev</div>
+                    <div className="text-[11px] text-ink2 leading-[1.7]">Wrote the first lines of code. Discovered how to build the things I was designing.</div>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 group">
-                <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2022</div>
-                <div>
-                  <div className="text-[13px] text-ink mb-1">Video Editing</div>
-                  <div className="text-[11px] text-ink2 leading-[1.7]">Started cutting videos. Learned pacing, rhythm, and what makes something feel right on screen.</div>
+                
+                <div className="grid grid-cols-[60px_1fr] md:grid-cols-[80px_1fr] gap-4 md:gap-6 group">
+                  <div className="text-[10px] text-ink3 font-bold mt-1.5 transition-colors group-hover:text-accent">2022</div>
+                  <div>
+                    <div className="text-[13px] text-ink mb-1">Video Editing</div>
+                    <div className="text-[11px] text-ink2 leading-[1.7]">Started cutting videos. Learned pacing, rhythm, and what makes something feel right on screen.</div>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div className="border-t border-border-rgba my-12 md:my-16 pt-12 md:pt-16">
+            {/* Shapes the Work Section */}
+            <div className="border-t border-border-rgba pt-12 md:pt-16">
               <h2 className="font-playfair text-[22px] md:text-[24px] font-black text-ink tracking-[-0.01em] mb-8 md:mb-10">
                 What <em className="italic font-normal">shapes the work</em>
               </h2>
               
-              <div className="grid gap-8 md:gap-10">
+              <div className="flex flex-col gap-8 md:gap-10">
                 <div>
                   <div className="text-[9px] text-ink3 tracking-[0.18em] uppercase mb-3">Films</div>
                   <div className="text-[13px] text-ink mb-2 tracking-[0.02em]">Whiplash · Fight Club · La La Land · Edgerunners</div>
@@ -179,6 +185,7 @@ export default async function AboutPage() {
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
       </article>

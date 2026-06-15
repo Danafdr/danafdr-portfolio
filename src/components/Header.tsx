@@ -38,7 +38,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`px-5 md:px-10 border-b border-border-rgba flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-5 sticky top-0 z-[100] bg-paper/96 backdrop-blur-[10px] transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
+    <header className={`px-5 md:px-10 border-b border-border-rgba flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] items-center gap-2 md:gap-5 relative md:sticky md:top-0 z-[100] bg-paper/96 backdrop-blur-[10px] transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
       <nav className="flex gap-2 sm:gap-4 md:gap-6 w-full justify-between md:w-auto md:justify-start order-2 md:order-1 border-t border-border-rgba md:border-none pt-2 md:pt-0 pb-2 md:pb-0 overflow-x-hidden">
         <Link href="/about" className="text-[8px] sm:text-[9px] text-ink2 tracking-[0.1em] sm:tracking-[0.18em] uppercase cursor-pointer no-underline py-2 md:py-5 transition-colors duration-200 block hover:text-ink shrink-0">About</Link>
         <Link href="/skills" className="text-[8px] sm:text-[9px] text-ink2 tracking-[0.1em] sm:tracking-[0.18em] uppercase cursor-pointer no-underline py-2 md:py-5 transition-colors duration-200 block hover:text-ink shrink-0">Skills</Link>
