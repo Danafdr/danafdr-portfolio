@@ -353,15 +353,15 @@ export default function FilmReel() {
         className="w-full h-[100dvh] overflow-y-scroll snap-y snap-mandatory bg-paper text-ink no-scrollbar scroll-pt-[80px] relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
-        {/* Header spacer */}
-        <div className="w-full h-[80px] snap-align-none"></div>
+        {/* Header spacer - hidden on mobile to prevent pushing content down */}
+        <div className="hidden md:block w-full h-[80px] snap-align-none"></div>
 
         {/* ── Slide 0: Selected Work Intro ── */}
         <div
           data-index={0}
-          className="reel-slide w-full h-[calc(100dvh-80px)] snap-start snap-always flex items-center justify-center relative"
+          className="reel-slide snap-start snap-always flex flex-col items-center justify-center min-h-[70vh] md:min-h-[calc(100dvh-80px)] w-full px-5 text-center relative"
         >
-          <div className="text-center max-w-[800px] px-10">
+          <div className="max-w-[800px]">
             <div className="anim-el text-[9px] text-ink3 tracking-[0.3em] uppercase mb-6">
               Vol. I · 2024 — present
             </div>
