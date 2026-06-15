@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function WorkPage() {
   return (
-    <main className="bg-paper h-[100dvh] overflow-hidden w-full fixed inset-0">
+    <main className="fixed inset-0 w-screen h-[100dvh] overflow-hidden bg-paper">
       <Suspense fallback={<div className="w-full h-full bg-paper" />}>
         <FilmReel />
       </Suspense>

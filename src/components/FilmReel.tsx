@@ -362,7 +362,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="h-[100dvh] w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-paper text-ink no-scrollbar flex flex-col relative"
+        className="h-full w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory no-scrollbar"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
@@ -497,7 +497,7 @@ export default function FilmReel() {
               {/* ── Panel 2: Project Listing ── */}
               <div
                 data-hindex={1}
-                className="slide-panel h-[100dvh] max-h-[100dvh] w-screen shrink-0 snap-start relative border-l border-[rgba(15,14,11,0.1)] overflow-hidden bg-paper"
+                className="slide-panel h-[100dvh] max-h-[100dvh] w-screen shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden bg-paper"
               >
                 {/* Panel Header */}
                 <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
@@ -538,9 +538,9 @@ export default function FilmReel() {
                   </div>
                 </div>
 
-                {/* Project List — NUCLEAR FIX: absolute bounding makes bleed mathematically impossible */}
+                {/* Project List — flex-1 + overscroll-contain, parent is now fixed so bleed is impossible */}
                 <div
-                  className={`absolute bottom-0 left-0 right-0 top-[120px] overflow-y-auto overscroll-contain px-5 pb-12 no-scrollbar ${isGridView ? "md:px-10" : "md:px-10"}`}
+                  className={`flex-1 w-full overflow-y-auto overscroll-contain px-5 pb-24 no-scrollbar ${isGridView ? "md:px-10" : "md:px-10"}`}
                   style={{ scrollbarWidth: "none" }}
                 >
                   <div className={`max-w-[1200px] w-full mx-auto pb-28 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
