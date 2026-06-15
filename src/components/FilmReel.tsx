@@ -301,7 +301,7 @@ export default function FilmReel() {
 
       {/* Top Left Number — only visible on Panel 1 (category intro) */}
       <div
-        className="fixed top-[100px] left-[40px] font-bebas text-[13px] tracking-[0.14em] text-ink3 z-40 transition-opacity duration-200"
+        className="hidden md:block fixed top-[100px] left-[40px] font-bebas text-[13px] tracking-[0.14em] text-ink3 z-40 transition-opacity duration-200"
         style={{ opacity: currentHIndex === 0 ? 1 : 0 }}
       >
         0{currentVIndex + 1} / 0{totalSlides}
@@ -309,7 +309,7 @@ export default function FilmReel() {
 
       {/* Left Edge Dots — Vertical (categories) */}
       <div 
-        className="fixed left-[20px] top-1/2 -translate-y-1/2 flex flex-col gap-[8px] z-40 transition-opacity duration-300"
+        className="hidden md:flex fixed left-[20px] top-1/2 -translate-y-1/2 flex-col gap-[8px] z-40 transition-opacity duration-300"
         style={{ opacity: currentHIndex === 1 ? 0 : 1, pointerEvents: currentHIndex === 1 ? 'none' : 'auto' }}
       >
         {Array.from({ length: totalSlides }).map((_, idx) => (
@@ -324,7 +324,7 @@ export default function FilmReel() {
 
       {/* Bottom Center Dots — Horizontal (panels) */}
       <div 
-        className="fixed bottom-[36px] left-1/2 -translate-x-1/2 flex gap-[10px] z-40 transition-opacity duration-300"
+        className="hidden md:flex fixed bottom-[36px] left-1/2 -translate-x-1/2 gap-[10px] z-40 transition-opacity duration-300"
         style={{ opacity: currentVIndex === 0 ? 0 : 1, pointerEvents: currentVIndex === 0 ? 'none' : 'auto' }}
       >
         {[0, 1].map((_, idx) => (
@@ -402,7 +402,7 @@ export default function FilmReel() {
               {/* ── Panel 1: Category Intro ── */}
               <div
                 data-hindex="0"
-                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-10 md:px-[80px] lg:px-[100px]"
+                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-5 md:px-[80px] lg:px-[100px]"
               >
                 <div className="w-full max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_35%] gap-10 lg:gap-16 items-center">
                   {/* Left: Text */}
