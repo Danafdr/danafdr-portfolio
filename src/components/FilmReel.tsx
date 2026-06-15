@@ -412,7 +412,7 @@ export default function FilmReel() {
               {/* ── Panel 1: Category Intro ── */}
               <div
                 data-hindex="0"
-                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-5 md:px-[80px] lg:px-[100px]"
+                className="slide-panel w-screen h-full shrink-0 snap-start overflow-y-auto overscroll-contain flex flex-col justify-center relative px-5 py-10 md:px-[80px] lg:px-[100px] lg:overflow-hidden"
               >
                 <div className="w-full max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_35%] gap-10 lg:gap-16 items-center">
                   {/* Left: Text */}
@@ -453,8 +453,8 @@ export default function FilmReel() {
                     </div>
                   </div>
 
-                  {/* Right: Preview mosaic of the category's projects */}
-                  <div className={`relative grid gap-3 anim-el ${
+                  {/* Right: Preview mosaic — hidden on mobile to prevent overflow */}
+                  <div className={`hidden lg:grid relative gap-3 anim-el ${
                     category.projects.length >= 3 ? 'h-[60vh]' : 
                     category.projects.length === 2 ? 'h-[40vh]' : 'h-[30vh]'
                   }`}
