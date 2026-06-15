@@ -280,38 +280,40 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                     Auto-fill <Wand2 size={10} />
                   </button>
                   
-                  {description.trim().length > 0 && (
-                    <button 
-                      type="button"
-                      onClick={async () => {
-                        toast('Improving...', 'success');
-                        try {
-                          const data = await apiFetch('/api/admin/ai/generate-description', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              title,
-                              type,
-                              repo_url: repoUrl,
-                              tools: toolsString.split(',').map((s: string) => s.trim()),
-                              current_description: description,
-                            })
-                          });
-                          if (data && data.description) {
-                            setDescription(data.description);
-                            toast('Description improved!', 'success');
-                          } else {
-                            toast(data?.error || 'Failed', 'error');
-                          }
-                        } catch (e: any) {
-                          toast(e.message || 'Error connecting to AI', 'error');
+                  <button 
+                    type="button"
+                    onClick={async () => {
+                      if (description.trim().length === 0) {
+                        toast('Please type a description first to improve it!', 'error');
+                        return;
+                      }
+                      toast('Improving...', 'success');
+                      try {
+                        const data = await apiFetch('/api/admin/ai/generate-description', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            title,
+                            type,
+                            repo_url: repoUrl,
+                            tools: toolsString.split(',').map((s: string) => s.trim()),
+                            current_description: description,
+                          })
+                        });
+                        if (data && data.description) {
+                          setDescription(data.description);
+                          toast('Description improved!', 'success');
+                        } else {
+                          toast(data?.error || 'Failed', 'error');
                         }
-                      }}
-                      className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
-                    >
-                      Improve <Wand2 size={10} />
-                    </button>
-                  )}
+                      } catch (e: any) {
+                        toast(e.message || 'Error connecting to AI', 'error');
+                      }
+                    }}
+                    className={`flex items-center gap-1 text-[9px] uppercase tracking-wider transition-colors ${description.trim().length > 0 ? 'text-accent hover:underline' : 'text-admin-ink3 cursor-not-allowed'}`}
+                  >
+                    Improve <Wand2 size={10} />
+                  </button>
                 </div>
               </div>
               <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} maxLength={200} className="w-full bg-bg text-admin-ink border border-border px-[14px] py-[10px] font-mono text-[12px] focus:border-accent focus:outline-none resize-none" />
