@@ -350,7 +350,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full h-[100dvh] overflow-y-scroll scroll-smooth snap-y snap-mandatory bg-paper text-ink no-scrollbar scroll-pt-[80px] relative"
+        className="w-full h-[100dvh] overflow-y-scroll snap-y snap-mandatory bg-paper text-ink no-scrollbar scroll-pt-[80px] relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
         {/* Header spacer */}
@@ -394,7 +394,7 @@ export default function FilmReel() {
             {/* Inner Horizontal Scroll Container */}
             <div
               ref={(el) => { hContainersRef.current[catIdx] = el; }}
-              className="w-full h-full flex overflow-x-scroll scroll-smooth snap-x snap-mandatory no-scrollbar"
+              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory no-scrollbar"
               style={{ scrollbarWidth: "none" }}
               onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
               onTouchStart={() => { activeHContainerRef.current = catIdx; }}
@@ -529,7 +529,7 @@ export default function FilmReel() {
                 </div>
 
                 {/* Project List */}
-                <div className={`flex-1 min-h-0 flex flex-col justify-start px-5 sm:px-6 md:px-10 py-6 overflow-x-hidden overflow-y-auto scroll-smooth no-scrollbar ${isGridView ? "" : "snap-y snap-mandatory"}`} style={{ scrollbarWidth: "none" }}>
+                <div className={`flex-1 min-h-0 flex flex-col justify-start px-5 sm:px-6 md:px-10 py-6 overflow-x-hidden overflow-y-auto no-scrollbar ${isGridView ? "" : "snap-y snap-mandatory"}`} style={{ scrollbarWidth: "none" }}>
                   <div className={`max-w-[1200px] w-full mx-auto pb-24 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
