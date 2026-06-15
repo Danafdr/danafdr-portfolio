@@ -80,37 +80,12 @@ export default function FilmReel() {
 
   // Track which slides have already been animated
   const animatedSlidesRef = useRef<Set<number>>(new Set());
-  const animatedHSlidesRef = useRef<Set<number>>(new Set());
+  const animatedHSlidesRef = useRef<Set<string>>(new Set());
 
   const [categories, setCategories] = useState(initialCategories);
   const totalSlides = categories.length + 1;
 
-  const [itemsPerPage, setItemsPerPage] = useState(3);
-
-  useEffect(() => {
-    const calculateItemsPerPage = () => {
-      // 100dvh - 80px (Main Header) - 130px (Panel Header/Padding) - 50px (Bottom Padding)
-      const availableHeight = window.innerHeight - 260;
-      // Project rows are roughly 150px tall on desktop, and 200px on mobile
-      const rowHeight = window.innerWidth < 768 ? 200 : 160;
-      const count = Math.max(1, Math.floor(availableHeight / rowHeight));
-      setItemsPerPage(Math.min(count, 10)); // Cap it so it doesn't get infinitely high
-    };
-
-    calculateItemsPerPage();
-    // Add small delay on resize to avoid thrashing
-    let timeoutId: ReturnType<typeof setTimeout>;
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(calculateItemsPerPage, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  const itemsPerPage = 4;
 
   useEffect(() => {
     getProjects().then(data => {
@@ -166,7 +141,7 @@ export default function FilmReel() {
     activeHContainerRef.current = catIdx;
     const hContainer = hContainersRef.current[catIdx];
     if (hContainer) {
-      hContainer.scrollTo({ left: window.innerWidth, behavior: "smooth" });
+      hContainer.scrollTo({ left: window.innerWidth, behavior: "auto" });
     }
   }, []);
 
@@ -175,22 +150,8 @@ export default function FilmReel() {
     activeHContainerRef.current = catIdx;
     const hContainer = hContainersRef.current[catIdx];
     if (hContainer) {
-      hContainer.scrollTo({ left: 0, behavior: "smooth" });
+      hContainer.scrollTo({ left: 0, behavior: "auto" });
     }
-  }, []);
-
-  const handleHScroll = useCallback((catIdx: number, e: React.UIEvent<HTMLDivElement>) => {
-    // Only the actively interacted container should sync to others to prevent loop
-    if (activeHContainerRef.current !== null && activeHContainerRef.current !== catIdx) return;
-    
-    const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
-    requestAnimationFrame(() => {
-      hContainersRef.current.forEach((container, i) => {
-        if (container && i !== catIdx) {
-          container.scrollLeft = scrollLeft;
-        }
-      });
-    });
   }, []);
 
   // Effect to handle direct category navigation
@@ -228,60 +189,7 @@ export default function FilmReel() {
     };
   }, []);
 
-  const isAnimatingWheel = useRef(false);
 
-  // GSAP Smooth Wheel Hijacking for Vertical Snap
-  useEffect(() => {
-    const container = vContainerRef.current;
-    if (!container) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      // Allow horizontal scroll (e.g. trackpad side swipe) to pass natively
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      // Allow native scroll inside the preview modal
-      if (document.querySelector('.lightbox-close')) return;
-
-      e.preventDefault();
-
-      if (isAnimatingWheel.current) return;
-      if (Math.abs(e.deltaY) < 5) return; // Ignore tiny movements
-
-      const direction = e.deltaY > 0 ? 1 : -1;
-      const targetIndex = currentVIndex + direction;
-
-      if (targetIndex >= 0 && targetIndex < totalSlides) {
-        isAnimatingWheel.current = true;
-        // Temporarily disable native scroll snapping so it doesn't fight GSAP
-        container.style.scrollSnapType = 'none';
-
-        const targetElement = container.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
-        if (targetElement) {
-          const proxy = { y: container.scrollTop };
-          // Account for the 80px scroll-padding-top so it perfectly matches native snap points
-          const targetY = Math.max(0, targetElement.offsetTop - 80);
-
-          gsap.to(proxy, {
-            y: targetY,
-            duration: 1.2,
-            ease: "expo.out",
-            onUpdate: () => { container.scrollTop = proxy.y; },
-            onComplete: () => {
-              // Restore native snap after animation completes
-              container.style.scrollSnapType = 'y mandatory';
-              // Add delay to prevent double-jumps from continuous scrolling
-              setTimeout(() => { isAnimatingWheel.current = false; }, 400);
-            }
-          });
-        } else {
-          container.style.scrollSnapType = 'y mandatory';
-          isAnimatingWheel.current = false;
-        }
-      }
-    };
-
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel);
-  }, [currentVIndex, totalSlides]);
 
   // Vertical Observer (between categories)
   useEffect(() => {
@@ -341,10 +249,11 @@ export default function FilmReel() {
             const hIndex = Number((entry.target as HTMLElement).dataset.hindex);
             setCurrentHIndex(hIndex);
 
-            if (hIndex === 1) {
+            if (hIndex >= 1) {
               const panel = entry.target;
-              if (!animatedHSlidesRef.current.has(currentVIndex)) {
-                animatedHSlidesRef.current.add(currentVIndex);
+              const slideKey = `${currentVIndex}-${hIndex}`;
+              if (!animatedHSlidesRef.current.has(slideKey)) {
+                animatedHSlidesRef.current.add(slideKey);
                 const items = panel.querySelectorAll(".project-row");
                 ctx.add(() => {
                   gsap.fromTo(
@@ -446,7 +355,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full h-[100dvh] overflow-y-scroll snap-y snap-mandatory bg-paper text-ink no-scrollbar scroll-pt-[80px] relative"
+        className="w-full h-[100dvh] overflow-y-scroll scroll-smooth snap-y snap-mandatory bg-paper text-ink no-scrollbar scroll-pt-[80px] relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
         {/* Header spacer */}
@@ -490,11 +399,10 @@ export default function FilmReel() {
             {/* Inner Horizontal Scroll Container */}
             <div
               ref={(el) => { hContainersRef.current[catIdx] = el; }}
-              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory no-scrollbar"
+              className="w-full h-full flex overflow-x-scroll scroll-smooth snap-x snap-mandatory no-scrollbar"
               style={{ scrollbarWidth: "none" }}
               onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
               onTouchStart={() => { activeHContainerRef.current = catIdx; }}
-              onScroll={(e) => handleHScroll(catIdx, e)}
             >
               {/* ── Panel 1: Category Intro ── */}
               <div
@@ -611,7 +519,7 @@ export default function FilmReel() {
                             onClick={() => {
                               const hContainer = hContainersRef.current[catIdx];
                               if (hContainer) {
-                                hContainer.scrollTo({ left: window.innerWidth * pageIdx, behavior: "smooth" });
+                                hContainer.scrollTo({ left: window.innerWidth * pageIdx, behavior: "auto" });
                               }
                             }}
                             className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
@@ -820,7 +728,6 @@ export default function FilmReel() {
       <style dangerouslySetInnerHTML={{ __html: `
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .anim-el { opacity: 0; transform: translateY(14px); }
-        .project-row { opacity: 0; transform: translateX(20px); }
       `}} />
     </>
   );
