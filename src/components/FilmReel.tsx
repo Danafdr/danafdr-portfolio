@@ -362,14 +362,14 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full h-[100dvh] overflow-y-auto snap-y snap-mandatory bg-paper text-ink no-scrollbar flex flex-col relative"
+        className="h-[100dvh] w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-paper text-ink no-scrollbar flex flex-col relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
         {/* ── Slide 0: Selected Work Intro ── */}
         <div
           data-index={0}
-          className="reel-slide min-h-[100dvh] h-[100dvh] w-full snap-start snap-always flex flex-col items-center justify-center px-5 text-center relative overflow-hidden shrink-0"
+          className="reel-slide h-[100dvh] w-full shrink-0 snap-start snap-always flex flex-col items-center justify-center px-5 text-center relative overflow-hidden"
         >
           <div className="max-w-[800px]">
             <div className="anim-el text-[9px] text-ink3 tracking-[0.3em] uppercase mb-6">
@@ -399,7 +399,7 @@ export default function FilmReel() {
             key={category.slug}
             id={category.slug}
             data-index={catIdx + 1}
-            className="reel-slide min-h-[100dvh] h-[100dvh] w-full snap-start snap-always flex flex-col relative overflow-hidden shrink-0"
+            className="reel-slide h-[100dvh] w-full shrink-0 snap-start snap-always flex flex-col relative overflow-hidden"
           >
             {/* Inner Horizontal Scroll Container */}
             <div
@@ -497,7 +497,7 @@ export default function FilmReel() {
               {/* ── Panel 2: Project Listing ── */}
               <div
                 data-hindex={1}
-                className="slide-panel min-h-[100dvh] h-[100dvh] w-screen shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden"
+                className="slide-panel h-[100dvh] w-screen shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden"
               >
                 {/* Panel Header */}
                 <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
@@ -538,8 +538,8 @@ export default function FilmReel() {
                   </div>
                 </div>
 
-                {/* Project List - flex-1 so it fills remaining space and scrolls internally */}
-                <div className={`flex-1 min-h-0 overflow-y-auto w-full px-5 md:px-10 py-6 no-scrollbar ${isGridView ? "" : ""}`} style={{ scrollbarWidth: "none" }}>
+                {/* Project List — overscroll-contain prevents scroll chaining to parent snap */}
+                <div className={`flex-1 w-full overflow-y-auto overscroll-contain px-5 pb-32 no-scrollbar ${isGridView ? "md:px-10" : "md:px-10"}`} style={{ scrollbarWidth: "none" }}>
                   <div className={`max-w-[1200px] w-full mx-auto pb-28 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
