@@ -73,6 +73,7 @@ export default function FilmReel() {
   const [currentHIndex, setCurrentHIndex] = useState(0);
   const [preview, setPreview] = useState<Project | null>(null);
   const [showHints, setShowHints] = useState(true);
+  const [isGridView, setIsGridView] = useState(false);
 
   const vContainerRef = useRef<HTMLDivElement>(null);
   const hContainersRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -501,62 +502,95 @@ export default function FilmReel() {
                       Projects
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                    <div className="font-mono text-[10px] text-ink3 uppercase tracking-widest">
-                      {category.projects.length} item{category.projects.length !== 1 ? "s" : ""}
-                    </div>
-                    <div className="font-bebas text-[13px] tracking-[0.14em] text-ink3">
-                      0{catIdx + 1} / 0{totalSlides}
+                  <div className="flex items-center gap-5 w-full md:w-auto justify-between md:justify-end">
+                    {/* View Toggle Button */}
+                    <button
+                      onClick={() => setIsGridView(!isGridView)}
+                      className="flex items-center justify-center w-8 h-8 rounded-full border border-border-rgba bg-transparent hover:bg-ink/5 transition-colors group"
+                      aria-label="Toggle View"
+                      title={isGridView ? "Switch to List View" : "Switch to Grid View"}
+                    >
+                      {isGridView ? (
+                        <svg className="w-3.5 h-3.5 text-ink2 group-hover:text-ink transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5 text-ink2 group-hover:text-ink transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                      )}
+                    </button>
+                    <div className="flex items-center gap-4">
+                      <div className="font-mono text-[10px] text-ink3 uppercase tracking-widest">
+                        {category.projects.length} item{category.projects.length !== 1 ? "s" : ""}
+                      </div>
+                      <div className="font-bebas text-[13px] tracking-[0.14em] text-ink3">
+                        0{catIdx + 1} / 0{totalSlides}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Project List */}
-                <div className="flex-1 min-h-0 flex flex-col justify-start px-6 md:px-10 py-6 overflow-y-auto scroll-smooth snap-y snap-mandatory no-scrollbar" style={{ scrollbarWidth: "none" }}>
-                  <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-4 pb-24">
+                <div className={`flex-1 min-h-0 flex flex-col justify-start px-6 md:px-10 py-6 overflow-y-auto scroll-smooth no-scrollbar ${isGridView ? "" : "snap-y snap-mandatory"}`} style={{ scrollbarWidth: "none" }}>
+                  <div className={`max-w-[1200px] w-full mx-auto pb-24 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
                         key={project.id}
                         onClick={() => setPreview(project)}
-                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[40px_110px_1fr_auto] gap-4 md:gap-5 items-start md:items-center py-4 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 snap-start shrink-0"
+                        className={`project-row proj-row group w-full cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 shrink-0 ${
+                          isGridView 
+                            ? "flex flex-col justify-between gap-4 p-5 rounded-[4px] border border-[rgba(15,14,11,0.08)] shadow-[0_4px_12px_rgba(0,0,0,0.02)] bg-paper/50" 
+                            : "grid grid-cols-1 md:grid-cols-[40px_110px_1fr_auto] gap-4 md:gap-5 items-start md:items-center py-4 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] snap-start"
+                        }`}
                         role="button"
-                        style={{ scrollMarginTop: "24px" }}
+                        style={isGridView ? {} : { scrollMarginTop: "24px" }}
                       >
-                        <div className="font-playfair text-[18px] md:text-[20px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
-                          {String(idx + 1).padStart(2, '0')}
-                        </div>
-
-                        {/* Thumbnail */}
-                        <div className="hidden md:block w-full">
-                          {project.thumbnail ? (
-                            <CroppedThumbnail project={project} sizeKey="4:3" className="w-full aspect-[4/3] rounded-[2px]" />
-                          ) : (
-                            <div className="w-full aspect-[4/3] bg-ink3/10 rounded-[2px]" />
-                          )}
-                        </div>
-
-                        {/* Info */}
-                        <div className="flex flex-col gap-1 w-full pl-0 md:pl-2">
-                          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
-                            <span className="font-playfair font-black text-[16px] md:text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
-                              {project.title}
-                            </span>
-                            <span className="text-[7px] md:text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
+                        {/* 1. Header / Index */}
+                        {isGridView ? (
+                          <div className="flex justify-between items-center w-full mb-1">
+                            <div className="font-playfair text-[12px] font-black text-ink3 opacity-60">
+                              {String(idx + 1).padStart(2, '0')}
+                            </div>
+                            <span className="text-[7px] font-mono text-accent tracking-[0.15em] uppercase px-2 py-1 bg-[rgba(15,14,11,0.03)] border border-[rgba(15,14,11,0.08)] rounded-[2px]">
                               {project.typeBadge}
                             </span>
                           </div>
-                          <div className="font-mono text-[9px] md:text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
+                        ) : (
+                          <div className="font-playfair text-[18px] md:text-[20px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
+                            {String(idx + 1).padStart(2, '0')}
+                          </div>
+                        )}
+
+                        {/* 2. Thumbnail */}
+                        <div className={isGridView ? "w-full overflow-hidden rounded-[2px]" : "hidden md:block w-full"}>
+                          {project.thumbnail ? (
+                            <CroppedThumbnail project={project} sizeKey="4:3" className={`w-full ${isGridView ? "aspect-[16/10] object-cover" : "aspect-[4/3]"} rounded-[2px] transition-transform duration-700 ease-out group-hover:scale-105`} />
+                          ) : (
+                            <div className={`w-full ${isGridView ? "aspect-[16/10]" : "aspect-[4/3]"} bg-ink3/10 rounded-[2px]`} />
+                          )}
+                        </div>
+
+                        {/* 3. Info */}
+                        <div className={`flex flex-col w-full ${isGridView ? "gap-2 mt-2" : "gap-1 pl-0 md:pl-2"}`}>
+                          <div className={`flex ${isGridView ? "flex-col" : "flex-col md:flex-row md:items-center gap-2 md:gap-3"}`}>
+                            <span className={`font-playfair font-black leading-[1.1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent ${isGridView ? "text-[20px]" : "text-[16px] md:text-[18px]"}`}>
+                              {project.title}
+                            </span>
+                            {!isGridView && (
+                              <span className="text-[7px] md:text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
+                                {project.typeBadge}
+                              </span>
+                            )}
+                          </div>
+                          <div className={`font-mono text-ink2 leading-[1.6] ${isGridView ? "text-[10px] line-clamp-3 opacity-80" : "text-[9px] md:text-[10px] max-w-[500px]"}`}>
                             {project.description}
                           </div>
                         </div>
 
-                        {/* Right side */}
-                        <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0">
-                          <div className="flex gap-[4px] flex-wrap justify-start md:justify-end">
+                        {/* 4. Right side / Footer */}
+                        <div className={`flex items-center justify-between w-full ${isGridView ? "mt-4 pt-4 border-t border-border-rgba" : "gap-4 md:w-auto md:justify-end mt-2 md:mt-0"}`}>
+                          <div className={`flex gap-[4px] flex-wrap justify-start ${isGridView ? "" : "md:justify-end"}`}>
                             {project.tags.slice(0, 3).map((tag, i) => (
                               <span
                                 key={i}
-                                className="text-[8px] font-mono text-ink3 border border-[rgba(15,14,11,0.12)] py-[2px] px-2 uppercase tracking-[0.05em] transition-colors duration-300 group-hover:border-accent/30 group-hover:text-ink2"
+                                className="text-[8px] font-mono text-ink3 border border-[rgba(15,14,11,0.12)] py-[2px] px-2 uppercase tracking-[0.05em] transition-colors duration-300 group-hover:border-[rgba(15,14,11,0.2)] group-hover:text-ink2"
                               >
                                 {tag}
                               </span>
