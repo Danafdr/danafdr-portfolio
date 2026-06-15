@@ -48,10 +48,10 @@ export default async function AboutPage() {
     <main className="bg-paper min-h-screen">
       <Header />
       
-      <article className="max-w-4xl mx-auto px-10 pt-20">
-        <div className="grid grid-cols-[1fr_2fr] gap-20 relative">
+      <article className="max-w-4xl mx-auto px-6 md:px-10 pt-10 md:pt-20">
+        <div className="flex flex-col md:grid md:grid-cols-[1fr_2fr] gap-10 md:gap-20 relative">
           <div className="h-full">
-            <div className="sticky top-[20vh]">
+            <div className="md:sticky top-[20vh]">
             <h1 className="font-playfair text-[40px] md:text-[52px] lg:text-[64px] font-black leading-[0.9] tracking-[-0.02em] mb-6">
               Who is<br /><em className="italic font-normal text-ink2">danafdr?</em>
             </h1>
