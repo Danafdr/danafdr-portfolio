@@ -513,16 +513,16 @@ export default function FilmReel() {
 
                 {/* Project List */}
                 <div className="flex-1 min-h-0 flex flex-col justify-start px-6 md:px-10 py-6 overflow-y-auto scroll-smooth snap-y snap-mandatory no-scrollbar" style={{ scrollbarWidth: "none" }}>
-                  <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-16 pb-32">
+                  <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-4 pb-24">
                     {category.projects.map((project, idx) => (
                       <div
                         key={project.id}
                         onClick={() => setPreview(project)}
-                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 snap-start shrink-0"
+                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[40px_110px_1fr_auto] gap-4 md:gap-5 items-start md:items-center py-4 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 snap-start shrink-0"
                         role="button"
                         style={{ scrollMarginTop: "24px" }}
                       >
-                        <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
+                        <div className="font-playfair text-[18px] md:text-[20px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
                           {String(idx + 1).padStart(2, '0')}
                         </div>
 
@@ -536,16 +536,16 @@ export default function FilmReel() {
                         </div>
 
                         {/* Info */}
-                        <div className="flex flex-col gap-1 w-full pl-0 md:pl-4">
+                        <div className="flex flex-col gap-1 w-full pl-0 md:pl-2">
                           <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
-                            <span className="font-playfair font-black text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
+                            <span className="font-playfair font-black text-[16px] md:text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
                               {project.title}
                             </span>
-                            <span className="text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
+                            <span className="text-[7px] md:text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
                               {project.typeBadge}
                             </span>
                           </div>
-                          <div className="font-mono text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
+                          <div className="font-mono text-[9px] md:text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
                             {project.description}
                           </div>
                         </div>
