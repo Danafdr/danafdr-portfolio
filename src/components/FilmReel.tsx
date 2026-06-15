@@ -73,6 +73,18 @@ export default function FilmReel() {
   const [currentVIndex, setCurrentVIndex] = useState(0);
   const [currentHIndex, setCurrentHIndex] = useState(0);
   const [preview, setPreview] = useState<Project | null>(null);
+
+  // Isolate scroll to Detail View when active
+  useEffect(() => {
+    if (preview) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [preview]);
   const [showHints, setShowHints] = useState(true);
   const [isGridView, setIsGridView] = useState(false);
 
@@ -614,37 +626,30 @@ export default function FilmReel() {
         ))}
       </div>
 
-      {/* ── Preview Modal ── */}
+      {/* ── Detail View (Master-Detail Pattern) ── */}
       <AnimatePresence>
         {preview && (
           <motion.div
-            key="preview-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            key="detail-view"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[600] flex items-center justify-center"
-            onClick={() => setPreview(null)}
+            className="fixed inset-0 z-[600] bg-paper overflow-y-auto overflow-x-hidden flex flex-col w-full h-[100dvh]"
+            style={{ WebkitOverflowScrolling: "touch" }}
           >
-            <div className="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
-            <motion.div
-              key="preview-modal"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 w-[90vw] max-w-[900px] max-h-[85vh] bg-paper border border-[rgba(15,14,11,0.15)] overflow-y-auto no-scrollbar flex flex-col shadow-2xl rounded-[4px]"
-              onClick={(e) => e.stopPropagation()}
-              style={{ scrollbarWidth: "none" }}
-            >
+            {/* Sticky Header with Back Button */}
+            <div className="sticky top-0 z-50 w-full bg-paper/95 backdrop-blur-md border-b border-border-rgba px-6 md:px-10 py-4 md:py-6 flex items-center justify-between shrink-0">
               <button
                 onClick={() => setPreview(null)}
-                className="lightbox-close absolute top-5 right-5 z-20 w-8 h-8 flex items-center justify-center text-[20px] font-mono cursor-pointer rounded-full bg-paper/50 hover:bg-paper backdrop-blur-md border border-[rgba(15,14,11,0.1)] text-ink hover:scale-110 active:scale-95 transition-all shadow-sm"
-                role="button"
-                aria-label="Close modal"
+                className="text-[11px] font-mono tracking-[0.1em] uppercase text-ink2 hover:text-accent transition-colors flex items-center gap-2 group"
+                aria-label="Back to Projects"
               >
-                ×
+                <span className="transition-transform group-hover:-translate-x-1">←</span> Back to Projects
               </button>
+            </div>
+
+            <div className="w-full max-w-[1200px] mx-auto pb-20 flex-1 flex flex-col">
 
             {/* Large Gradient Visual */}
             <div
@@ -736,7 +741,7 @@ export default function FilmReel() {
                   </div>
                 </div>
             </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
