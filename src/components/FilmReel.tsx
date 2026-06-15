@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import Header from "./Header";
 import { projects, type Project } from "../data/projects";
 import { getProjects } from "../lib/api";
@@ -614,24 +615,36 @@ export default function FilmReel() {
       </div>
 
       {/* ── Preview Modal ── */}
-      {preview && (
-        <div
-          className="fixed inset-0 z-[600] flex items-center justify-center"
-          onClick={() => setPreview(null)}
-        >
-          <div className="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
-          <div
-            className="relative z-10 w-[90vw] max-w-[900px] max-h-[85vh] bg-paper border border-[rgba(15,14,11,0.15)] overflow-y-auto no-scrollbar flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-            style={{ scrollbarWidth: "none" }}
+      <AnimatePresence>
+        {preview && (
+          <motion.div
+            key="preview-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[600] flex items-center justify-center"
+            onClick={() => setPreview(null)}
           >
-            <button
-              onClick={() => setPreview(null)}
-              className="lightbox-close absolute top-5 right-5 z-20 w-8 h-8 flex items-center justify-center text-[16px] font-mono cursor-pointer rounded-full"
-              role="button"
+            <div className="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
+            <motion.div
+              key="preview-modal"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10 w-[90vw] max-w-[900px] max-h-[85vh] bg-paper border border-[rgba(15,14,11,0.15)] overflow-y-auto no-scrollbar flex flex-col shadow-2xl rounded-[4px]"
+              onClick={(e) => e.stopPropagation()}
+              style={{ scrollbarWidth: "none" }}
             >
-              ×
-            </button>
+              <button
+                onClick={() => setPreview(null)}
+                className="lightbox-close absolute top-5 right-5 z-20 w-8 h-8 flex items-center justify-center text-[20px] font-mono cursor-pointer rounded-full bg-paper/50 hover:bg-paper backdrop-blur-md border border-[rgba(15,14,11,0.1)] text-ink hover:scale-110 active:scale-95 transition-all shadow-sm"
+                role="button"
+                aria-label="Close modal"
+              >
+                ×
+              </button>
 
             {/* Large Gradient Visual */}
             <div
@@ -723,9 +736,10 @@ export default function FilmReel() {
                   </div>
                 </div>
             </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style dangerouslySetInnerHTML={{ __html: `
         .no-scrollbar::-webkit-scrollbar { display: none; }
