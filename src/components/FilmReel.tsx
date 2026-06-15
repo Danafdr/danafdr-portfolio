@@ -85,8 +85,6 @@ export default function FilmReel() {
   const [categories, setCategories] = useState(initialCategories);
   const totalSlides = categories.length + 1;
 
-  const itemsPerPage = 4;
-
   useEffect(() => {
     getProjects().then(data => {
       if (!data || !Array.isArray(data)) return;
@@ -327,19 +325,14 @@ export default function FilmReel() {
         className="fixed bottom-[36px] left-1/2 -translate-x-1/2 flex gap-[10px] z-40 transition-opacity duration-300"
         style={{ opacity: currentVIndex === 0 ? 0 : 1, pointerEvents: currentVIndex === 0 ? 'none' : 'auto' }}
       >
-        {(() => {
-          const currentCat = currentVIndex > 0 ? categories[currentVIndex - 1] : null;
-          const numPanels = currentCat ? 1 + Math.ceil(currentCat.projects.length / itemsPerPage) : 0;
-          const totalDots = Math.max(2, numPanels);
-          return Array.from({ length: totalDots }).map((_, idx) => (
-            <div
-              key={idx}
-              className={`w-[6px] h-[6px] rounded-full transition-all duration-200 ease-out
-                ${idx === currentHIndex ? "bg-accent scale-[1.4]" : "bg-ink3 scale-100"}
-              `}
-            ></div>
-          ));
-        })()}
+        {[0, 1].map((_, idx) => (
+          <div
+            key={idx}
+            className={`w-[6px] h-[6px] rounded-full transition-all duration-200 ease-out
+              ${idx === currentHIndex ? "bg-accent scale-[1.4]" : "bg-ink3 scale-100"}
+            `}
+          ></div>
+        ))}
       </div>
 
       {/* Visual Hints */}
@@ -489,123 +482,98 @@ export default function FilmReel() {
                 </div>
               </div>
 
-              {/* ── Panel 2+: Project Listing Pages ── */}
-              {(() => {
-                const chunks = [];
-                for (let i = 0; i < category.projects.length; i += itemsPerPage) {
-                  chunks.push(category.projects.slice(i, i + itemsPerPage));
-                }
-                if (chunks.length === 0) chunks.push([]); // At least one page
-
-                return chunks.map((chunk, pageIdx) => (
-                  <div
-                    key={pageIdx}
-                    data-hindex={pageIdx + 1}
-                    className="slide-panel w-screen h-[calc(100dvh-80px)] shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)]"
-                  >
-                    {/* Panel Header */}
-                    <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10">
-                      <div className="flex flex-col items-start">
-                        {pageIdx === 0 ? (
-                          <div
-                            onClick={() => goBackToIntro(catIdx)}
-                            className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
-                            role="button"
-                          >
-                            <span className="transition-transform group-hover:-translate-x-1">←</span> Back to {category.name}
-                          </div>
-                        ) : (
-                          <div
-                            onClick={() => {
-                              const hContainer = hContainersRef.current[catIdx];
-                              if (hContainer) {
-                                hContainer.scrollTo({ left: window.innerWidth * pageIdx, behavior: "auto" });
-                              }
-                            }}
-                            className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
-                            role="button"
-                          >
-                            <span className="transition-transform group-hover:-translate-x-1">←</span> Previous page
-                          </div>
-                        )}
-                        <div className="font-playfair font-black text-[24px] leading-[1] tracking-[-0.02em]">
-                          Projects {chunks.length > 1 ? <span className="text-ink3 ml-2 text-[18px]">/ Page {pageIdx + 1}</span> : ''}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                        <div className="font-mono text-[10px] text-ink3 uppercase tracking-widest">
-                          {category.projects.length} item{category.projects.length !== 1 ? "s" : ""}
-                        </div>
-                        <div className="font-bebas text-[13px] tracking-[0.14em] text-ink3">
-                          0{catIdx + 1} / 0{totalSlides}
-                        </div>
-                      </div>
+              {/* ── Panel 2: Project Listing ── */}
+              <div
+                data-hindex={1}
+                className="slide-panel w-screen h-[calc(100dvh-80px)] shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)]"
+              >
+                {/* Panel Header */}
+                <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
+                  <div className="flex flex-col items-start">
+                    <div
+                      onClick={() => goBackToIntro(catIdx)}
+                      className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
+                      role="button"
+                    >
+                      <span className="transition-transform group-hover:-translate-x-1">←</span> Back to {category.name}
                     </div>
-
-                    {/* Project List */}
-                    <div className="flex-1 min-h-0 flex flex-col justify-start px-6 md:px-10 py-6 overflow-y-auto no-scrollbar" style={{ scrollbarWidth: "none" }}>
-                      <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-0 pb-10">
-                        {chunk.map((project) => (
-                          <div
-                            key={project.id}
-                            onClick={() => setPreview(project)}
-                            className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200"
-                            role="button"
-                          >
-                            <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
-                              {String(category.projects.indexOf(project) + 1).padStart(2, '0')}
-                            </div>
-
-                            {/* Thumbnail */}
-                            <div className="hidden md:block w-full">
-                              {project.thumbnail ? (
-                                <CroppedThumbnail project={project} sizeKey="4:3" className="w-full aspect-[4/3] rounded-[2px]" />
-                              ) : (
-                                <div className="w-full aspect-[4/3] bg-ink3/10 rounded-[2px]" />
-                              )}
-                            </div>
-
-                            {/* Info */}
-                            <div className="flex flex-col gap-1 w-full pl-0 md:pl-4">
-                              <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
-                                <span className="font-playfair font-black text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
-                                  {project.title}
-                                </span>
-                                <span className="text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
-                                  {project.typeBadge}
-                                </span>
-                              </div>
-                              <div className="font-mono text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
-                                {project.description}
-                              </div>
-                            </div>
-
-                            {/* Right side */}
-                            <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0">
-                              <div className="flex gap-[4px] flex-wrap justify-start md:justify-end">
-                                {project.tags.slice(0, 3).map((tag, i) => (
-                                  <span
-                                    key={i}
-                                    className="text-[8px] font-mono text-ink3 border border-[rgba(15,14,11,0.12)] py-[2px] px-2 uppercase tracking-[0.05em] transition-colors duration-300 group-hover:border-accent/30 group-hover:text-ink2"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                              <div className="flex items-center gap-4 shrink-0">
-                                <span className="text-[10px] font-mono text-ink3">{project.year}</span>
-                                <span className="work-arr text-[14px] text-ink3 transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent">
-                                  →
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                    <div className="font-playfair font-black text-[24px] leading-[1] tracking-[-0.02em]">
+                      Projects
                     </div>
                   </div>
-                ));
-              })()}
+                  <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                    <div className="font-mono text-[10px] text-ink3 uppercase tracking-widest">
+                      {category.projects.length} item{category.projects.length !== 1 ? "s" : ""}
+                    </div>
+                    <div className="font-bebas text-[13px] tracking-[0.14em] text-ink3">
+                      0{catIdx + 1} / 0{totalSlides}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Project List */}
+                <div className="flex-1 min-h-0 flex flex-col justify-start px-6 md:px-10 py-6 overflow-y-auto scroll-smooth snap-y snap-mandatory no-scrollbar" style={{ scrollbarWidth: "none" }}>
+                  <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-16 pb-32">
+                    {category.projects.map((project, idx) => (
+                      <div
+                        key={project.id}
+                        onClick={() => setPreview(project)}
+                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 snap-start shrink-0"
+                        role="button"
+                        style={{ scrollMarginTop: "24px" }}
+                      >
+                        <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
+                          {String(idx + 1).padStart(2, '0')}
+                        </div>
+
+                        {/* Thumbnail */}
+                        <div className="hidden md:block w-full">
+                          {project.thumbnail ? (
+                            <CroppedThumbnail project={project} sizeKey="4:3" className="w-full aspect-[4/3] rounded-[2px]" />
+                          ) : (
+                            <div className="w-full aspect-[4/3] bg-ink3/10 rounded-[2px]" />
+                          )}
+                        </div>
+
+                        {/* Info */}
+                        <div className="flex flex-col gap-1 w-full pl-0 md:pl-4">
+                          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
+                            <span className="font-playfair font-black text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
+                              {project.title}
+                            </span>
+                            <span className="text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
+                              {project.typeBadge}
+                            </span>
+                          </div>
+                          <div className="font-mono text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
+                            {project.description}
+                          </div>
+                        </div>
+
+                        {/* Right side */}
+                        <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0">
+                          <div className="flex gap-[4px] flex-wrap justify-start md:justify-end">
+                            {project.tags.slice(0, 3).map((tag, i) => (
+                              <span
+                                key={i}
+                                className="text-[8px] font-mono text-ink3 border border-[rgba(15,14,11,0.12)] py-[2px] px-2 uppercase tracking-[0.05em] transition-colors duration-300 group-hover:border-accent/30 group-hover:text-ink2"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-4 shrink-0">
+                            <span className="text-[10px] font-mono text-ink3">{project.year}</span>
+                            <span className="work-arr text-[14px] text-ink3 transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent">
+                              →
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
