@@ -308,7 +308,7 @@ export default function FilmReel() {
   }, []);
 
   return (
-    <>
+    <div className="h-full w-full flex flex-col bg-paper text-ink">
       <Header />
 
       {/* Top Left Number — only visible on Panel 1 (category intro) */}
@@ -362,7 +362,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="h-full w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory no-scrollbar"
+        className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory no-scrollbar"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
@@ -751,6 +751,6 @@ export default function FilmReel() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .anim-el { opacity: 0; transform: translateY(14px); }
       `}} />
-    </>
+    </div>
   );
 }
