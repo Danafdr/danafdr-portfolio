@@ -251,18 +251,25 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                 <button 
                   type="button"
                   onClick={async () => {
-                    toast('Generating...', 'success');
+                    const hasText = description.trim().length > 0;
+                    toast(hasText ? 'Improving...' : 'Generating...', 'success');
                     try {
                       const data = await apiFetch('/api/admin/ai/generate-description', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ title, type, repo_url: repoUrl, tools: toolsString.split(',').map((s: string) => s.trim()) })
+                        body: JSON.stringify({
+                          title,
+                          type,
+                          repo_url: repoUrl,
+                          tools: toolsString.split(',').map((s: string) => s.trim()),
+                          current_description: description,
+                        })
                       });
                       if (data && data.description) {
                         setDescription(data.description);
-                        toast('Description generated!', 'success');
+                        toast(hasText ? 'Description improved!' : 'Description generated!', 'success');
                       } else {
-                        toast(data?.error || 'Failed to generate', 'error');
+                        toast(data?.error || 'Failed', 'error');
                       }
                     } catch (e: any) {
                       toast(e.message || 'Error connecting to AI', 'error');
@@ -270,7 +277,7 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
                   }}
                   className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
                 >
-                  Magic Auto-fill <Wand2 size={10} />
+                  {description.trim().length > 0 ? 'Improve with AI' : 'Magic Auto-fill'} <Wand2 size={10} />
                 </button>
               </div>
               <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} maxLength={200} className="w-full bg-bg text-admin-ink border border-border px-[14px] py-[10px] font-mono text-[12px] focus:border-accent focus:outline-none resize-none" />
