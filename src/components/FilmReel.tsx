@@ -308,7 +308,7 @@ export default function FilmReel() {
   }, []);
 
   return (
-    <div className="h-full w-full flex flex-col bg-paper text-ink">
+    <div className="h-[100dvh] w-full flex flex-col bg-paper text-ink">
       <Header />
 
       {/* Top Left Number — only visible on Panel 1 (category intro) */}
@@ -538,9 +538,9 @@ export default function FilmReel() {
                   </div>
                 </div>
 
-                {/* Project List — flex-1 + overscroll-contain, parent is now fixed so bleed is impossible */}
+                {/* Project List */}
                 <div
-                  className={`flex-1 w-full overflow-y-auto overscroll-contain px-5 pb-24 no-scrollbar ${isGridView ? "md:px-10" : "md:px-10"}`}
+                  className={`flex-1 min-h-0 overflow-y-auto px-5 pb-24 max-md:absolute max-md:bottom-0 max-md:top-[250px] max-md:w-full md:relative no-scrollbar ${isGridView ? "md:px-10" : "md:px-10"}`}
                   style={{ scrollbarWidth: "none" }}
                 >
                   <div className={`max-w-[1200px] w-full mx-auto pb-28 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
