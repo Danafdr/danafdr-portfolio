@@ -401,7 +401,7 @@ export default function FilmReel() {
             key={category.slug}
             id={category.slug}
             data-index={catIdx + 1}
-            className="reel-slide w-full h-[calc(100dvh-80px)] snap-start snap-always"
+            className="reel-slide w-full h-[100dvh] md:h-[calc(100dvh-80px)] snap-start snap-always overflow-hidden"
           >
             {/* Inner Horizontal Scroll Container */}
             <div
@@ -499,8 +499,7 @@ export default function FilmReel() {
               {/* ── Panel 2: Project Listing ── */}
               <div
                 data-hindex={1}
-                className="slide-panel w-screen shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden"
-                style={{ height: 'calc(100dvh - 80px)' }}
+                className="slide-panel w-screen h-[100dvh] md:h-[calc(100dvh-80px)] shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden"
               >
                 {/* Panel Header */}
                 <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
@@ -542,15 +541,8 @@ export default function FilmReel() {
                 </div>
 
                 {/* Project List */}
-                <div
-                  className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar px-5 md:px-10 py-6"
-                  style={{ scrollbarWidth: "none" }}
-                >
-                  <div className={`max-w-[1200px] w-full mx-auto pb-12 ${
-                    isGridView
-                      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                      : "flex flex-col gap-0"
-                  }`}>
+                <div className={`flex-1 min-h-0 flex flex-col justify-start px-5 sm:px-6 md:px-10 py-6 overflow-x-hidden overflow-y-auto no-scrollbar ${isGridView ? "" : "snap-y snap-mandatory"}`} style={{ scrollbarWidth: "none" }}>
+                  <div className={`max-w-[1200px] w-full mx-auto pb-28 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
                         key={project.id}
@@ -558,7 +550,7 @@ export default function FilmReel() {
                         className={`project-row proj-row group w-full cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200 shrink-0 ${
                           isGridView 
                             ? "flex flex-col justify-between gap-4 p-5 rounded-[4px] border border-[rgba(15,14,11,0.08)] shadow-[0_4px_12px_rgba(0,0,0,0.02)] bg-paper/50" 
-                            : "flex flex-col md:grid md:grid-cols-[40px_110px_1fr_auto] gap-4 md:gap-5 items-start md:items-center py-4 border-b border-[rgba(15,14,11,0.08)]"
+                            : "grid grid-cols-1 md:grid-cols-[40px_110px_1fr_auto] gap-4 md:gap-5 items-start md:items-center py-4 px-4 mx-0 md:-mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] snap-start"
                         }`}
                         role="button"
                         style={isGridView ? {} : { scrollMarginTop: "24px" }}
