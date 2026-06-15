@@ -248,37 +248,71 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
             <div className="flex flex-col gap-2">
               <div className="flex justify-between items-center">
                 <label className="font-mono text-[9px] uppercase tracking-[0.18em] text-admin-ink2">Short Description</label>
-                <button 
-                  type="button"
-                  onClick={async () => {
-                    const hasText = description.trim().length > 0;
-                    toast(hasText ? 'Improving...' : 'Generating...', 'success');
-                    try {
-                      const data = await apiFetch('/api/admin/ai/generate-description', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          title,
-                          type,
-                          repo_url: repoUrl,
-                          tools: toolsString.split(',').map((s: string) => s.trim()),
-                          current_description: description,
-                        })
-                      });
-                      if (data && data.description) {
-                        setDescription(data.description);
-                        toast(hasText ? 'Description improved!' : 'Description generated!', 'success');
-                      } else {
-                        toast(data?.error || 'Failed', 'error');
+                <div className="flex items-center gap-3">
+                  <button 
+                    type="button"
+                    onClick={async () => {
+                      toast('Generating...', 'success');
+                      try {
+                        const data = await apiFetch('/api/admin/ai/generate-description', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            title,
+                            type,
+                            repo_url: repoUrl,
+                            tools: toolsString.split(',').map((s: string) => s.trim()),
+                            current_description: '', // Force empty to generate from scratch
+                          })
+                        });
+                        if (data && data.description) {
+                          setDescription(data.description);
+                          toast('Description generated!', 'success');
+                        } else {
+                          toast(data?.error || 'Failed', 'error');
+                        }
+                      } catch (e: any) {
+                        toast(e.message || 'Error connecting to AI', 'error');
                       }
-                    } catch (e: any) {
-                      toast(e.message || 'Error connecting to AI', 'error');
-                    }
-                  }}
-                  className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
-                >
-                  {description.trim().length > 0 ? 'Improve with AI' : 'Magic Auto-fill'} <Wand2 size={10} />
-                </button>
+                    }}
+                    className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
+                  >
+                    Auto-fill <Wand2 size={10} />
+                  </button>
+                  
+                  {description.trim().length > 0 && (
+                    <button 
+                      type="button"
+                      onClick={async () => {
+                        toast('Improving...', 'success');
+                        try {
+                          const data = await apiFetch('/api/admin/ai/generate-description', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              title,
+                              type,
+                              repo_url: repoUrl,
+                              tools: toolsString.split(',').map((s: string) => s.trim()),
+                              current_description: description,
+                            })
+                          });
+                          if (data && data.description) {
+                            setDescription(data.description);
+                            toast('Description improved!', 'success');
+                          } else {
+                            toast(data?.error || 'Failed', 'error');
+                          }
+                        } catch (e: any) {
+                          toast(e.message || 'Error connecting to AI', 'error');
+                        }
+                      }}
+                      className="flex items-center gap-1 text-[9px] text-accent uppercase tracking-wider hover:underline"
+                    >
+                      Improve <Wand2 size={10} />
+                    </button>
+                  )}
+                </div>
               </div>
               <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} maxLength={200} className="w-full bg-bg text-admin-ink border border-border px-[14px] py-[10px] font-mono text-[12px] focus:border-accent focus:outline-none resize-none" />
             </div>
