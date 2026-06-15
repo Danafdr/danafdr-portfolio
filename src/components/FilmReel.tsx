@@ -80,37 +80,10 @@ export default function FilmReel() {
 
   // Track which slides have already been animated
   const animatedSlidesRef = useRef<Set<number>>(new Set());
-  const animatedHSlidesRef = useRef<Set<string>>(new Set());
+  const animatedHSlidesRef = useRef<Set<number>>(new Set());
 
   const [categories, setCategories] = useState(initialCategories);
   const totalSlides = categories.length + 1;
-
-  const [itemsPerPage, setItemsPerPage] = useState(3);
-
-  useEffect(() => {
-    const calculateItemsPerPage = () => {
-      // 100dvh - 80px (Main Header) - 130px (Panel Header/Padding) - 50px (Bottom Padding)
-      const availableHeight = window.innerHeight - 260;
-      // Project rows are roughly 150px tall on desktop, and 200px on mobile
-      const rowHeight = window.innerWidth < 768 ? 200 : 160;
-      const count = Math.max(1, Math.floor(availableHeight / rowHeight));
-      setItemsPerPage(Math.min(count, 10)); // Cap it so it doesn't get infinitely high
-    };
-
-    calculateItemsPerPage();
-    // Add small delay on resize to avoid thrashing
-    let timeoutId: ReturnType<typeof setTimeout>;
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(calculateItemsPerPage, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   useEffect(() => {
     getProjects().then(data => {
@@ -341,21 +314,18 @@ export default function FilmReel() {
             const hIndex = Number((entry.target as HTMLElement).dataset.hindex);
             setCurrentHIndex(hIndex);
 
-            if (hIndex >= 1) {
+            if (hIndex === 1) {
               const panel = entry.target;
-              const panelKey = `${currentVIndex}-${hIndex}`;
-              if (!animatedHSlidesRef.current.has(panelKey)) {
-                animatedHSlidesRef.current.add(panelKey);
+              if (!animatedHSlidesRef.current.has(currentVIndex)) {
+                animatedHSlidesRef.current.add(currentVIndex);
                 const items = panel.querySelectorAll(".project-row");
-                if (items.length > 0) {
-                  ctx.add(() => {
-                    gsap.fromTo(
-                      items,
-                      { opacity: 0, x: 20 },
-                      { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }
-                    );
-                  });
-                }
+                ctx.add(() => {
+                  gsap.fromTo(
+                    items,
+                    { opacity: 0, x: 20 },
+                    { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }
+                  );
+                });
               }
             }
           }
@@ -421,19 +391,14 @@ export default function FilmReel() {
         className="fixed bottom-[36px] left-1/2 -translate-x-1/2 flex gap-[10px] z-40 transition-opacity duration-300"
         style={{ opacity: currentVIndex === 0 ? 0 : 1, pointerEvents: currentVIndex === 0 ? 'none' : 'auto' }}
       >
-        {(() => {
-          const currentCat = currentVIndex > 0 ? categories[currentVIndex - 1] : null;
-          const numPanels = currentCat ? 1 + Math.ceil(currentCat.projects.length / itemsPerPage) : 0;
-          const totalDots = Math.max(2, numPanels);
-          return Array.from({ length: totalDots }).map((_, idx) => (
-            <div
-              key={idx}
-              className={`w-[6px] h-[6px] rounded-full transition-all duration-200 ease-out
-                ${idx === currentHIndex ? "bg-accent scale-[1.4]" : "bg-ink3 scale-100"}
-              `}
-            ></div>
-          ));
-        })()}
+        {[0, 1].map((_, idx) => (
+          <div
+            key={idx}
+            className={`w-[6px] h-[6px] rounded-full transition-all duration-200 ease-out
+              ${idx === currentHIndex ? "bg-accent scale-[1.4]" : "bg-ink3 scale-100"}
+            `}
+          ></div>
+        ))}
       </div>
 
       {/* Visual Hints */}
@@ -464,7 +429,7 @@ export default function FilmReel() {
             <div className="anim-el text-[9px] text-ink3 tracking-[0.3em] uppercase mb-6">
               Vol. I · 2024 — present
             </div>
-            <h1 className="anim-el font-playfair font-black text-[48px] md:text-[74px] lg:text-[100px] leading-[0.88] tracking-[-0.02em] mb-8">
+            <h1 className="anim-el font-playfair font-black text-[clamp(48px,10vw,100px)] leading-[0.88] tracking-[-0.02em] mb-8">
               Selected <em className="italic font-normal">work</em>
             </h1>
             <div className="anim-el w-[1px] h-12 bg-[rgba(15,14,11,0.18)] mx-auto mb-8"></div>
@@ -510,7 +475,7 @@ export default function FilmReel() {
                     <div className="anim-el text-[9px] text-accent tracking-[0.2em] uppercase mb-5">
                       0{catIdx + 1} — Category
                     </div>
-                    <h2 className="anim-el font-playfair font-black text-[40px] md:text-[56px] lg:text-[72px] leading-[0.88] tracking-[-0.02em] mb-6 text-ink">
+                    <h2 className="anim-el font-playfair font-black text-[clamp(40px,6vw,72px)] leading-[0.88] tracking-[-0.02em] mb-6 text-ink">
                       {category.name}
                     </h2>
                     <p className="anim-el font-mono text-[14px] text-ink2 leading-[1.7] max-w-[400px] mb-8">
@@ -584,123 +549,97 @@ export default function FilmReel() {
                 </div>
               </div>
 
-              {/* ── Panel 2+: Project Listing Pages ── */}
-              {(() => {
-                const chunks = [];
-                for (let i = 0; i < category.projects.length; i += itemsPerPage) {
-                  chunks.push(category.projects.slice(i, i + itemsPerPage));
-                }
-                if (chunks.length === 0) chunks.push([]); // At least one page
-
-                return chunks.map((chunk, pageIdx) => (
-                  <div
-                    key={pageIdx}
-                    data-hindex={pageIdx + 1}
-                    className="slide-panel w-screen h-[calc(100dvh-80px)] shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)]"
-                  >
-                    {/* Panel Header */}
-                    <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10">
-                      <div className="flex flex-col items-start">
-                        {pageIdx === 0 ? (
-                          <div
-                            onClick={() => goBackToIntro(catIdx)}
-                            className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
-                            role="button"
-                          >
-                            <span className="transition-transform group-hover:-translate-x-1">←</span> Back to {category.name}
-                          </div>
-                        ) : (
-                          <div
-                            onClick={() => {
-                              const hContainer = hContainersRef.current[catIdx];
-                              if (hContainer) {
-                                hContainer.scrollTo({ left: window.innerWidth * pageIdx, behavior: "smooth" });
-                              }
-                            }}
-                            className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
-                            role="button"
-                          >
-                            <span className="transition-transform group-hover:-translate-x-1">←</span> Previous page
-                          </div>
-                        )}
-                        <div className="font-playfair font-black text-[24px] leading-[1] tracking-[-0.02em]">
-                          Projects {chunks.length > 1 ? <span className="text-ink3 ml-2 text-[18px]">/ Page {pageIdx + 1}</span> : ''}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                        <div className="font-mono text-[10px] text-ink3 uppercase tracking-widest">
-                          {category.projects.length} item{category.projects.length !== 1 ? "s" : ""}
-                        </div>
-                        <div className="font-bebas text-[13px] tracking-[0.14em] text-ink3">
-                          0{catIdx + 1} / 0{totalSlides}
-                        </div>
-                      </div>
+              {/* ── Panel 2: Project Listing ── */}
+              <div
+                data-hindex="1"
+                className="slide-panel w-screen h-[calc(100dvh-80px)] shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)]"
+              >
+                {/* Panel Header */}
+                <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10">
+                  <div className="flex flex-col items-start">
+                    <div
+                      onClick={() => goBackToIntro(catIdx)}
+                      className="text-[9px] font-mono tracking-[0.15em] uppercase text-ink2 mb-4 hover:text-accent transition-colors flex items-center gap-2 group cursor-pointer"
+                      role="button"
+                    >
+                      <span className="transition-transform group-hover:-translate-x-1">←</span> Back to {category.name}
                     </div>
-
-                    {/* Project List */}
-                    <div className="flex-1 min-h-0 flex flex-col justify-start px-6 md:px-10 py-6 overflow-y-auto no-scrollbar" style={{ scrollbarWidth: "none" }}>
-                      <div className="max-w-[1200px] w-full mx-auto flex flex-col gap-0 pb-10">
-                        {chunk.map((project) => (
-                          <div
-                            key={project.id}
-                            onClick={() => setPreview(project)}
-                            className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 px-4 -mx-4 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left hover:bg-[rgba(15,14,11,0.02)] active:scale-[0.99] transition-all duration-200"
-                            role="button"
-                          >
-                            <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60 transition-opacity group-hover:opacity-100 group-hover:text-ink">
-                              {String(category.projects.indexOf(project) + 1).padStart(2, '0')}
-                            </div>
-
-                            {/* Thumbnail */}
-                            <div className="hidden md:block w-full">
-                              {project.thumbnail ? (
-                                <CroppedThumbnail project={project} sizeKey="4:3" className="w-full aspect-[4/3] rounded-[2px]" />
-                              ) : (
-                                <div className="w-full aspect-[4/3] bg-ink3/10 rounded-[2px]" />
-                              )}
-                            </div>
-
-                            {/* Info */}
-                            <div className="flex flex-col gap-1 w-full pl-0 md:pl-4">
-                              <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
-                                <span className="font-playfair font-black text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
-                                  {project.title}
-                                </span>
-                                <span className="text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
-                                  {project.typeBadge}
-                                </span>
-                              </div>
-                              <div className="font-mono text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
-                                {project.description}
-                              </div>
-                            </div>
-
-                            {/* Right side */}
-                            <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0">
-                              <div className="flex gap-[4px] flex-wrap justify-start md:justify-end">
-                                {project.tags.slice(0, 3).map((tag, i) => (
-                                  <span
-                                    key={i}
-                                    className="text-[8px] font-mono text-ink3 border border-[rgba(15,14,11,0.12)] py-[2px] px-2 uppercase tracking-[0.05em]"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                              <div className="flex items-center gap-4 shrink-0">
-                                <span className="text-[10px] font-mono text-ink3">{project.year}</span>
-                                <span className="work-arr text-[14px] text-ink3 transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent">
-                                  →
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                    <div className="font-playfair font-black text-[24px] leading-[1] tracking-[-0.02em]">
+                      Projects
                     </div>
                   </div>
-                ));
-              })()}
+                  <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                    <div className="font-mono text-[10px] text-ink3 uppercase tracking-widest">
+                      {category.projects.length} item{category.projects.length !== 1 ? "s" : ""}
+                    </div>
+                    <div className="font-bebas text-[13px] tracking-[0.14em] text-ink3">
+                      0{catIdx + 1} / 0{totalSlides}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Project List */}
+                <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 md:px-10 py-6" style={{ scrollbarWidth: "none" }}>
+                  <div className="max-w-[1200px] mx-auto flex flex-col gap-0 pb-10">
+                    {category.projects.map((project) => (
+                      <div
+                        key={project.id}
+                        onClick={() => setPreview(project)}
+                        className="project-row proj-row group w-full grid grid-cols-1 md:grid-cols-[52px_140px_1fr_auto] gap-4 md:gap-6 items-start md:items-center py-6 shadow-[0_1px_0_0_var(--color-border-rgba)] cursor-pointer text-left active:scale-[0.98] transition-all duration-200"
+                        role="button"
+                      >
+                        <div className="font-playfair text-[22px] md:text-[26px] font-black text-ink3 opacity-60">
+                          {String(category.projects.indexOf(project) + 1).padStart(2, '0')}
+                        </div>
+
+                        {/* Thumbnail */}
+                        <div className="hidden md:block w-full">
+                          {project.thumbnail ? (
+                            <CroppedThumbnail project={project} sizeKey="4:3" className="w-full aspect-[4/3] rounded-[2px]" />
+                          ) : (
+                            <div className="w-full aspect-[4/3] bg-ink3/10 rounded-[2px]" />
+                          )}
+                        </div>
+
+                        {/* Info */}
+                        <div className="flex flex-col gap-1 w-full pl-0 md:pl-4">
+                          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
+                            <span className="font-playfair font-black text-[18px] leading-[1] tracking-[-0.02em] transition-colors duration-200 group-hover:text-accent">
+                              {project.title}
+                            </span>
+                            <span className="text-[8px] font-mono text-accent tracking-[0.15em] uppercase">
+                              {project.typeBadge}
+                            </span>
+                          </div>
+                          <div className="font-mono text-[10px] text-ink2 leading-[1.5] max-w-[500px]">
+                            {project.description}
+                          </div>
+                        </div>
+
+                        {/* Right side */}
+                        <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0">
+                          <div className="flex gap-[4px] flex-wrap justify-start md:justify-end">
+                            {project.tags.slice(0, 3).map((tag, i) => (
+                              <span
+                                key={i}
+                                className="text-[8px] font-mono text-ink3 border border-[rgba(15,14,11,0.12)] py-[2px] px-2 uppercase tracking-[0.05em]"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-4 shrink-0">
+                            <span className="text-[10px] font-mono text-ink3">{project.year}</span>
+                            <span className="work-arr text-[14px] text-ink3 transition-all duration-200 group-hover:translate-x-1">
+                              →
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
@@ -736,7 +675,7 @@ export default function FilmReel() {
               {preview.thumbnail ? (
                 <CroppedThumbnail project={preview} sizeKey="16:9" className="absolute inset-0 w-full h-full" />
               ) : (
-                <div className="font-playfair font-black text-[36px] md:text-[54px] lg:text-[72px] text-[#f0ebe2]/30 tracking-[-0.02em] leading-[0.9] text-center px-10 relative z-10">
+                <div className="font-playfair font-black text-[clamp(36px,6vw,72px)] text-[#f0ebe2]/30 tracking-[-0.02em] leading-[0.9] text-center px-10 relative z-10">
                   {preview.title}
                 </div>
               )}
@@ -762,7 +701,7 @@ export default function FilmReel() {
                   <div className="text-[9px] text-accent tracking-[0.2em] uppercase mb-3">
                     {preview.typeBadge}
                   </div>
-                  <h3 className="font-playfair font-black text-[28px] md:text-[36px] lg:text-[44px] leading-[0.9] tracking-[-0.02em] mb-2 md:mb-4">
+                  <h3 className="font-playfair font-black text-[clamp(28px,4vw,44px)] leading-[0.9] tracking-[-0.02em] mb-2 md:mb-4">
                     {preview.title}
                   </h3>
                 </div>
