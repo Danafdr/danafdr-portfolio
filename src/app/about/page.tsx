@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "../../components/Header";
 import { prisma } from "../../lib/prisma";
+import { getAge } from "../../utils/age";
 
 export const revalidate = 0;
 
@@ -57,7 +58,7 @@ export default async function AboutPage() {
             <h1 className="font-playfair text-[36px] md:text-[52px] lg:text-[64px] font-black leading-[0.9] tracking-[-0.02em] mb-6">
               Who is<br /><em className="italic font-normal text-ink2">danafdr?</em>
             </h1>
-            <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">West Jakarta, Indonesia</div>
+            <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mb-4">Jakarta, Indonesia</div>
             <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">Web Dev · Video Editor</div>
             
             <div className="mt-8 md:mt-12 w-full aspect-[3/4] bg-[rgba(15,14,11,0.05)] border border-border-rgba relative overflow-hidden flex items-center justify-center">
@@ -106,7 +107,7 @@ export default async function AboutPage() {
             <div>
               <p className="mb-8 text-ink text-[15px] leading-[1.9]">
                 <span className="float-left text-[56px] md:text-[64px] font-playfair font-black leading-[0.8] mr-3 mt-1 text-ink">A</span>
-                17-year-old from West Jakarta who builds full-stack web apps and studies how things move. Web development is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
+                {getAge()}-year-old from Jakarta who builds full-stack web apps and studies how things move. Web development is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
               </p>
               
               <p className="mb-8">

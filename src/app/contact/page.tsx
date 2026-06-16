@@ -103,7 +103,7 @@ export default function ContactPage() {
             
             <div className="flex items-center gap-4 py-6 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[100px]">Location</span>
-              <span className="text-[15px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">West Jakarta, Indonesia</span>
+              <span className="text-[15px] text-ink transition-colors duration-200 tracking-[0.02em] group-hover:text-accent">Jakarta, Indonesia</span>
               <span className="ml-auto text-[14px] text-ink3">·</span>
             </div>
             
@@ -122,7 +122,7 @@ export default function ContactPage() {
       </section>
       
       <div className="px-10 py-6 border-t border-border-rgba flex justify-between text-[9px] text-ink3 tracking-[0.14em] uppercase">
-        <span>danafdr · West Jakarta · 2025</span>
+        <span>danafdr · Jakarta · 2025</span>
         <span>Boys Don&apos;t Cry energy · web-first · no templates ever</span>
       </div>
     </main>

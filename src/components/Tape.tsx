@@ -18,7 +18,7 @@ export default function Tape() {
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Boys Don&apos;t Cry <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Edgerunners <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Berserk <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
-        <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">West Jakarta <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
+        <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Jakarta <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Laravel <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Next.js <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">React <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
@@ -35,7 +35,7 @@ export default function Tape() {
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Boys Don&apos;t Cry <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Edgerunners <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
         <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Berserk <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
-        <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">West Jakarta <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
+        <span className="text-[9px] text-[rgba(240,235,226,0.3)] tracking-[0.2em] px-[18px] uppercase whitespace-nowrap">Jakarta <b className="text-[rgba(240,235,226,0.65)] font-normal">/</b></span>
       </div>
     </div>
   );

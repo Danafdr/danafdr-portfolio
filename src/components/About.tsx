@@ -1,10 +1,12 @@
+import { getAge } from "@/utils/age";
+
 export default function About() {
   return (
     <section id="about-s" className="grid grid-cols-1 lg:grid-cols-2 border-b border-border-rgba reveal">
       <div className="py-[52px] px-5 md:px-10 border-b lg:border-b-0 lg:border-r border-border-rgba">
         <h2 className="font-playfair text-[24px] md:text-[30px] lg:text-[36px] font-black leading-[0.95] tracking-[-0.02em] mb-7">Who is<br /><em className="italic font-normal text-ink2">danafdr?</em></h2>
-        <p className="text-[13px] leading-relaxed font-sans md:font-mono md:text-[11px] text-ink2 md:leading-[1.95] mb-[14px]">
-          A 17-year-old from West Jakarta who builds full-stack web apps and studies how things move. <strong className="text-ink font-normal">Web development</strong> is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
+        <p className="text-ink text-[11px] font-sans md:font-mono md:text-[11px] leading-relaxed max-w-[500px] mb-[14px]">
+          A {getAge()}-year-old from Jakarta who builds full-stack web apps and studies how things move. <strong className="text-ink font-normal">Web development</strong> is the strongest skill right now — Laravel, Next.js, React, shipping real projects and growing fast.
         </p>
         <p className="text-[13px] leading-relaxed font-sans md:font-mono md:text-[11px] text-ink2 md:leading-[1.95] mb-[14px]">
           <strong className="text-ink font-normal">Video editing &amp; motion graphics</strong> is the direction being carved out — tweaking with After Effects and learning cinematography to see what makes a cut feel alive. Still studying Apple and SaaS motion aesthetics for that premium product feel.

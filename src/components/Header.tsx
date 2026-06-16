@@ -52,7 +52,7 @@ export default function Header() {
       </nav>
       <div className="font-playfair text-[13px] font-black tracking-[0.1em] uppercase text-center leading-none py-3 md:py-4 order-1 md:order-2 w-full md:w-auto">
         <Link href="/" className="no-underline text-ink">danafdr</Link>
-        <span className="hidden md:block text-[8px] font-normal italic text-ink2 tracking-[0.18em] normal-case mt-1">web dev × video editing × West Jakarta</span>
+        <span className="hidden md:block text-[8px] font-normal italic text-ink2 tracking-[0.18em] normal-case mt-1">web dev × video editing × Jakarta</span>
       </div>
       <div className="hidden md:flex justify-end items-center gap-[14px] text-[9px] tracking-[0.14em] uppercase order-3">
         {availableForWork && (

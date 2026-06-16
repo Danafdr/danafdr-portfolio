@@ -117,7 +117,7 @@ export default function Contact() {
             </div>
             <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Location</span>
-              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">West Jakarta, Indonesia</span>
+              <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">Jakarta, Indonesia</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">·</span>
             </div>
             {availableForWork && (
@@ -136,7 +136,7 @@ export default function Contact() {
       </div>
       <div className="mt-[52px] pt-[18px] border-t border-border-rgba flex flex-col md:flex-row justify-between gap-4 text-[9px] text-ink3 tracking-[0.14em] uppercase">
         <div className="flex flex-wrap gap-4 md:gap-6">
-          <span>danafdr · West Jakarta · 2025</span>
+          <span>danafdr · Jakarta · 2025</span>
           <a href="/photography" className="hover:text-ink transition-colors">Photography ↗</a>
         </div>
         <span>Boys Don&apos;t Cry energy · web-first · no templates ever</span>

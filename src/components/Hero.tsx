@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getAge } from "@/utils/age";
 
 export default function Hero({ heroSettings }: { heroSettings?: any }) {
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -84,8 +85,8 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
     <section id="hero" className="border-b border-border-rgba flex flex-col min-h-[calc(100vh-80px)]">
       {/* Top Bar */}
       <div className="py-3 px-5 md:px-10 border-b border-border-rgba flex justify-between text-[9px] text-ink2 tracking-[0.16em] uppercase shrink-0">
-        <span className="hidden sm:inline">West Jakarta, Indonesia · 2025</span>
-        <span className="sm:hidden">West Jakarta · 2025</span>
+        <span className="hidden sm:inline">Jakarta, Indonesia · 2025</span>
+        <span className="sm:hidden">Jakarta · 2025</span>
         <span className="hidden sm:inline">Web Dev · Video Editor · Mograph · b. July 2008</span>
         <span className="sm:hidden text-right">b. 2008</span>
       </div>
@@ -147,7 +148,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
           
           <div className="relative z-10 mt-2 lg:mt-[200px]">
             <p className="font-playfair italic text-[15px] md:text-[16px] lg:text-[17px] text-ink2 leading-[1.6] max-w-[380px]">
-              A web developer with the eye of a video editor. Full-stack apps that ship, visual cuts that hit with intention. At 17, from West Jakarta — building both before most people choose one.
+              A web developer with the eye of a video editor. Full-stack apps that ship, visual cuts that hit with intention. At {getAge()}, from Jakarta — building both before most people choose one.
             </p>
           </div>
           
@@ -169,7 +170,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
           <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">video editing &amp; mograph</div>
         </div>
         <div className="py-5 px-5 md:px-7">
-          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">17</div>
+          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">{getAge()}</div>
           <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">years old — building</div>
         </div>
       </div>
