@@ -64,7 +64,7 @@ export default function Contact() {
               required
               value={name}
               onChange={e => setName(e.target.value)}
-              className="bg-transparent border-b border-border-rgba py-2 px-1 text-[13px] text-ink placeholder:text-ink3 focus:outline-none focus:border-accent transition-colors"
+              className="bg-transparent border-b border-border-rgba py-3 md:py-2 px-1 text-[13px] text-ink placeholder:text-ink3 focus:outline-none focus:border-accent transition-colors"
             />
             <input 
               type="email" 
@@ -72,7 +72,7 @@ export default function Contact() {
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="bg-transparent border-b border-border-rgba py-2 px-1 text-[13px] text-ink placeholder:text-ink3 focus:outline-none focus:border-accent transition-colors"
+              className="bg-transparent border-b border-border-rgba py-3 md:py-2 px-1 text-[13px] text-ink placeholder:text-ink3 focus:outline-none focus:border-accent transition-colors"
             />
             <textarea 
               placeholder="Message" 
@@ -80,7 +80,7 @@ export default function Contact() {
               rows={3}
               value={message}
               onChange={e => setMessage(e.target.value)}
-              className="bg-transparent border-b border-border-rgba py-2 px-1 text-[13px] text-ink placeholder:text-ink3 focus:outline-none focus:border-accent transition-colors resize-none mt-2"
+              className="bg-transparent border-b border-border-rgba py-3 md:py-2 px-1 text-[13px] text-ink placeholder:text-ink3 focus:outline-none focus:border-accent transition-colors resize-none mt-2"
             />
             <button 
               type="submit" 
@@ -95,39 +95,39 @@ export default function Contact() {
         
         <div>
           <div className="flex flex-col gap-0">
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://github.com/danafdr', '_blank')}>
+            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://github.com/danafdr', '_blank')}>
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">GitHub</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">github.com/danafdr</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">↗</span>
             </div>
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://instagram.com/danafdr_', '_blank')}>
+            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://instagram.com/danafdr_', '_blank')}>
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Instagram</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">@danafdr_</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">↗</span>
             </div>
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://tiktok.com/@danafdr_', '_blank')}>
+            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://tiktok.com/@danafdr_', '_blank')}>
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">TikTok</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">@danafdr_</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">↗</span>
             </div>
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://youtube.com/@danafdr', '_blank')}>
+            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={() => window.open('https://youtube.com/@danafdr', '_blank')}>
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">YouTube</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">@danafdr</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">↗</span>
             </div>
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba">
+            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Location</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">West Jakarta, Indonesia</span>
               <span className="md:ml-auto text-[12px] text-ink3 hidden md:block">·</span>
             </div>
             {availableForWork && (
-              <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba">
+              <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba">
                 <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Status</span>
                 <span className="text-[13px] text-accent transition-colors duration-200 tracking-[0.02em]">Available for work</span>
                 <div className="w-[5px] h-[5px] rounded-full bg-accent shrink-0 animate-pd hidden md:block md:ml-auto"></div>
               </div>
             )}
-            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
+            <div className="c-row flex flex-col md:flex-row md:items-center gap-2 md:gap-4 py-4 md:py-[15px] px-2 -mx-2 border-b border-border-rgba cursor-pointer group">
               <span className="text-[9px] text-ink3 tracking-[0.18em] uppercase min-w-[80px]">Open to</span>
               <span className="text-[13px] text-ink transition-colors duration-200 tracking-[0.02em]">Freelance · Collabs · Internships</span>
             </div>

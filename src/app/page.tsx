@@ -25,16 +25,16 @@ export default async function Home() {
   const heroSettings = await getHeroSettings();
 
   return (
-    <>
+    <main className="w-full">
       <Header />
-      <Hero heroSettings={heroSettings} />
+      <div className="px-5 md:px-0 mt-8 mb-16 md:mt-0 md:mb-0"><Hero heroSettings={heroSettings} /></div>
       <Tape />
-      <PullQuote />
-      <About />
-      <Work />
-      <Now />
-      <Contact />
+      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><PullQuote /></div>
+      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><About /></div>
+      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><Work /></div>
+      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><Now /></div>
+      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><Contact /></div>
       <RevealManager />
-    </>
+    </main>
   );
 }
