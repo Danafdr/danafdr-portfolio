@@ -308,7 +308,7 @@ export default function FilmReel() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-paper text-ink">
+    <>
       <Header />
 
       {/* Top Left Number — only visible on Panel 1 (category intro) */}
@@ -349,24 +349,27 @@ export default function FilmReel() {
         ))}
       </div>
 
+      {/* Visual Hints */}
       <div
         className={`fixed bottom-8 right-10 flex flex-col items-end gap-2 font-mono text-[9px] text-ink3 uppercase tracking-widest transition-opacity duration-500 z-50 pointer-events-none ${
           showHints ? "opacity-100" : "opacity-0"
         }`}
       >
+        <div>swipe →</div>
         <div>scroll ↓</div>
       </div>
 
-      {/* Main Content Flow */}
+      {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full flex flex-col"
+        className="w-full h-[100dvh] overflow-y-auto snap-y snap-mandatory bg-paper text-ink no-scrollbar flex flex-col relative"
+        style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
         {/* ── Slide 0: Selected Work Intro ── */}
         <div
           data-index={0}
-          className="reel-slide min-h-screen w-full flex flex-col items-center justify-center px-5 text-center relative"
+          className="reel-slide min-h-[100dvh] h-[100dvh] w-full snap-start snap-always flex flex-col items-center justify-center px-5 text-center relative overflow-hidden shrink-0"
         >
           <div className="max-w-[800px]">
             <div className="anim-el text-[9px] text-ink3 tracking-[0.3em] uppercase mb-6">
@@ -391,26 +394,26 @@ export default function FilmReel() {
         </div>
 
         {/* ── Category Slides ── */}
-        <div className="flex flex-col gap-20 py-20">
-          {categories.map((category, catIdx) => (
+        {categories.map((category, catIdx) => (
+          <div
+            key={category.slug}
+            id={category.slug}
+            data-index={catIdx + 1}
+            className="reel-slide min-h-[100dvh] h-[100dvh] w-full snap-start snap-always flex flex-col relative overflow-hidden shrink-0"
+          >
+            {/* Inner Horizontal Scroll Container */}
             <div
-              key={category.slug}
-              id={category.slug}
-              data-index={catIdx + 1}
-              className="reel-slide w-full flex flex-col relative"
+              ref={(el) => { hContainersRef.current[catIdx] = el; }}
+              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory no-scrollbar"
+              style={{ scrollbarWidth: "none" }}
+              onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
+              onTouchStart={() => { activeHContainerRef.current = catIdx; }}
             >
-              {/* Inner layout flow */}
+              {/* ── Panel 1: Category Intro ── */}
               <div
-                ref={(el) => { hContainersRef.current[catIdx] = el; }}
-                className="w-full flex flex-col gap-10"
-                onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
-                onTouchStart={() => { activeHContainerRef.current = catIdx; }}
+                data-hindex="0"
+                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-5 md:px-[80px] lg:px-[100px]"
               >
-                {/* ── Panel 1: Category Intro ── */}
-                <div
-                  data-hindex="0"
-                  className="slide-panel w-full flex flex-col justify-center relative px-5 py-10 md:px-[80px] lg:px-[100px]"
-                >
                 <div className="w-full max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_35%] gap-10 lg:gap-16 items-center">
                   {/* Left: Text */}
                   <div>
@@ -450,8 +453,8 @@ export default function FilmReel() {
                     </div>
                   </div>
 
-                  {/* Right: Preview mosaic — hidden on mobile to prevent overflow */}
-                  <div className={`hidden lg:grid relative gap-3 anim-el ${
+                  {/* Right: Preview mosaic of the category's projects */}
+                  <div className={`relative grid gap-3 anim-el ${
                     category.projects.length >= 3 ? 'h-[60vh]' : 
                     category.projects.length === 2 ? 'h-[40vh]' : 'h-[30vh]'
                   }`}
@@ -491,11 +494,11 @@ export default function FilmReel() {
                 </div>
               </div>
 
-                {/* ── Panel 2: Project Listing ── */}
-                <div
-                  data-hindex={1}
-                  className="slide-panel w-full relative flex flex-col bg-paper"
-                >
+              {/* ── Panel 2: Project Listing ── */}
+              <div
+                data-hindex={1}
+                className="slide-panel min-h-[100dvh] h-[100dvh] w-screen shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden"
+              >
                 {/* Panel Header */}
                 <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
                   <div className="flex flex-col items-start">
@@ -535,10 +538,8 @@ export default function FilmReel() {
                   </div>
                 </div>
 
-                {/* Project List */}
-                <div
-                  className={`w-full px-5 pb-24 ${isGridView ? "md:px-10" : "md:px-10"}`}
-                >
+                {/* Project List - flex-1 so it fills remaining space and scrolls internally */}
+                <div className={`flex-1 min-h-0 overflow-y-auto w-full px-5 md:px-10 py-6 no-scrollbar ${isGridView ? "" : ""}`} style={{ scrollbarWidth: "none" }}>
                   <div className={`max-w-[1200px] w-full mx-auto pb-28 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
@@ -619,8 +620,9 @@ export default function FilmReel() {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
 
       {/* ── Detail View (Master-Detail Pattern) ── */}
       <AnimatePresence>
@@ -746,6 +748,6 @@ export default function FilmReel() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .anim-el { opacity: 0; transform: translateY(14px); }
       `}} />
-    </div>
+    </>
   );
 }
