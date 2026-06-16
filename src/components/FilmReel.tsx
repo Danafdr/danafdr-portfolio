@@ -362,7 +362,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-paper text-ink no-scrollbar flex flex-col relative"
+        className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-paper text-ink no-scrollbar flex flex-col relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
@@ -404,7 +404,7 @@ export default function FilmReel() {
             {/* Inner Horizontal Scroll Container */}
             <div
               ref={(el) => { hContainersRef.current[catIdx] = el; }}
-              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory scroll-smooth no-scrollbar"
+              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory no-scrollbar"
               style={{ scrollbarWidth: "none" }}
               onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
               onTouchStart={() => { activeHContainerRef.current = catIdx; }}
