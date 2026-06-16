@@ -412,7 +412,7 @@ export default function FilmReel() {
               {/* ── Panel 1: Category Intro ── */}
               <div
                 data-hindex="0"
-                className="slide-panel w-screen h-full shrink-0 snap-start overflow-y-auto overscroll-contain flex flex-col justify-center relative px-5 py-10 md:px-[80px] lg:px-[100px] lg:overflow-hidden"
+                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-5 md:px-[80px] lg:px-[100px]"
               >
                 <div className="w-full max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_35%] gap-10 lg:gap-16 items-center">
                   {/* Left: Text */}
