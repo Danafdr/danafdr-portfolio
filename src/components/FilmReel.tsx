@@ -153,7 +153,7 @@ export default function FilmReel() {
     activeHContainerRef.current = catIdx;
     const hContainer = hContainersRef.current[catIdx];
     if (hContainer) {
-      hContainer.scrollTo({ left: window.innerWidth, behavior: "auto" });
+      hContainer.scrollTo({ left: window.innerWidth, behavior: "smooth" });
     }
   }, []);
 
@@ -162,7 +162,7 @@ export default function FilmReel() {
     activeHContainerRef.current = catIdx;
     const hContainer = hContainersRef.current[catIdx];
     if (hContainer) {
-      hContainer.scrollTo({ left: 0, behavior: "auto" });
+      hContainer.scrollTo({ left: 0, behavior: "smooth" });
     }
   }, []);
 
@@ -362,7 +362,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full h-[100dvh] overflow-y-auto snap-y snap-mandatory bg-paper text-ink no-scrollbar flex flex-col relative"
+        className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-paper text-ink no-scrollbar flex flex-col relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
@@ -404,7 +404,7 @@ export default function FilmReel() {
             {/* Inner Horizontal Scroll Container */}
             <div
               ref={(el) => { hContainersRef.current[catIdx] = el; }}
-              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory no-scrollbar"
+              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory scroll-smooth no-scrollbar"
               style={{ scrollbarWidth: "none" }}
               onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
               onTouchStart={() => { activeHContainerRef.current = catIdx; }}
@@ -412,7 +412,7 @@ export default function FilmReel() {
               {/* ── Panel 1: Category Intro ── */}
               <div
                 data-hindex="0"
-                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-5 md:px-[80px] lg:px-[100px]"
+                className="slide-panel w-screen h-full shrink-0 snap-start overflow-y-auto overscroll-contain flex flex-col justify-center relative px-5 py-10 md:px-[80px] lg:px-[100px] lg:overflow-hidden"
               >
                 <div className="w-full max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_35%] gap-10 lg:gap-16 items-center">
                   {/* Left: Text */}
@@ -454,7 +454,7 @@ export default function FilmReel() {
                   </div>
 
                   {/* Right: Preview mosaic of the category's projects */}
-                  <div className={`relative grid gap-3 anim-el ${
+                  <div className={`hidden lg:grid relative gap-3 anim-el ${
                     category.projects.length >= 3 ? 'h-[60vh]' : 
                     category.projects.length === 2 ? 'h-[40vh]' : 'h-[30vh]'
                   }`}
