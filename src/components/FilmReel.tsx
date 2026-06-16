@@ -244,8 +244,8 @@ export default function FilmReel() {
           const proxy = { y: container.scrollTop };
           gsap.to(proxy, {
             y: targetElement.offsetTop,
-            duration: 1.0,
-            ease: "expo.out",
+            duration: 1.3,
+            ease: "power3.inOut",
             onUpdate: () => { container.scrollTop = proxy.y; },
             onComplete: () => {
               // Restore native snap
