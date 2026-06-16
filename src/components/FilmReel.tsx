@@ -204,66 +204,6 @@ export default function FilmReel() {
   const isAnimatingWheel = useRef(false);
   const lastWheelTime = useRef(0);
 
-  // GSAP Smooth Wheel Hijacking for Desktop Mouse (ignores trackpads)
-  useEffect(() => {
-    const container = vContainerRef.current;
-    if (!container) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      // Allow horizontal scroll (e.g. trackpad side swipe) to pass natively
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      // Allow native scroll inside the preview modal
-      if (document.querySelector('.lightbox-close')) return;
-
-      const now = e.timeStamp;
-      const timeSinceLastWheel = now - lastWheelTime.current;
-      lastWheelTime.current = now;
-
-      // Trackpad Detection Heuristic:
-      // Trackpads fire continuous events (time diff < 40ms) or have small fractional deltas.
-      // Standard mouse wheels usually fire discrete events > 50ms apart with large deltas (e.g. 100).
-      if (timeSinceLastWheel < 40 || Math.abs(e.deltaY) < 40 || e.deltaY % 1 !== 0) {
-        return; // Let native CSS handle trackpad snapping perfectly
-      }
-
-      e.preventDefault();
-
-      if (isAnimatingWheel.current) return;
-
-      const direction = Math.sign(e.deltaY);
-      const targetIndex = currentVIndex + direction;
-
-      if (targetIndex >= 0 && targetIndex < totalSlides) {
-        isAnimatingWheel.current = true;
-        
-        // Temporarily disable native scroll snapping so it doesn't fight GSAP
-        container.style.scrollSnapType = 'none';
-        
-        const targetElement = container.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
-        if (targetElement) {
-          const proxy = { y: container.scrollTop };
-          gsap.to(proxy, {
-            y: targetElement.offsetTop,
-            duration: 1.3,
-            ease: "power3.inOut",
-            onUpdate: () => { container.scrollTop = proxy.y; },
-            onComplete: () => {
-              // Restore native snap
-              container.style.scrollSnapType = 'y mandatory';
-              setTimeout(() => { isAnimatingWheel.current = false; }, 50);
-            }
-          });
-        } else {
-          container.style.scrollSnapType = 'y mandatory';
-          isAnimatingWheel.current = false;
-        }
-      }
-    };
-
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel);
-  }, [currentVIndex, totalSlides]);
-
   // Vertical Observer (between categories)
   useEffect(() => {
     if (!vContainerRef.current) return;
@@ -423,7 +363,7 @@ export default function FilmReel() {
       {/* Outer Vertical Scroll Container */}
       <div
         ref={vContainerRef}
-        className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-paper text-ink no-scrollbar flex flex-col relative"
+        className="w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-paper text-ink no-scrollbar flex flex-col relative"
         style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
       >
 
@@ -465,7 +405,7 @@ export default function FilmReel() {
             {/* Inner Horizontal Scroll Container */}
             <div
               ref={(el) => { hContainersRef.current[catIdx] = el; }}
-              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory no-scrollbar"
+              className="w-full h-full flex overflow-x-scroll snap-x snap-mandatory scroll-smooth no-scrollbar"
               style={{ scrollbarWidth: "none" }}
               onMouseEnter={() => { activeHContainerRef.current = catIdx; }}
               onTouchStart={() => { activeHContainerRef.current = catIdx; }}
