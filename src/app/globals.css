@@ -171,8 +171,7 @@ button[type="submit"] {
 
 /* 3. Navigation links */
 .nav-link,
-.hdr-l a,
-header nav a {
+.hdr-l a {
   color: var(--ink2);
   background: transparent;
   padding: 6px 10px;
@@ -182,11 +181,12 @@ header nav a {
               color 200ms ease;
 }
 
-.nav-link:hover,
-.hdr-l a:hover,
-header nav a:hover {
-  background: var(--ink);
-  color: var(--paper);
+@media (hover: hover) and (pointer: fine) {
+  .nav-link:hover,
+  .hdr-l a:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
 }
 
 /* 4. Tag chips */
