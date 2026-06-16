@@ -204,6 +204,64 @@ export default function FilmReel() {
   const isAnimatingWheel = useRef(false);
   const lastWheelTime = useRef(0);
 
+  // Native Mouse Wheel Hijacker
+  // Forces discrete mouse wheel ticks to use native browser smooth scrolling
+  // so it matches trackpad physics exactly, instead of instantly jumping.
+  useEffect(() => {
+    const container = vContainerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Allow horizontal scroll (e.g. trackpad side swipe) to pass natively
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      // Allow native scroll inside the preview modal
+      if (document.querySelector('.lightbox-close')) return;
+
+      const now = e.timeStamp;
+      const timeSinceLastWheel = now - lastWheelTime.current;
+      lastWheelTime.current = now;
+
+      // Trackpad Detection Heuristic:
+      if (timeSinceLastWheel < 40 || Math.abs(e.deltaY) < 40 || e.deltaY % 1 !== 0) {
+        return; // Let native CSS handle trackpad snapping perfectly
+      }
+
+      e.preventDefault();
+
+      if (isAnimatingWheel.current) return;
+
+      const direction = Math.sign(e.deltaY);
+      const targetIndex = currentVIndex + direction;
+
+      if (targetIndex >= 0 && targetIndex < totalSlides) {
+        isAnimatingWheel.current = true;
+        
+        const targetElement = container.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
+        if (targetElement) {
+          // Temporarily disable scroll-snap so it doesn't fight the programmatic scroll
+          container.style.scrollSnapType = 'none';
+
+          // Use native CSS smooth scrolling for the mouse
+          container.scrollTo({
+            top: targetElement.offsetTop,
+            behavior: "smooth"
+          });
+          
+          // Browser native smooth scroll typically takes ~500ms. 
+          setTimeout(() => {
+            container.style.scrollSnapType = 'y mandatory';
+            isAnimatingWheel.current = false;
+          }, 600);
+        } else {
+          isAnimatingWheel.current = false;
+        }
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
+  }, [currentVIndex, totalSlides]);
+
   // Vertical Observer (between categories)
   useEffect(() => {
     if (!vContainerRef.current) return;
