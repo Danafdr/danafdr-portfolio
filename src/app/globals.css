@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Ensure Tailwind hover utilities only apply on devices that support true hover (prevents sticky hover on mobile) */
+@custom-variant hover (@media (hover: hover) and (pointer: fine) { &:hover });
+
 @theme {
   --color-paper: #f0ebe2;
   --color-ink: #0f0e0b;
@@ -88,6 +91,8 @@ input[type="number"] {
   scrollbar-width: none !important;
   /* Hide scrollbar for IE and Edge */
   -ms-overflow-style: none !important;
+  /* Disable tap highlight color on mobile (removes black/gray boxes on tap) */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -113,13 +118,24 @@ a, button, [role="button"],
     border-color 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hoverable:hover {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .hoverable:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* 1. Buttons (primary) */
+  .btn-primary:hover,
+  .btn-main:hover,
+  button[type="submit"]:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
 }
 
-/* 1. Buttons (primary) */
+/* 1. Buttons (primary) base */
 .btn-primary,
 .btn-main,
 button[type="submit"] {
@@ -129,14 +145,6 @@ button[type="submit"] {
   transition: background 220ms cubic-bezier(0.16,1,0.3,1),
               color 220ms cubic-bezier(0.16,1,0.3,1),
               border-color 220ms cubic-bezier(0.16,1,0.3,1);
-}
-
-.btn-primary:hover,
-.btn-main:hover,
-button[type="submit"]:hover {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
 }
 
 /* 2. Ghost / outline buttons */
@@ -151,12 +159,14 @@ button[type="submit"]:hover {
               border-color 220ms cubic-bezier(0.16,1,0.3,1);
 }
 
-.btn-ghost:hover,
-.btn-outline:hover,
-.btn-line:hover {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .btn-ghost:hover,
+  .btn-outline:hover,
+  .btn-line:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
 }
 
 /* 3. Navigation links */
