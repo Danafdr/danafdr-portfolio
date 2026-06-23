@@ -3,7 +3,7 @@
 A highly-custom, premium portfolio for a web developer and video editor/motion graphics designer. The aesthetic is heavily inspired by cinematic title sequences, brutalism, and high-end SaaS product motion.
 
 ## 🚀 Live Site
-*(Add your vercel link here)*
+*danafdr.vercel.app*
 
 ## 🎬 Features
 - **Film Reel Scroll Architecture**: A custom dual-axis snap scrolling engine (vertical between categories, horizontal within categories) that feels like a physical film reel, heavily inspired by cinematic UI.
