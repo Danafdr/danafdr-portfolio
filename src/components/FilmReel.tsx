@@ -111,6 +111,7 @@ export default function FilmReel() {
         tags: Array.isArray(p.tools) ? p.tools : (typeof p.tools === 'string' ? (function() { try { return JSON.parse(p.tools); } catch { return p.tools.split(',').map((s: string) => s.trim()); } })() : []),
         year: p.year || "2024",
         link: p.live_url || undefined,
+        repoUrl: p.repo_url || undefined,
         videoUrl: p.video_url || undefined,
         hasCaseStudy: false,
         visualTitle: p.title,
@@ -790,7 +791,17 @@ export default function FilmReel() {
                         Visit live ↗
                       </a>
                     )}
-                    {!preview.link && !preview.videoUrl && (
+                    {preview.repoUrl && (
+                      <a
+                        href={preview.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-mono tracking-[0.1em] uppercase text-accent flex items-center gap-2 hover:gap-3 transition-all no-underline"
+                      >
+                        Source Code ↗
+                      </a>
+                    )}
+                    {!preview.link && !preview.videoUrl && !preview.repoUrl && (
                       <div className="text-[11px] font-mono tracking-[0.1em] uppercase text-ink3 flex items-center gap-2">
                         {preview.hasCaseStudy ? "Case study coming" : "Coming soon"}
                       </div>

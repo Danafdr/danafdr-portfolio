@@ -6,6 +6,7 @@ export interface Project {
   tags: string[];
   year: string;
   link?: string;
+  repoUrl?: string;
   videoUrl?: string;
   hasCaseStudy: boolean;
   visualTitle?: string;
