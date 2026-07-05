@@ -6,7 +6,6 @@ import { createProject, updateProject, processThumbnail, apiFetch } from '@/lib/
 import { AdminInput } from './AdminInput';
 import { AdminButton } from './AdminButton';
 import { toast } from './Toast';
-import { StepMediaMotion } from './StepMediaMotion';
 import { StepMediaPhotography } from './StepMediaPhotography';
 import { GithubRepoSelector } from './GithubRepoSelector';
 import ImageEditor from '../ImageEditor';
@@ -137,7 +136,7 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
     }
   };
 
-  const handleSaveStep2WebOther = async () => {
+  const handleSaveStep2Thumbnail = async () => {
     if (!projectId) return;
     setLoading(true);
     const formData = new FormData();
@@ -367,8 +366,6 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
           <div className="flex flex-col gap-6">
             {type === 'photography' ? (
               <StepMediaPhotography projectId={projectId} />
-            ) : (type === 'motion' || type === 'video') ? (
-              <StepMediaMotion projectId={projectId} initialData={initialData} onComplete={() => { router.push('/admin/projects'); router.refresh(); }} />
             ) : (
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-2">
@@ -439,8 +436,8 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
             {loading ? 'Saving...' : 'Save & Continue →'}
           </AdminButton>
         ) : (
-          (type === 'web' || type === 'other') ? (
-            <AdminButton onClick={handleSaveStep2WebOther} disabled={loading}>
+          type !== 'photography' ? (
+            <AdminButton onClick={handleSaveStep2Thumbnail} disabled={loading}>
               {loading ? 'Saving...' : 'Finish Project'}
             </AdminButton>
           ) : (
