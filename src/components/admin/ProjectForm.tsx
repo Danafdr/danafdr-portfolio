@@ -96,8 +96,8 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
     formData.append('year', year.toString());
     formData.append('description', description);
     formData.append('full_description', fullDescription);
-    if (type !== 'photography' && toolsString.trim()) {
-        const toolsArr = toolsString.split(',').map((t: string) => t.trim()).filter(Boolean);
+    if (type !== 'photography') {
+        const toolsArr = toolsString.trim() ? toolsString.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
         formData.append('tools', JSON.stringify(toolsArr));
     }
     if (type === 'web' || type === 'other') {
