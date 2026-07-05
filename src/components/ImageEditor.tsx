@@ -60,7 +60,6 @@ export default function ImageEditor({
   const [isSaving, setIsSaving] = useState(false);
 
   // Multi-crop states
-  const [editMode, setEditMode] = useState<'master' | 'manual'>('master');
   const [activeTab, setActiveTab] = useState<string>('16:9');
   const [multiCrops, setMultiCrops] = useState<Record<string, Crop | undefined>>(initialMultiCrops);
 
@@ -69,7 +68,7 @@ export default function ImageEditor({
 
   const handleCropChange = (c: Crop) => {
     setCrop(c);
-    if (multiCropMode && editMode === 'manual') {
+    if (multiCropMode) {
       setMultiCrops(prev => ({ ...prev, [activeTab]: c }));
     }
   };
@@ -84,7 +83,7 @@ export default function ImageEditor({
         height
       );
       setCrop(newCrop);
-      if (multiCropMode && editMode === 'manual') {
+      if (multiCropMode) {
         setMultiCrops(prev => ({ ...prev, [activeTab]: newCrop }));
       }
     }
@@ -114,8 +113,8 @@ export default function ImageEditor({
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     setImageLoaded(true);
-    // If in multi-crop manual mode with no existing crops, init the active tab
-    if (multiCropMode && editMode === 'manual') {
+    // If in multi-crop mode with no existing crops, init the active tab
+    if (multiCropMode) {
       const { width, height } = e.currentTarget;
       const r = MULTI_CROP_RATIOS.find(r => r.id === activeTab);
       if (r && (!multiCrops[activeTab] || !multiCrops[activeTab]!.width)) {
@@ -140,7 +139,6 @@ export default function ImageEditor({
       setGrain(initialFilterValues?.grain || 0);
       setSaveMode('css');
       setAspect(undefined);
-      setEditMode(Object.keys(initialMultiCrops).length > 0 ? 'manual' : 'master');
       setMultiCrops(initialMultiCrops);
       if (multiCropMode && Object.keys(initialMultiCrops).length > 0) {
         setActiveTab('16:9');
@@ -179,7 +177,7 @@ export default function ImageEditor({
       rotation
     };
 
-    if (multiCropMode && editMode === 'manual') {
+    if (multiCropMode) {
       payload.multi_crops = {
         '16:9': scaleCrop(multiCrops['16:9'], scaleX, scaleY),
         '4:3': scaleCrop(multiCrops['4:3'], scaleX, scaleY),
@@ -273,33 +271,8 @@ export default function ImageEditor({
               <span>{multiCropMode ? 'Crop Mode' : 'Aspect ratio'}</span>
               {recommendedRatio && <span className="text-accent italic text-[8px] lowercase">Recommended: {recommendedRatio}</span>}
             </div>
-            
-            {multiCropMode && (
-              <div className="flex gap-2 mb-6">
-                <button
-                  onClick={() => setEditMode('master')}
-                  className={`flex-1 text-[10px] px-3 py-2 border transition-all ${
-                    editMode === 'master' 
-                      ? 'border-accent text-ink bg-[rgba(200,68,26,0.1)]' 
-                      : 'border-[rgba(240,235,226,0.08)] text-ink3 hover:bg-ink hover:text-[#0f0e0b]'
-                  }`}
-                >
-                  Master Crop (Applies to all)
-                </button>
-                <button
-                  onClick={() => setEditMode('manual')}
-                  className={`flex-1 text-[10px] px-3 py-2 border transition-all ${
-                    editMode === 'manual' 
-                      ? 'border-accent text-ink bg-[rgba(200,68,26,0.1)]' 
-                      : 'border-[rgba(240,235,226,0.08)] text-ink3 hover:bg-ink hover:text-[#0f0e0b]'
-                  }`}
-                >
-                  Manual Crop (Per size)
-                </button>
-              </div>
-            )}
 
-            {multiCropMode && editMode === 'manual' ? (
+            {multiCropMode ? (
               <div>
                 <div className="text-[8px] text-ink3 uppercase mb-2">Select size to edit:</div>
                 <div className="grid grid-cols-3 gap-2 mb-4">
@@ -363,7 +336,7 @@ export default function ImageEditor({
               <div className="text-[9px] text-accent uppercase tracking-[0.1em] mb-4">Live Previews</div>
               <div className="flex flex-col gap-4">
                 <LivePreviewCrop 
-                  crop={editMode === 'manual' ? multiCrops['16:9'] : crop} 
+                  crop={multiCrops['16:9']} 
                   imageRef={imgRef} 
                   imageUrl={imageUrl} 
                   aspectValue={16/9} 
@@ -371,7 +344,7 @@ export default function ImageEditor({
                   cssFilter={getCssFilter()} 
                 />
                 <LivePreviewCrop 
-                  crop={editMode === 'manual' ? multiCrops['4:3'] : crop} 
+                  crop={multiCrops['4:3']} 
                   imageRef={imgRef} 
                   imageUrl={imageUrl} 
                   aspectValue={4/3} 
@@ -379,7 +352,7 @@ export default function ImageEditor({
                   cssFilter={getCssFilter()} 
                 />
                 <LivePreviewCrop 
-                  crop={editMode === 'manual' ? multiCrops['1:1'] : crop} 
+                  crop={multiCrops['1:1']} 
                   imageRef={imgRef} 
                   imageUrl={imageUrl} 
                   aspectValue={1} 

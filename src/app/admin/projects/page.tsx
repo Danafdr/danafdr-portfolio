@@ -84,7 +84,7 @@ function SortableItem({
 
       {/* Toggles */}
       <div className="flex items-center mr-4">
-        <label className="admin-toggle-row flex items-center gap-2">
+        <div className="admin-toggle-row flex items-center gap-2">
           <span className="font-mono text-[9px] text-admin-ink3 uppercase">Featured</span>
           <button
             onClick={() => onToggle(project.id, 'featured')}
@@ -92,9 +92,9 @@ function SortableItem({
           >
             <div className={`w-3 h-3 rounded-full bg-bg transition-transform ${project.featured ? 'translate-x-4' : 'translate-x-0'}`} />
           </button>
-        </label>
+        </div>
         
-        <label className="admin-toggle-row flex items-center gap-2">
+        <div className="admin-toggle-row flex items-center gap-2">
           <span className="font-mono text-[9px] text-admin-ink3 uppercase">Published</span>
           <button
             onClick={() => onToggle(project.id, 'published')}
@@ -102,7 +102,7 @@ function SortableItem({
           >
             <div className={`w-3 h-3 rounded-full bg-bg transition-transform ${project.published ? 'translate-x-4' : 'translate-x-0'}`} />
           </button>
-        </label>
+        </div>
       </div>
 
       {/* Actions */}

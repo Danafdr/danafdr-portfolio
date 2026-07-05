@@ -38,6 +38,8 @@ export async function POST(request: Request) {
     const year = yearStr ? parseInt(yearStr) : null;
     const live_url = formData.get('live_url') as string;
     const repo_url = formData.get('repo_url') as string;
+    const video_url = formData.get('video_url') as string;
+    const video_platform = formData.get('video_platform') as string;
     const toolsStr = formData.get('tools') as string;
 
     if (!slug) {
@@ -69,6 +71,8 @@ export async function POST(request: Request) {
         year,
         live_url,
         repo_url,
+        video_url,
+        video_platform,
         tools: toolsStr ? JSON.parse(toolsStr) : [],
         gradient_start: formData.get('gradient_start') as string || '#1a1816',
         gradient_end: formData.get('gradient_end') as string || '#2a2420',

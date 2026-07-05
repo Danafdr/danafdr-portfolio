@@ -40,6 +40,12 @@ export async function POST(request: Request, props: { params: Promise<{ id: stri
     const repo_url = formData.get('repo_url') as string;
     if (repo_url !== null) dataToUpdate.repo_url = repo_url;
     
+    const video_url = formData.get('video_url') as string;
+    if (video_url !== null) dataToUpdate.video_url = video_url;
+    
+    const video_platform = formData.get('video_platform') as string;
+    if (video_platform !== null) dataToUpdate.video_platform = video_platform;
+    
     const toolsStr = formData.get('tools') as string;
     if (toolsStr !== null) dataToUpdate.tools = toolsStr ? JSON.parse(toolsStr) : [];
     

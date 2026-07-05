@@ -38,7 +38,19 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
   const [year, setYear] = useState(initialData?.year || new Date().getFullYear());
   const [description, setDescription] = useState(initialData?.description || '');
   const [fullDescription, setFullDescription] = useState(initialData?.full_description || '');
-  const [toolsString, setToolsString] = useState(initialData?.tools?.join(', ') || '');
+  const [toolsString, setToolsString] = useState(() => {
+    if (!initialData?.tools) return '';
+    if (Array.isArray(initialData.tools)) return initialData.tools.join(', ');
+    if (typeof initialData.tools === 'string') {
+      try {
+        const parsed = JSON.parse(initialData.tools);
+        if (Array.isArray(parsed)) return parsed.join(', ');
+      } catch {
+        return initialData.tools;
+      }
+    }
+    return '';
+  });
   
   // URLs (Step 1 or 2 depending on type)
   const [liveUrl, setLiveUrl] = useState(initialData?.live_url || '');
@@ -87,7 +99,7 @@ export function ProjectForm({ initialData, isEdit }: ProjectFormProps) {
     formData.append('full_description', fullDescription);
     if (type !== 'photography' && toolsString.trim()) {
         const toolsArr = toolsString.split(',').map((t: string) => t.trim()).filter(Boolean);
-        toolsArr.forEach((t: string, i: number) => formData.append(`tools[${i}]`, t));
+        formData.append('tools', JSON.stringify(toolsArr));
     }
     if (type === 'web' || type === 'other') {
         formData.append('live_url', liveUrl);
