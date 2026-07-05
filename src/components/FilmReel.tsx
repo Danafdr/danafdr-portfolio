@@ -429,7 +429,7 @@ export default function FilmReel() {
         {/* ── Slide 0: Selected Work Intro ── */}
         <div
           data-index={0}
-          className="reel-slide min-h-[100dvh] h-[100dvh] w-full snap-start snap-always flex flex-col items-center justify-center px-5 text-center relative overflow-hidden shrink-0"
+          className="reel-slide min-h-[100dvh] h-[100dvh] w-full snap-start snap-always flex flex-col items-center justify-center px-6 md:px-12 text-center relative overflow-hidden shrink-0"
         >
           <div className="max-w-[800px]">
             <div className="anim-el text-[9px] text-ink3 tracking-[0.3em] uppercase mb-6">
@@ -472,7 +472,7 @@ export default function FilmReel() {
               {/* ── Panel 1: Category Intro ── */}
               <div
                 data-hindex="0"
-                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-5 md:px-[80px] lg:px-[100px]"
+                className="slide-panel w-screen h-full shrink-0 snap-start flex items-center relative px-6 md:px-12"
               >
                 <div className="w-full max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_35%] gap-10 lg:gap-16 items-center">
                   {/* Left: Text */}
@@ -514,9 +514,9 @@ export default function FilmReel() {
                   </div>
 
                   {/* Right: Preview mosaic of the category's projects */}
-                  <div className={`hidden lg:grid relative gap-3 anim-el ${
-                    category.projects.length >= 3 ? 'h-[60vh]' : 
-                    category.projects.length === 2 ? 'h-[40vh]' : 'h-[30vh]'
+                  <div className={`grid relative gap-3 anim-el ${
+                    category.projects.length >= 3 ? 'h-[25vh] lg:h-[60vh]' : 
+                    category.projects.length === 2 ? 'h-[20vh] lg:h-[40vh]' : 'h-[15vh] lg:h-[30vh]'
                   }`}
                     style={{
                       gridTemplateRows: category.projects.length > 1
@@ -560,7 +560,7 @@ export default function FilmReel() {
                 className="slide-panel min-h-[100dvh] h-[100dvh] w-screen shrink-0 snap-start relative flex flex-col border-l border-[rgba(15,14,11,0.1)] overflow-hidden"
               >
                 {/* Panel Header */}
-                <div className="px-6 md:px-10 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
+                <div className="px-6 md:px-12 pt-8 pb-5 border-b border-border-rgba flex flex-col md:flex-row items-start md:items-end justify-between shrink-0 gap-4 bg-paper z-10 relative">
                   <div className="flex flex-col items-start">
                     <div
                       onClick={() => goBackToIntro(catIdx)}

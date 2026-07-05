@@ -84,7 +84,7 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
   return (
     <section id="hero" className="border-b border-border-rgba flex flex-col min-h-[calc(100vh-80px)]">
       {/* Top Bar */}
-      <div className="py-3 px-5 md:px-10 border-b border-border-rgba flex justify-between text-[9px] text-ink2 tracking-[0.16em] uppercase shrink-0">
+      <div className="py-3 px-6 md:px-12 border-b border-border-rgba flex justify-between text-[9px] text-ink2 tracking-[0.16em] uppercase shrink-0">
         <span className="hidden sm:inline">Jakarta, Indonesia · 2025</span>
         <span className="sm:hidden">Jakarta · 2025</span>
         <span className="hidden sm:inline">Web Dev · Video Editor · Mograph · b. July 2008</span>
@@ -92,10 +92,10 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
       </div>
 
       {/* Main Content */}
-      <div className="px-5 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-0 relative flex-1">
+      <div className="px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 relative flex-1">
         {/* Left Col */}
-        <div className="pr-0 lg:pr-10 border-b lg:border-b-0 lg:border-r border-border-rgba relative z-10 flex flex-col justify-center py-[6vh] lg:py-[4vh]">
-          <div className="text-[9px] text-accent tracking-[0.3em] uppercase mb-[4vh]">Portfolio — Issue No. 001</div>
+        <div className="pr-0 lg:pr-12 border-b lg:border-b-0 lg:border-r border-border-rgba relative z-10 flex flex-col justify-center py-12 lg:py-[4vh]">
+          <div className="text-[9px] text-accent tracking-[0.3em] uppercase mb-8 lg:mb-[4vh]">Portfolio — Issue No. 001</div>
           <h1 ref={headlineRef} className="font-playfair text-[46px] md:text-[75px] lg:text-[104px] font-black leading-[0.86] tracking-[-0.03em] flex flex-col">
             <span className="anim-word block opacity-0 translate-y-10">CODES</span>
             <span className="anim-word block opacity-0 translate-y-10"><em className="italic font-normal text-ink2">&amp; moves</em></span>
@@ -104,10 +104,10 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
         </div>
 
         {/* Right Col */}
-        <div className="pl-0 lg:pl-10 flex flex-col justify-between relative py-[6vh] lg:py-[4vh] gap-8 lg:gap-0">
+        <div className="pl-0 lg:pl-12 flex flex-col justify-between relative py-12 lg:py-[4vh] gap-8 lg:gap-0">
           <div 
             ref={photoRef} 
-            className="relative lg:absolute top-0 lg:top-0 right-0 w-full lg:w-[200px] h-[260px] md:h-[340px] lg:h-[260px] bg-[rgba(15,14,11,0.05)] border border-border-rgba z-0 overflow-hidden flex items-center justify-center opacity-100 mb-6 lg:mb-0 lg:opacity-100"
+            className="relative lg:absolute top-0 lg:top-0 right-0 w-full lg:w-[200px] h-[300px] md:h-[400px] lg:h-[260px] bg-[rgba(15,14,11,0.05)] border border-border-rgba z-0 overflow-hidden flex items-center justify-center opacity-100 mb-6 lg:mb-0 lg:opacity-100"
           >
             {!hasPhoto ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-[9px] text-ink3 uppercase tracking-[0.2em] text-center px-4">
@@ -161,17 +161,17 @@ export default function Hero({ heroSettings }: { heroSettings?: any }) {
 
       {/* Bottom Bar */}
       <div className="grid grid-cols-1 md:grid-cols-3 border-t border-border-rgba mt-auto shrink-0">
-        <div className="py-5 px-5 md:px-7 border-b md:border-b-0 md:border-r border-border-rgba">
-          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">WD</div>
-          <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">web dev — strongest</div>
+        <div className="py-6 px-6 md:px-12 border-b md:border-b-0 md:border-r border-border-rgba">
+          <div className="font-bebas text-[28px] md:text-[34px] lg:text-[40px] tracking-[0.08em] text-ink leading-none">WD</div>
+          <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-2">web dev — strongest</div>
         </div>
-        <div className="py-5 px-5 md:px-7 border-b md:border-b-0 md:border-r border-border-rgba">
-          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">VE / MG</div>
-          <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">video editing &amp; mograph</div>
+        <div className="py-6 px-6 md:px-12 border-b md:border-b-0 md:border-r border-border-rgba">
+          <div className="font-bebas text-[28px] md:text-[34px] lg:text-[40px] tracking-[0.08em] text-ink leading-none">VE / MG</div>
+          <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-2">video editing &amp; mograph</div>
         </div>
-        <div className="py-5 px-5 md:px-7">
-          <div className="font-bebas text-[24px] md:text-[29px] lg:text-[34px] tracking-[0.08em] text-ink leading-none">{getAge()}</div>
-          <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-1">years old — building</div>
+        <div className="py-6 px-6 md:px-12">
+          <div className="font-bebas text-[28px] md:text-[34px] lg:text-[40px] tracking-[0.08em] text-ink leading-none">{getAge()}</div>
+          <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase mt-2">years old — building</div>
         </div>
       </div>
     </section>

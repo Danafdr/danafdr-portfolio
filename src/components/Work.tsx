@@ -29,7 +29,7 @@ const categories = [
 export default function Work() {
   return (
     <section id="work" className="border-b border-border-rgba reveal">
-      <div className="py-7 px-5 md:px-10 border-b border-border-rgba flex justify-between items-baseline">
+      <div className="py-7 px-6 md:px-12 border-b border-border-rgba flex justify-between items-baseline">
         <div className="font-playfair text-[22px] md:text-[27px] lg:text-[32px] font-black tracking-[-0.02em]">Selected <em className="italic font-normal">work</em></div>
         <div className="text-[9px] text-ink2 tracking-[0.14em] uppercase">2024 — present</div>
       </div>
@@ -38,7 +38,7 @@ export default function Work() {
           key={cat.id} 
           href={`/work?cat=${cat.slug}`}
           scroll={false}
-          className="work-item grid grid-cols-[40px_1fr_24px] md:grid-cols-[52px_1fr_auto_32px] gap-x-3 gap-y-1 md:gap-5 items-center py-5 px-5 md:px-10 border-b border-border-rgba cursor-pointer group no-underline"
+          className="work-item grid grid-cols-[40px_1fr_24px] md:grid-cols-[52px_1fr_auto_32px] gap-x-3 gap-y-1 md:gap-5 items-center py-5 px-6 md:px-12 border-b border-border-rgba cursor-pointer group no-underline"
         >
           <div className="font-playfair text-[26px] font-black text-ink3 row-span-2 md:row-span-1">{cat.id}</div>
           <div className="col-start-2">

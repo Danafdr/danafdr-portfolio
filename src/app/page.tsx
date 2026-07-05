@@ -25,15 +25,17 @@ export default async function Home() {
   const heroSettings = await getHeroSettings();
 
   return (
-    <main className="w-full">
-      <Header />
-      <div className="px-5 md:px-0 mt-8 mb-16 md:mt-0 md:mb-0"><Hero heroSettings={heroSettings} /></div>
+    <main className="w-full flex flex-col gap-24 md:gap-32 pb-24">
+      <div className="flex flex-col">
+        <Header />
+        <Hero heroSettings={heroSettings} />
+      </div>
       <Tape />
-      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><PullQuote /></div>
-      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><About /></div>
-      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><Work /></div>
-      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><Now /></div>
-      <div className="px-5 md:px-0 mt-24 mb-12 md:mt-0 md:mb-0"><Contact /></div>
+      <div className="w-full max-w-[1920px] mx-auto"><PullQuote /></div>
+      <div className="w-full max-w-[1920px] mx-auto"><About /></div>
+      <div className="w-full max-w-[1920px] mx-auto"><Work /></div>
+      <div className="w-full max-w-[1920px] mx-auto"><Now /></div>
+      <div className="w-full max-w-[1920px] mx-auto"><Contact /></div>
       <RevealManager />
     </main>
   );
