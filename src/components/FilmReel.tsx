@@ -217,6 +217,9 @@ export default function FilmReel() {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
       // Allow native scroll inside the preview modal
       if (document.querySelector('.lightbox-close')) return;
+      
+      // Allow native vertical scroll inside the project lists
+      if ((e.target as HTMLElement).closest('.proj-scroll-area')) return;
 
       const now = e.timeStamp;
       const timeSinceLastWheel = now - lastWheelTime.current;
@@ -599,7 +602,7 @@ export default function FilmReel() {
                 </div>
 
                 {/* Project List - flex-1 so it fills remaining space and scrolls internally */}
-                <div className={`flex-1 min-h-0 overflow-y-auto w-full px-5 md:px-10 py-6 no-scrollbar ${isGridView ? "" : ""}`} style={{ scrollbarWidth: "none" }}>
+                <div className={`proj-scroll-area flex-1 min-h-0 overflow-y-auto w-full px-6 md:px-12 py-6 no-scrollbar ${isGridView ? "" : ""}`} style={{ scrollbarWidth: "none" }}>
                   <div className={`max-w-[1200px] w-full mx-auto pb-28 ${isGridView ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-6 md:gap-4"}`}>
                     {category.projects.map((project, idx) => (
                       <div
